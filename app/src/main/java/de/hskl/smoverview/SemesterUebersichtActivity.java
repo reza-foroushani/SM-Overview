@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
@@ -18,6 +19,8 @@ import android.widget.NumberPicker;
 import android.widget.Spinner;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -38,21 +41,21 @@ public class SemesterUebersichtActivity extends AppCompatActivity
 
         expListView = (ExpandableListView) findViewById(R.id.MEINE_LISTE);
 
-        listDataHeader = new ArrayList<String>();
-        listDataChild = new HashMap<String, List<String>>();
+        listDataHeader = new ArrayList<>();
+        listDataChild = new HashMap<>();
 
         // Adding child data
         listDataHeader.add("Semester 1");
         listDataHeader.add("Semester 2");
 
         // Adding child data
-        List<String> s1 = new ArrayList<String>();
+        List<String> s1 = new ArrayList<>();
         s1.add("Test1");
         s1.add("Test2");
         s1.add("Test3");
 
         // Adding child data
-        List<String> s2 = new ArrayList<String>();
+        List<String> s2 = new ArrayList<>();
         s2.add("Test1");
         s2.add("Test2");
         s2.add("Test3");
@@ -80,34 +83,20 @@ public class SemesterUebersichtActivity extends AppCompatActivity
             }
         });
 
-        registerForContextMenu(expListView);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.start_activity_menu, menu);
-
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        LayoutInflater inflater = LayoutInflater.from(this);
-        View inflateView;
-        AlertDialog dialog;
-
-        switch(item.getItemId())
+        FloatingActionButton addSemesterFab = findViewById(R.id.ADDSEMESTER_FLOATINGACTIONBUTTON);
+        addSemesterFab.setOnClickListener(new View.OnClickListener()
         {
-            case R.id.ITEM_HINZUFUEGEN:
-                inflateView = inflater.inflate(R.layout.semester_hinzufuegen_dialog, null);
+            @Override
+            public void onClick(View view)
+            {
+                AlertDialog.Builder builder = new AlertDialog.Builder(SemesterUebersichtActivity.this);
+                LayoutInflater inflater = LayoutInflater.from(SemesterUebersichtActivity.this);
+                View inflateView = inflater.inflate(R.layout.semester_hinzufuegen_dialog, null);
+                AlertDialog dialog;
                 builder.setView(inflateView);
 
-                final NumberPicker semesterNp = (NumberPicker) inflateView.findViewById(R.id.SEMESTER_NUMBERPICKER);
                 String[] numbers = getAvailableSemesterNumberArray();
+                final NumberPicker semesterNp = (NumberPicker) inflateView.findViewById(R.id.SEMESTER_NUMBERPICKER);
                 semesterNp.setDisplayedValues(numbers);
                 semesterNp.setMinValue(1);
                 semesterNp.setMaxValue(numbers.length);
@@ -130,7 +119,31 @@ public class SemesterUebersichtActivity extends AppCompatActivity
 
                 dialog = builder.create();
                 dialog.show();
-                break;
+            }
+        });
+
+        registerForContextMenu(expListView);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.start_activity_menu, menu);
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = LayoutInflater.from(this);
+        View inflateView;
+        AlertDialog dialog;
+
+        switch(item.getItemId())
+        {
             case R.id.ITEM_LOESCHEN:
                 //TODO: Semester Löschen
                 Log.d("HSKL", "LOESCHEN...");
@@ -139,7 +152,7 @@ public class SemesterUebersichtActivity extends AppCompatActivity
                 builder.setView(inflateView);
 
                 final Spinner spinner = (Spinner) inflateView.findViewById(R.id.SEMESTER_SPINNER);
-                ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(
                         this, android.R.layout.simple_spinner_item, listDataHeader);
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 spinner.setAdapter(adapter);
