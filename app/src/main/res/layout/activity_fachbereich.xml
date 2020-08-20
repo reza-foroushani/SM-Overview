@@ -5,17 +5,29 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".MasterActivity">
-
+    tools:context=".Fachbereich">
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/FACHBERICH"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        android:layout_gravity="center_horizontal"
         android:paddingLeft="20dp"
         android:paddingTop="10dp"
         android:paddingRight="20dp"
         android:paddingBottom="10dp"
-        android:text="Fachbereiche von Master"
-        android:textSize="30sp" />
+        android:text="Fachbereich"
+        android:textSize="30sp"
+        android:verticalScrollbarPosition="defaultPosition" />
+
+    <Button
+        android:id="@+id/BACHELOR"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Bachelor" />
+
+    <Button
+        android:id="@+id/MASTER"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Master" />
 </LinearLayout>
