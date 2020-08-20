@@ -17,6 +17,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".MasterActivity"/>
+<activity android:name=".SubHinzufuegenFachbereichMasterActivity"/>
     </application>
 
 </manifest>

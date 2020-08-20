@@ -18,4 +18,22 @@
         android:paddingBottom="10dp"
         android:text="Fachbereiche von Master"
         android:textSize="30sp" />
+
+    <ListView
+        android:id="@+id/FACHBEREICH_LISTE"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:layout_margin="16dp"
+
+        android:src="@drawable/ic_add_white_48dp"
+        app:backgroundTint="#070707" />
+
+
+
 </LinearLayout>
