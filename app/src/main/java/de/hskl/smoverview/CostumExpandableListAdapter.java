@@ -1,14 +1,20 @@
 package de.hskl.smoverview;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Typeface;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.NumberPicker;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -84,14 +90,90 @@ public class CostumExpandableListAdapter extends BaseExpandableListAdapter
     }
 
     @Override
-    public View getGroupView(int groupPosition, boolean isExpanded,
+    public View getGroupView(final int groupPosition, boolean isExpanded,
                              View convertView, ViewGroup parent)
     {
         String headerTitle = (String) getGroup(groupPosition);
-        if (convertView == null) {
+        if (convertView == null)
+        {
             LayoutInflater infalInflater = (LayoutInflater) this._context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = infalInflater.inflate(R.layout.list_group, null);
+
+            Button addModulBtn = (Button)convertView.findViewById(R.id.ADDMODUL_BUTTON);
+            addModulBtn.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View view)
+                {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(_context);
+                    LayoutInflater inflater = LayoutInflater.from(_context);
+                    final View inflateView = inflater.inflate(R.layout.modul_hinzufuegen_dialog, null);
+                    AlertDialog dialog;
+                    builder.setView(inflateView);
+
+                    builder.setTitle("Neues Modul hinzufügen")
+                            .setPositiveButton("Hinzufügen", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    //TODO: Add to Database
+                                    final EditText modulNameEditText = (EditText) inflateView.findViewById(R.id.MODULNAME_EDITTEXT);
+
+                                    _listDataChild.get(getGroup(groupPosition)).add(modulNameEditText.getText().toString());
+                                    notifyDataSetChanged();
+                                }
+                            })
+                            .setNegativeButton("Abbrechen", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    //Nichts tun
+                                }
+                            });
+
+                    dialog = builder.create();
+                    dialog.show();
+                }
+            });
+
+            Button deleteSemesterBtn = (Button)convertView.findViewById(R.id.DELETESEMESTER_BUTTON);
+            deleteSemesterBtn.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View view)
+                {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(_context);
+                    LayoutInflater inflater = LayoutInflater.from(_context);
+                    AlertDialog dialog;
+
+                    final String str = _listDataHeader.get(groupPosition);
+
+                    builder.setTitle("Willst du wirklich das Semester \"" + str + "\" löschen?")
+                            .setPositiveButton("Bestätigen", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    //TODO: Delete from Database
+                                    _listDataHeader.remove(str);
+                                    _listDataChild.remove(str);
+                                    notifyDataSetChanged();
+                                }
+                            })
+                            .setNegativeButton("Abbrechen", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    //Nichts tun
+                                }
+                            });
+
+                    dialog = builder.create();
+                    dialog.show();
+                }
+            });
+
+            Button editSemesterBtn = (Button)convertView.findViewById(R.id.EDITSEMESTER_BUTTON);
+            editSemesterBtn.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View view)
+                {
+                    Log.d("HSKL", "Startup Edit Semester Subactivity...");
+                }
+            });
         }
 
         TextView lblListHeader = (TextView) convertView

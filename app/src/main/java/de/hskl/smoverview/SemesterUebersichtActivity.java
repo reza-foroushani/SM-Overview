@@ -63,8 +63,7 @@ public class SemesterUebersichtActivity extends AppCompatActivity
         listDataChild.put(listDataHeader.get(0), s1); // Header, Child data
         listDataChild.put(listDataHeader.get(1), s2);
 
-        listAdapter = new CostumExpandableListAdapter
-                (this, listDataHeader, listDataChild);
+        listAdapter = new CostumExpandableListAdapter(this, listDataHeader, listDataChild);
         expListView.setAdapter(listAdapter);
 
         expListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener()
@@ -126,67 +125,6 @@ public class SemesterUebersichtActivity extends AppCompatActivity
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.start_activity_menu, menu);
-
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        LayoutInflater inflater = LayoutInflater.from(this);
-        View inflateView;
-        AlertDialog dialog;
-
-        switch(item.getItemId())
-        {
-            case R.id.ITEM_LOESCHEN:
-                //TODO: Semester Löschen
-                Log.d("HSKL", "LOESCHEN...");
-
-                inflateView= inflater.inflate(R.layout.semester_loeschen_dialog, null);
-                builder.setView(inflateView);
-
-                final Spinner spinner = (Spinner) inflateView.findViewById(R.id.SEMESTER_SPINNER);
-                ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                        this, android.R.layout.simple_spinner_item, listDataHeader);
-                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                spinner.setAdapter(adapter);
-
-                builder.setTitle("Bestehendes Semester und dazugehörige Module löschen")
-                        .setPositiveButton("Löschen", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                //TODO: Semester aus DB löschen unda lle Module
-                                String selected = spinner.getSelectedItem().toString();
-                                listDataHeader.remove(selected);
-                                listDataChild.remove(selected);
-                                listAdapter.updateView(listDataHeader, listDataChild);
-                            }
-                        })
-                        .setNegativeButton("Abbrechen", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                //Nichts tun
-                            }
-                        });
-
-                dialog = builder.create();
-                dialog.show();
-                break;
-            case R.id.ITEM_BEARBEITEN:
-                //TODO: Semester bearbeiten
-                Log.d("HSKL", "Bearbeiten...");
-                break;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo)
     {
         super.onCreateContextMenu(menu, v, menuInfo);
@@ -196,11 +134,9 @@ public class SemesterUebersichtActivity extends AppCompatActivity
 
         MenuItem bearbeiten = menu.findItem(R.id.CONTEXT_BEARBEITEN);
         MenuItem loeschen = menu.findItem(R.id.CONTEXT_LOESCHEN);
-        MenuItem hinzufuegen = menu.findItem(R.id.CONTEXT_HINZUFUEGEN);
 
         bearbeiten.setTitle("Bearbeiten");
         loeschen.setTitle("Löschen");
-        hinzufuegen.setTitle("Hinzufügen");
     }
 
     @Override
@@ -222,37 +158,12 @@ public class SemesterUebersichtActivity extends AppCompatActivity
         {
             case R.id.CONTEXT_BEARBEITEN:
                 //TODO: Modul BEARBEITEN
-                Log.d("HSKL", "Bearbeiten...");
+                Log.d("HSKL", "Startup Subactivity for Editing Modul...");
                 break;
             case R.id.CONTEXT_LOESCHEN:
                 //TODO: In der Datenbank Modul löschen
                 listDataChild.get(semesterName).remove(modulName);
                 listAdapter.updateView(listDataHeader, listDataChild);
-                break;
-            case R.id.CONTEXT_HINZUFUEGEN:
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-                LayoutInflater inflater = LayoutInflater.from(this);
-                View inflateView= inflater.inflate(R.layout.modul_hinzufuegen_dialog, null);
-                builder.setView(inflateView);
-
-                final EditText newModulName = (EditText) inflateView.findViewById(R.id.MODULNAME_EDITTEXT);
-                builder.setTitle("Neues Modul hinzufügen")
-                        .setPositiveButton("Hinzufügen", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        //TODO: Modul in Datenbank einfügen
-                        listDataChild.get(semesterName).add(newModulName.getText().toString());
-                        listAdapter.updateView(listDataHeader, listDataChild);
-                    }
-                })
-                       .setNegativeButton("Abbrechen", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        //Nichts tun
-                    }
-                });
-
-                AlertDialog dialog = builder.create();
-                dialog.show();
                 break;
             default:
                 return super.onContextItemSelected(item);

@@ -6,7 +6,4 @@
     <item
         android:id="@+id/CONTEXT_LOESCHEN"
         android:title="Löschen" />
-    <item
-        android:id="@+id/CONTEXT_HINZUFUEGEN"
-        android:title="Hinzufügen" />
 </menu>
