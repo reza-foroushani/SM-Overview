@@ -15,24 +15,5 @@ public class MainBachelorActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_bachelor);
 
-        bachelor =(Button) findViewById(R.id.bachelorButton);
-        bachelor.setOnClickListener(new View.OnClickListener(){
-
-            @Override
-            public void onClick(View view){
-                Toast.makeText(getApplicationContext(),
-                        "Studiengänge Bachelor",Toast.LENGTH_LONG).show();
-            }
-        });
-
-        master =(Button) findViewById(R.id.masterButton);
-        master.setOnClickListener(new View.OnClickListener(){
-
-            @Override
-            public void onClick(View view){
-                Toast.makeText(getApplicationContext(),
-                        "Studiengänge Master",Toast.LENGTH_LONG).show();
-            }
-        });
     }
 }
