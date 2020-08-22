@@ -1,8 +1,10 @@
 package de.hskl.smoverview;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -171,7 +173,13 @@ public class CostumExpandableListAdapter extends BaseExpandableListAdapter
                 @Override
                 public void onClick(View view)
                 {
+                    final String str = _listDataHeader.get(groupPosition);
                     Log.d("HSKL", "Startup Edit Semester Subactivity...");
+                    Intent i = new Intent(_context, SemesterBearbeitenSubActivity.class);
+                    Log.d("HSKL", "Groupos: " + groupPosition);
+                    i.putExtra("INDEX", groupPosition);
+                    i.putExtra("SEMESTERNAME", str);
+                    ((Activity) _context).startActivityForResult(i, RequestCodes.editSemesterSuccess.toInt());
                 }
             });
         }

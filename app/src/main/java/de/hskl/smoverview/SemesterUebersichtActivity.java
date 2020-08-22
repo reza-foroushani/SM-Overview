@@ -1,6 +1,8 @@
 package de.hskl.smoverview;
 
+import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.DownloadManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -159,6 +161,12 @@ public class SemesterUebersichtActivity extends AppCompatActivity
             case R.id.CONTEXT_BEARBEITEN:
                 //TODO: Modul BEARBEITEN
                 Log.d("HSKL", "Startup Subactivity for Editing Modul...");
+                Intent i = new Intent(this, ModulBearbeitenSubActivity.class);
+                i.putExtra("CHILDINDEX", childPos);
+                i.putExtra("GROUPINDEX", groupPos);
+                i.putExtra("MODULNAME", modulName);
+                i.putExtra("MODULBESCHREIBUNG", "Modulbeschreibung");
+                startActivityForResult(i, RequestCodes.editModuleSuccess.toInt());
                 break;
             case R.id.CONTEXT_LOESCHEN:
                 //TODO: In der Datenbank Modul löschen
@@ -171,10 +179,55 @@ public class SemesterUebersichtActivity extends AppCompatActivity
         return super.onContextItemSelected(item);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        //TODO: In Datenbank speichern
+        Log.d("HSKL", "onActivityResult");
+        if(requestCode == RequestCodes.editSemesterSuccess.toInt())
+        {
+            if(resultCode == Activity.RESULT_OK)
+            {
+                Log.d("HSKL", "New Semestername: " + data.getStringExtra("SEMESTERNAME"));
+                int index = data.getIntExtra("INDEX", -1);
+
+                String newSemesterName = data.getStringExtra("SEMESTERNAME");
+                String oldSemestername = listDataHeader.get(index);
+                List<String> modulesFromSemester = listDataChild.get(oldSemestername);
+
+                //Rename Semester in List and add to hashmap
+                listDataHeader.set(index, newSemesterName);
+                listDataChild.put(listDataHeader.get(index), modulesFromSemester);
+
+                //Remove old entry
+                listDataChild.remove(oldSemestername);
+
+                listAdapter.updateView(listDataHeader, listDataChild);
+            }
+        }
+        if(requestCode == RequestCodes.editModuleSuccess.toInt())
+        {
+            if(resultCode == Activity.RESULT_OK)
+            {
+                String modulName = data.getStringExtra("MODULNAME");
+                String semesterName = listDataHeader.get(data.getIntExtra("GROUPINDEX", -1));
+                List<String> modulesList = listDataChild.get(semesterName);
+                int childIndex = data.getIntExtra("CHILDINDEX", -1);
+
+                modulesList.set(childIndex, modulName);
+
+                listDataChild.put(semesterName, modulesList);
+
+                listAdapter.updateView(listDataHeader, listDataChild);
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
     private String[] getAvailableSemesterNumberArray()
     {
         //TODO: Andere Max Semester?
-        final int MAXSEMESTER = 10;
+        final int MAXSEMESTER = 5;
 
         ArrayList<String> availableNumbers = new ArrayList<>();
         ArrayList<Integer> usedNumbers = new ArrayList<>();

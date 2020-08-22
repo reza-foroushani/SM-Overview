@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SemesterBearbeitenSubActivity">
+
+    <EditText
+        android:id="@+id/EDITSEMESTERNAME_EDITTEXT"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Semestername"
+        android:inputType="textPersonName" />
+
+    <Button
+        android:id="@+id/EDITSEMESTERNAMESAVE_BUTTON"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/EDITSEMESTERNAME_EDITTEXT"
+        android:layout_centerHorizontal="false"
+        android:text="Speichern"
+        android:onClick="saveData" />
+</RelativeLayout>
