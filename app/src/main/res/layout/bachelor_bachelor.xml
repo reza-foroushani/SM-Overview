@@ -5,24 +5,25 @@
     android:id="@+id/BACHELOR_LAYOUT"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#EDF8FA"
     android:orientation="vertical"
     tools:context=".BachelorIntent">
 
     <ImageView
-        android:id="@+id/imageView5"
+        android:id="@+id/IMAGE_BACHELOR"
         android:layout_width="match_parent"
         android:layout_height="110dp"
-        app:srcCompat="@drawable/monster_2841763_1920" />
+        app:srcCompat="@drawable/books_1831917_1280" />
 
     <TextView
         android:id="@+id/BACHELOR_TEXTVIEW"
         android:layout_width="200dp"
-        android:layout_height="29dp"
-        android:layout_below="@id/imageView5"
+        android:layout_height="50dp"
+        android:layout_below="@id/IMAGE_BACHELOR"
         android:layout_centerInParent="true"
         android:text="Bachelor Studiengänge"
         android:textAllCaps="true"
-        android:textSize="16sp"
+        android:textSize="13sp"
         android:textStyle="bold" />
 
 </RelativeLayout>
