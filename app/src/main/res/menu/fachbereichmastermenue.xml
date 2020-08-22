@@ -8,6 +8,7 @@
         <menu>
             <item
                 android:id="@+id/ITEM_HINZUFUEGEN"
+                android:icon="@drawable/ic_add_black_48dp"
                 android:title="Hinzufügen" />
             <item
                 android:id="@+id/ITEM_LOEASCHEN"

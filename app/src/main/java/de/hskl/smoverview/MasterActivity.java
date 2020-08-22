@@ -2,8 +2,10 @@ package de.hskl.smoverview;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -14,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,6 +34,8 @@ public class MasterActivity extends AppCompatActivity implements View.OnClickLis
 
     ListView fachbereichliste ;
     ArrayList<String> FachbereichMasterItem = new ArrayList<>();
+    //todo später mit SimpelCursorAdabter  arbeiten mit datenbank
+
     ArrayAdapter<String> items;
     String altetext;
     int altertextposition;
@@ -51,6 +56,17 @@ public class MasterActivity extends AppCompatActivity implements View.OnClickLis
         });*/
 
         fachbereichliste =(ListView) findViewById(R.id.FACHBEREICH_LISTE);
+        //TODO Adabter für datenbank
+        /*Context cxt= this;
+        int itemLayout = android.R.layout.simple_list_item_1;
+        // lifert von datenbank alle Einträger
+        //Cursor cursor = db.selectAlleMasterbereiche
+        //anzeigen alle werte aus der spalte
+        String[ ]  from = new String[] {//db.name von spalte}
+        //die werte aus spalte weden in das tex1 eingefügt
+                int[] to = new int [] {android.R.id.text1};
+        SimpleCursorAdapter simpleCursorAdapter = new SimpleCursorAdapter(cxt,itemLayout,cursor,from,to)
+        fachbereichliste.setAdapter(simpleCursorAdapter);*/
 
         // es wird listeview mit cotextmnue verbunden
         registerForContextMenu(fachbereichliste);
@@ -82,7 +98,11 @@ public class MasterActivity extends AppCompatActivity implements View.OnClickLis
     protected void onActivityResult(int requestCod ,int resultCode , Intent data){
         if(requestCod==RequestCodHinzufuegen ){
             if(resultCode== Activity.RESULT_OK){
+                //TODO hier später mit datenbank löschen
+
+
                 // es wird  neue item hinzugefügt
+
                 FachbereichMasterItem.add(data.getStringExtra("NAME"));
 
                 Toast toast = Toast.makeText(this, "Nuer Fachbereich hinzufügt", Toast.LENGTH_SHORT);
@@ -98,12 +118,15 @@ public class MasterActivity extends AppCompatActivity implements View.OnClickLis
         super.onStart();
         fachbereichliste.setAdapter(items);
 
-    }// hier wenn ich auf item gedrüct ist zu activti von Eduard
+    }
+    // hier wenn ich auf item gedrüct ist,aslo geh  zu activti von Eduard
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
         Object o = fachbereichliste.getItemAtPosition(i);
         //oder
        // String selctItem = adapterView.getItemAtPosition(i).toString();
+        //TODO hier später mit Eduard verknubfung
+
         String pen = o.toString();
         Toast toast = Toast.makeText(getApplicationContext(), pen , Toast.LENGTH_SHORT);
         toast.show();
@@ -131,15 +154,15 @@ public class MasterActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     public boolean onContextItemSelected(@NonNull MenuItem item) {
         if(item.getItemId()==R.id.BEARBEITEN){
-         openDialog();
+         openBearbeitungDialog();
         }
         if(item.getItemId()== R.id.LOESCHEN){
-
+            openLoeschenDialog();
         }
         return super.onContextItemSelected(item);
     }
 // bearbeiten Dialog
-     public void openDialog(){
+     public void  openBearbeitungDialog(){
          AlertDialog.Builder dialogBearbeiten= new AlertDialog.Builder(this);
          dialogBearbeiten.setTitle("Fachbereichname berbeiten ");
          dialogBearbeiten.setMessage("Neu Name eingeben");
@@ -167,12 +190,36 @@ public class MasterActivity extends AppCompatActivity implements View.OnClickLis
          dialogBearbeiten.setNegativeButton("Abbrechen", new DialogInterface.OnClickListener() {
              @Override
              public void onClick(DialogInterface dialogInterface, int i) {
-
+                 dialogInterface.dismiss();
              }
          });
          dialogBearbeiten.create();
          dialogBearbeiten.show();
 
+     }
+     //löschen Dialog
+     public void openLoeschenDialog(){
+         final AlertDialog.Builder dialogloeschen= new AlertDialog.Builder(this);
+         dialogloeschen.setTitle("Fachbereich löschen ");
+         dialogloeschen.setMessage("Sind Sie sicher ");
+         dialogloeschen.setPositiveButton("löschen", new DialogInterface.OnClickListener() {
+             @Override
+             public void onClick(DialogInterface dialogInterface, int i) {
+                 //TODO hier später mit datenbank löschen
+
+
+                 Toast toast = Toast.makeText(getApplicationContext(), "gelöcht", Toast.LENGTH_SHORT);
+                 toast.show();
+             }
+         });
+         dialogloeschen.setNegativeButton("Abbrechen", new DialogInterface.OnClickListener() {
+             @Override
+             public void onClick(DialogInterface dialogInterface, int i) {
+                 dialogInterface.dismiss();
+             }
+         });
+         dialogloeschen.create();
+         dialogloeschen.show();
      }
      //save status 
     @Override

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-<item android:title="bearbeiten"  android:id="@+id/BEARBEITEN"></item>
-<item android:title="löschen"  android:id="@+id/LOESCHEN"></item>
+<item android:title="bearbeiten"  android:id="@+id/BEARBEITEN"  android:icon="@drawable/ic_mode_edit_white_48dp"></item>
+<item android:title="löschen"  android:id="@+id/LOESCHEN"  android:icon="@drawable/ic_delete_white_48dp"></item>
 </menu>
