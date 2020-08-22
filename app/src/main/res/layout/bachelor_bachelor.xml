@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/BACHELOR_LAYOUT"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".BachelorIntent">
+
+    <ImageView
+        android:id="@+id/imageView5"
+        android:layout_width="match_parent"
+        android:layout_height="110dp"
+        app:srcCompat="@drawable/monster_2841763_1920" />
+
+    <TextView
+        android:id="@+id/BACHELOR_TEXTVIEW"
+        android:layout_width="200dp"
+        android:layout_height="29dp"
+        android:layout_below="@id/imageView5"
+        android:layout_centerInParent="true"
+        android:text="Bachelor Studiengänge"
+        android:textAllCaps="true"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+</RelativeLayout>

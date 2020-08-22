@@ -24,7 +24,7 @@
         android:layout_centerInParent="true"
         android:fontFamily="sans-serif-black"
         android:gravity="center"
-        android:padding="25dp"
+        android:padding="20dp"
         android:text="Herzlich Willkomen"
         android:textAllCaps="true"
         android:textColor="#20222E"
@@ -40,6 +40,7 @@
         android:layout_alignParentBottom="false"
         android:layout_centerInParent="true"
         android:background="#5F81A3"
+        android:padding="16dp"
         android:text="BACHELOR"
         android:textSize="22sp" />
 
@@ -49,9 +50,9 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/BACHELOR_BUTTON"
         android:layout_centerInParent="true"
-        android:layout_centerVertical="true"
         android:layout_marginTop="36dp"
         android:background="#FF9800"
+        android:padding="16dp"
         android:text="MASTER"
         android:textSize="22sp" />
 
