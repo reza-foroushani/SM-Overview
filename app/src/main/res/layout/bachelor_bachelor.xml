@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/BACHELOR_LAYOUT"
@@ -9,39 +9,35 @@
     android:orientation="vertical"
     tools:context=".BachelorIntent">
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/ADD_BUTTEN"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:clickable="true"
+        android:scrollbarSize="20sp"
+
+        android:src="@drawable/add"
+        app:backgroundTint="#89CAC4"
+        app:fabSize="auto"
+        app:maxImageSize="26sp" />
+
     <ImageView
         android:id="@+id/IMAGE_BACHELOR"
-        android:layout_width="match_parent"
-        android:layout_height="110dp"
-        app:srcCompat="@drawable/books_1831917_1280" />
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center_horizontal"
+        app:srcCompat="@drawable/computer_icon_2429310_640" />
 
     <TextView
-        android:id="@+id/BACHELOR_TEXTVIEW"
+        android:id="@+id/TEXT_VIEW_BACHELOR"
         android:layout_width="200dp"
-        android:layout_height="50dp"
-        android:layout_below="@id/IMAGE_BACHELOR"
-        android:layout_centerInParent="true"
-        android:autoText="false"
+        android:layout_height="30dp"
+        android:layout_margin="110dp"
         android:text="Bachelor Studiengänge"
-        android:textAllCaps="true"
-        android:textSize="15sp"
-        android:textStyle="bold" />
+        android:textAllCaps="false"
+        android:textColor="#020202"
+        android:textSize="16sp" />
 
-    <Button
-        android:id="@+id/button"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginBottom="16dp"
-        android:background="#FFFFFF"
-        android:drawableBottom="@android:drawable/ic_menu_add" />
 
-    " />
-
-</RelativeLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

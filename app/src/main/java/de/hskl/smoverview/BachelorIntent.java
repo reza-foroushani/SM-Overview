@@ -14,7 +14,7 @@ public class BachelorIntent extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.bachelor_bachelor);
 
-        ausgabe = findViewById(R.id.BACHELOR_TEXTVIEW);
+        ausgabe = findViewById(R.id.TEXT_VIEW_BACHELOR);
 
 
     }
