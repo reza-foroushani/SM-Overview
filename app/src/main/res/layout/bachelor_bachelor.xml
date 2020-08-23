@@ -21,9 +21,27 @@
         android:layout_height="50dp"
         android:layout_below="@id/IMAGE_BACHELOR"
         android:layout_centerInParent="true"
+        android:autoText="false"
         android:text="Bachelor Studiengänge"
         android:textAllCaps="true"
-        android:textSize="13sp"
+        android:textSize="15sp"
         android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="16dp"
+        android:background="#FFFFFF"
+        android:drawableBottom="@android:drawable/ic_menu_add" />
+
+    " />
 
 </RelativeLayout>
