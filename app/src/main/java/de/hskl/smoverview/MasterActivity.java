@@ -114,15 +114,17 @@ public class MasterActivity extends AppCompatActivity implements View.OnClickLis
 
             String FachbereichNme = data.getStringExtra("NAME");
             String FachbereichBeschreibung = data.getStringExtra("BESCHREIBUNG");
-
-            Master master=new Master(FachbereichNme,FachbereichBeschreibung);
-            db.addFachberecihMaster(master,"M");
+                
+            if(FachbereichNme.trim().length() > 0) {
+                Master master = new Master(FachbereichNme, FachbereichBeschreibung);
+                db.addFachberecihMaster(master, "M");
                 // es wird  neue item hinzugefügt
 
-              //  FachbereichMasterItem.add(data.getStringExtra("NAME"));
+                //  FachbereichMasterItem.add(data.getStringExtra("NAME"));
 
                 Toast toast = Toast.makeText(this, "Nuer Fachbereich hinzufügt", Toast.LENGTH_SHORT);
                 toast.show();
+            }
 
             }
 
@@ -212,6 +214,7 @@ MusterahmadDB dbDialog= new MusterahmadDB(this);
                //  FachbereichMasterItem.set(altertextposition,newText.getText().toString());
 
                   //TODO hier später mit datenbank
+
                  Master nueMaster = new Master (master.getFachbereich_Id(),newText.getText().toString(),newBeschreibung.getText().toString());
                  db.updatMaster(nueMaster,master.getFachbereich_Id());
                  updateList();
