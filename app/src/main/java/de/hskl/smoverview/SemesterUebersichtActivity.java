@@ -2,23 +2,18 @@ package de.hskl.smoverview;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.DownloadManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.NumberPicker;
-import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -30,10 +25,14 @@ import java.util.List;
 
 public class SemesterUebersichtActivity extends AppCompatActivity
 {
+    FloatingActionButton addSemesterFab;
     CostumExpandableListAdapter listAdapter;
     ExpandableListView expListView;
     List<String> listDataHeader;
     HashMap<String, List<String>> listDataChild;
+
+    //TODO: Andere Max Semester?
+    final int MAXSEMESTER = 5;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -42,86 +41,18 @@ public class SemesterUebersichtActivity extends AppCompatActivity
         setContentView(R.layout.semester_uebersicht_activity);
 
         expListView = (ExpandableListView) findViewById(R.id.MEINE_LISTE);
+        addSemesterFab = (FloatingActionButton) findViewById(R.id.ADDSEMESTER_FLOATINGACTIONBUTTON);
 
         listDataHeader = new ArrayList<>();
         listDataChild = new HashMap<>();
 
-        // Adding child data
-        listDataHeader.add("Semester 1");
-        listDataHeader.add("Semester 2");
-
-        // Adding child data
-        List<String> s1 = new ArrayList<>();
-        s1.add("Test1");
-        s1.add("Test2");
-        s1.add("Test3");
-
-        // Adding child data
-        List<String> s2 = new ArrayList<>();
-        s2.add("Test1");
-        s2.add("Test2");
-        s2.add("Test3");
-
-        listDataChild.put(listDataHeader.get(0), s1); // Header, Child data
-        listDataChild.put(listDataHeader.get(1), s2);
+        fillListWithData(); //TODO: Delete later
 
         listAdapter = new CostumExpandableListAdapter(this, listDataHeader, listDataChild);
         expListView.setAdapter(listAdapter);
 
-        expListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener()
-        {
-            @Override
-            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition
-                    , int childPosition, long id)
-            {
-                final String semesterName = listDataHeader.get(groupPosition);
-                final String modulName = listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition);
-                Intent intent = new Intent(SemesterUebersichtActivity.this, ModulDetailansichtActivity.class);
-                intent.putExtra("SEMESTER", semesterName);
-                intent.putExtra("MODUL", modulName);
-                startActivity(intent);
-                return false;
-            }
-        });
-
-        FloatingActionButton addSemesterFab = findViewById(R.id.ADDSEMESTER_FLOATINGACTIONBUTTON);
-        addSemesterFab.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                AlertDialog.Builder builder = new AlertDialog.Builder(SemesterUebersichtActivity.this);
-                LayoutInflater inflater = LayoutInflater.from(SemesterUebersichtActivity.this);
-                View inflateView = inflater.inflate(R.layout.semester_hinzufuegen_dialog, null);
-                AlertDialog dialog;
-                builder.setView(inflateView);
-
-                String[] numbers = getAvailableSemesterNumberArray();
-                final NumberPicker semesterNp = (NumberPicker) inflateView.findViewById(R.id.SEMESTER_NUMBERPICKER);
-                semesterNp.setDisplayedValues(numbers);
-                semesterNp.setMinValue(1);
-                semesterNp.setMaxValue(numbers.length);
-
-                builder.setTitle("Neues Semester hinzufügen")
-                        .setPositiveButton("Hinzufügen", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                //TODO: Semester in Datenbank einfügen
-                                int selectedSemesterNr = Integer.parseInt(semesterNp.getDisplayedValues()[semesterNp.getValue()-1]);
-                                listDataHeader.add("Semester " + selectedSemesterNr);
-                                listDataChild.put("Semester " + selectedSemesterNr, new ArrayList<String>());
-                                listAdapter.updateView(listDataHeader, listDataChild);
-                            }
-                        })
-                        .setNegativeButton("Abbrechen", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                //Nichts tun
-                            }
-                        });
-
-                dialog = builder.create();
-                dialog.show();
-            }
-        });
+        setupClickListenerForModulDetailed();
+        setupClickListenerForSemesterAdd();
 
         registerForContextMenu(expListView);
     }
@@ -172,6 +103,7 @@ public class SemesterUebersichtActivity extends AppCompatActivity
                 //TODO: In der Datenbank Modul löschen
                 listDataChild.get(semesterName).remove(modulName);
                 listAdapter.updateView(listDataHeader, listDataChild);
+                Toast.makeText(this, "Modul erfolgreich gelöscht!", Toast.LENGTH_SHORT).show();
                 break;
             default:
                 return super.onContextItemSelected(item);
@@ -203,6 +135,7 @@ public class SemesterUebersichtActivity extends AppCompatActivity
                 listDataChild.remove(oldSemestername);
 
                 listAdapter.updateView(listDataHeader, listDataChild);
+                Toast.makeText(this, "Semester erfolgreich verändert!", Toast.LENGTH_SHORT).show();
             }
         }
         if(requestCode == RequestCodes.editModuleSuccess.toInt())
@@ -219,16 +152,81 @@ public class SemesterUebersichtActivity extends AppCompatActivity
                 listDataChild.put(semesterName, modulesList);
 
                 listAdapter.updateView(listDataHeader, listDataChild);
+                Toast.makeText(this, "Modul erfolgreich verändert!", Toast.LENGTH_SHORT).show();
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
 
+    private void setupClickListenerForModulDetailed()
+    {
+        expListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener()
+        {
+            @Override
+            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition
+                    , int childPosition, long id)
+            {
+                final String semesterName = listDataHeader.get(groupPosition);
+                final String modulName = listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition);
+                Intent intent = new Intent(SemesterUebersichtActivity.this, ModulDetailansichtActivity.class);
+                intent.putExtra("SEMESTER", semesterName);
+                intent.putExtra("MODUL", modulName);
+                startActivity(intent);
+                return false;
+            }
+        });
+    }
+
+    private void setupClickListenerForSemesterAdd()
+    {
+        addSemesterFab.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                Log.d("HSKL", "größe: " + listDataHeader.size());
+                if(MAXSEMESTER == listDataHeader.size())
+                    Toast.makeText(SemesterUebersichtActivity.this, "Maximum an Semester erreicht!", Toast.LENGTH_SHORT).show();
+                else
+                {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(SemesterUebersichtActivity.this);
+                    LayoutInflater inflater = LayoutInflater.from(SemesterUebersichtActivity.this);
+                    View inflateView = inflater.inflate(R.layout.semester_hinzufuegen_dialog, null);
+                    AlertDialog dialog;
+                    builder.setView(inflateView);
+
+                    String[] numbers = getAvailableSemesterNumberArray();
+                    final NumberPicker semesterNp = (NumberPicker) inflateView.findViewById(R.id.SEMESTER_NUMBERPICKER);
+                    semesterNp.setDisplayedValues(numbers);
+                    semesterNp.setMinValue(1);
+                    semesterNp.setMaxValue(numbers.length);
+
+                    builder.setTitle("Neues Semester hinzufügen")
+                            .setPositiveButton("Hinzufügen", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    //TODO: Semester in Datenbank einfügen
+                                    int selectedSemesterNr = Integer.parseInt(semesterNp.getDisplayedValues()[semesterNp.getValue() - 1]);
+                                    listDataHeader.add("Semester " + selectedSemesterNr);
+                                    listDataChild.put("Semester " + selectedSemesterNr, new ArrayList<String>());
+                                    listAdapter.updateView(listDataHeader, listDataChild);
+                                    Toast.makeText(SemesterUebersichtActivity.this, "Semester erfolgreich hinzugefügt!", Toast.LENGTH_SHORT).show();
+                                }
+                            })
+                            .setNegativeButton("Abbrechen", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    //Nichts tun
+                                }
+                            });
+
+                    dialog = builder.create();
+                    dialog.show();
+                }
+            }
+        });
+    }
+
     private String[] getAvailableSemesterNumberArray()
     {
-        //TODO: Andere Max Semester?
-        final int MAXSEMESTER = 5;
-
         ArrayList<String> availableNumbers = new ArrayList<>();
         ArrayList<Integer> usedNumbers = new ArrayList<>();
 
@@ -243,5 +241,27 @@ public class SemesterUebersichtActivity extends AppCompatActivity
         }
 
         return availableNumbers.toArray(new String[0]);
+    }
+
+    private void fillListWithData()
+    {
+        // Adding child data
+        listDataHeader.add("Semester 1");
+        listDataHeader.add("Semester 2");
+
+        // Adding child data
+        List<String> s1 = new ArrayList<>();
+        s1.add("Test1");
+        s1.add("Test2");
+        s1.add("Test3");
+
+        // Adding child data
+        List<String> s2 = new ArrayList<>();
+        s2.add("Test1");
+        s2.add("Test2");
+        s2.add("Test3");
+
+        listDataChild.put(listDataHeader.get(0), s1); // Header, Child data
+        listDataChild.put(listDataHeader.get(1), s2);
     }
 }

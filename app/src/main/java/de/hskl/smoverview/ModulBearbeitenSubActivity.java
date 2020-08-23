@@ -31,6 +31,7 @@ public class ModulBearbeitenSubActivity extends AppCompatActivity
         childindex = i.getIntExtra("CHILDINDEX", -1);
         groupindex = i.getIntExtra("GROUPINDEX", -1);
         modulName = i.getStringExtra("MODULNAME");
+
         modulNameEditText.setText(modulName);
         modulBeschreibung = i.getStringExtra("MODULBESCHREIBUNG");
         modulBeschreibungEditText.setText(modulBeschreibung);

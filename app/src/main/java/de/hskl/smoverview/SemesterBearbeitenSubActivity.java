@@ -3,7 +3,6 @@ package de.hskl.smoverview;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
-import android.app.Instrumentation;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -28,6 +27,7 @@ public class SemesterBearbeitenSubActivity extends AppCompatActivity
         Intent i = getIntent();
         index = i.getIntExtra("INDEX", -1);
         semesterName = i.getStringExtra("SEMESTERNAME");
+
         semesterNameEditText.setText(semesterName);
     }
 
