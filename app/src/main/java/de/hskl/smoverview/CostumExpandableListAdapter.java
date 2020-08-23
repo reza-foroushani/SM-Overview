@@ -94,17 +94,16 @@ public class CostumExpandableListAdapter extends BaseExpandableListAdapter
         String headerTitle = (String) getGroup(groupPosition);
         if (convertView == null)
         {
-            Log.d("HSKL", "getGroupView: " + groupPosition);
             LayoutInflater infalInflater = (LayoutInflater) this._context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = infalInflater.inflate(R.layout.list_group, null);
-
-            Button addModulBtn = (Button)convertView.findViewById(R.id.ADDMODUL_BUTTON);
-            Button deleteSemesterBtn = (Button)convertView.findViewById(R.id.DELETESEMESTER_BUTTON);
-
-            setupClickListenerModulAdd(addModulBtn, groupPosition);
-            setupClickListenerSemesterDelete(deleteSemesterBtn, groupPosition);
         }
+
+        Button addModulBtn = (Button)convertView.findViewById(R.id.ADDMODUL_BUTTON);
+        Button deleteSemesterBtn = (Button)convertView.findViewById(R.id.DELETESEMESTER_BUTTON);
+
+        setupClickListenerModulAdd(addModulBtn, groupPosition);
+        setupClickListenerSemesterDelete(deleteSemesterBtn, groupPosition);
 
         TextView lblListHeader = (TextView) convertView.findViewById(R.id.lblListHeader);
         lblListHeader.setTypeface(null, Typeface.BOLD);
