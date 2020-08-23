@@ -17,6 +17,15 @@
         android:inputType="textPersonName"
         android:textSize="24sp" />
 
+    <EditText
+        android:id="@+id/BESCHREIBUNG_SUB"
+        android:layout_width="411dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Beschreichbung"
+        android:inputType="textPersonName"
+        android:textSize="18sp" />
+
     <Button
         android:id="@+id/SPEICHERN_BUTTON"
         android:layout_width="match_parent"
@@ -29,4 +38,5 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Abbrechen" />
+
 </LinearLayout>
