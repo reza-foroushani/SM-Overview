@@ -15,8 +15,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:clickable="true"
-        android:scrollbarSize="20sp"
+        android:onClick="onClick"
 
+        android:scrollbarSize="20sp"
         android:src="@drawable/add"
         app:backgroundTint="#89CAC4"
         app:fabSize="auto"
@@ -41,3 +42,4 @@
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
