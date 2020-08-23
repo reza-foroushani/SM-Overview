@@ -8,6 +8,8 @@
         android:id="@+id/MODULNAME_EDITTEXT"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:hint="Modulname"/>
+        android:layout_margin="25dp"
+        android:layout_weight="1"
+        android:hint="Modulname" />
 
 </LinearLayout>

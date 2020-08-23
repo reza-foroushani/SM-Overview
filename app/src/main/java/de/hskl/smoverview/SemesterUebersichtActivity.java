@@ -91,7 +91,6 @@ public class SemesterUebersichtActivity extends AppCompatActivity
         {
             case R.id.CONTEXT_BEARBEITEN:
                 //TODO: Modul BEARBEITEN
-                Log.d("HSKL", "Startup Subactivity for Editing Modul...");
                 Intent i = new Intent(this, ModulBearbeitenSubActivity.class);
                 i.putExtra("CHILDINDEX", childPos);
                 i.putExtra("GROUPINDEX", groupPos);
@@ -120,21 +119,23 @@ public class SemesterUebersichtActivity extends AppCompatActivity
         {
             if(resultCode == Activity.RESULT_OK)
             {
-                Log.d("HSKL", "New Semestername: " + data.getStringExtra("SEMESTERNAME"));
                 int index = data.getIntExtra("INDEX", -1);
 
                 String newSemesterName = data.getStringExtra("SEMESTERNAME");
-                String oldSemestername = listDataHeader.get(index);
-                List<String> modulesFromSemester = listDataChild.get(oldSemestername);
+                String oldSemesterName = listDataHeader.get(index);
+                List<String> modulesFromSemester = listDataChild.get(oldSemesterName);
 
-                //Rename Semester in List and add to hashmap
-                listDataHeader.set(index, newSemesterName);
-                listDataChild.put(listDataHeader.get(index), modulesFromSemester);
+                if(!newSemesterName.equals(oldSemesterName)) //Do something is new name is new
+                {
+                    //Rename Semester in List and add to hashmap
+                    listDataHeader.set(index, newSemesterName);
+                    listDataChild.put(listDataHeader.get(index), modulesFromSemester);
 
-                //Remove old entry
-                listDataChild.remove(oldSemestername);
+                    //Remove old entry
+                    listDataChild.remove(oldSemesterName);
 
-                listAdapter.updateView(listDataHeader, listDataChild);
+                    listAdapter.updateView(listDataHeader, listDataChild);
+                }
                 Toast.makeText(this, "Semester erfolgreich verändert!", Toast.LENGTH_SHORT).show();
             }
         }
