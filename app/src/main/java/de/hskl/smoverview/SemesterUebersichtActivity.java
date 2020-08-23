@@ -115,30 +115,6 @@ public class SemesterUebersichtActivity extends AppCompatActivity
     {
         //TODO: In Datenbank speichern
         Log.d("HSKL", "onActivityResult");
-        if(requestCode == RequestCodes.editSemesterSuccess.toInt())
-        {
-            if(resultCode == Activity.RESULT_OK)
-            {
-                int index = data.getIntExtra("INDEX", -1);
-
-                String newSemesterName = data.getStringExtra("SEMESTERNAME");
-                String oldSemesterName = listDataHeader.get(index);
-                List<String> modulesFromSemester = listDataChild.get(oldSemesterName);
-
-                if(!newSemesterName.equals(oldSemesterName)) //Do something is new name is new
-                {
-                    //Rename Semester in List and add to hashmap
-                    listDataHeader.set(index, newSemesterName);
-                    listDataChild.put(listDataHeader.get(index), modulesFromSemester);
-
-                    //Remove old entry
-                    listDataChild.remove(oldSemesterName);
-
-                    listAdapter.updateView(listDataHeader, listDataChild);
-                }
-                Toast.makeText(this, "Semester erfolgreich verändert!", Toast.LENGTH_SHORT).show();
-            }
-        }
         if(requestCode == RequestCodes.editModuleSuccess.toInt())
         {
             if(resultCode == Activity.RESULT_OK)
@@ -185,7 +161,6 @@ public class SemesterUebersichtActivity extends AppCompatActivity
             @Override
             public void onClick(View view)
             {
-                Log.d("HSKL", "größe: " + listDataHeader.size());
                 if(MAXSEMESTER == listDataHeader.size())
                     Toast.makeText(SemesterUebersichtActivity.this, "Maximum an Semester erreicht!", Toast.LENGTH_SHORT).show();
                 else
@@ -210,6 +185,8 @@ public class SemesterUebersichtActivity extends AppCompatActivity
                                     listDataHeader.add("Semester " + selectedSemesterNr);
                                     listDataChild.put("Semester " + selectedSemesterNr, new ArrayList<String>());
                                     listAdapter.updateView(listDataHeader, listDataChild);
+                                    Log.d("HSKL", "Listheader: " + listDataHeader);
+                                    Log.d("HSKL", "Listchild: " + listDataChild);
                                     Toast.makeText(SemesterUebersichtActivity.this, "Semester erfolgreich hinzugefügt!", Toast.LENGTH_SHORT).show();
                                 }
                             })

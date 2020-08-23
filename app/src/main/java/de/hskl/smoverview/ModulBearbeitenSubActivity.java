@@ -25,7 +25,7 @@ public class ModulBearbeitenSubActivity extends AppCompatActivity
         setContentView(R.layout.modul_bearbeiten_subactivity);
         modulNameEditText = (EditText) findViewById(R.id.EDIMODULENAME_EDITTEXT);
         modulBeschreibungEditText = (EditText) findViewById(R.id.EDITMODULBESCHREIBUNG_EDITTEXT);
-        speichernButton = (Button) findViewById(R.id.EDITSEMESTER_BUTTON);
+        speichernButton = (Button) findViewById(R.id.EDITMODUL_BUTTON);
 
         Intent i = getIntent();
         childindex = i.getIntExtra("CHILDINDEX", -1);

@@ -2,7 +2,6 @@ package de.hskl.smoverview;
 
 public enum RequestCodes
 {
-    editSemesterSuccess(10),
     editModuleSuccess(11);
 
     private int requestCode;
