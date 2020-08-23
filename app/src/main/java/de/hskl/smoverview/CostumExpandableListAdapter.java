@@ -1,12 +1,9 @@
 package de.hskl.smoverview;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Typeface;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -143,10 +140,7 @@ public class CostumExpandableListAdapter extends BaseExpandableListAdapter
                                 final EditText modulNameEditText = (EditText) inflateView.findViewById(R.id.MODULNAME_EDITTEXT);
                                 String neuesModul = modulNameEditText.getText().toString();
                                 String semesterName = (String)getGroup(groupPosition);
-                                Log.d("HSKL", "Listheader: " + _listDataHeader);
-                                Log.d("HSKL", "Listchild: " + _listDataChild);
-                                Log.d("HSKL", "Grouppos: " + groupPosition);
-                                Log.d("HSKL", "Semester: " + semesterName);
+
                                 if(!neuesModul.isEmpty())
                                 {
                                     _listDataChild.get(semesterName).add(neuesModul);

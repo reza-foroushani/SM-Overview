@@ -80,7 +80,6 @@ public class SemesterUebersichtActivity extends AppCompatActivity
         int groupPos = ExpandableListView.getPackedPositionGroup(info.packedPosition);
         int childPos = ExpandableListView.getPackedPositionChild(info.packedPosition);
 
-        //TODO: FIX => Warum kann ich Gruppe (Semester) Context Menü aufrufen?
         if(childPos == -1)
             return super.onContextItemSelected(item);
 
@@ -114,7 +113,6 @@ public class SemesterUebersichtActivity extends AppCompatActivity
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
         //TODO: In Datenbank speichern
-        Log.d("HSKL", "onActivityResult");
         if(requestCode == RequestCodes.editModuleSuccess.toInt())
         {
             if(resultCode == Activity.RESULT_OK)
@@ -185,8 +183,6 @@ public class SemesterUebersichtActivity extends AppCompatActivity
                                     listDataHeader.add("Semester " + selectedSemesterNr);
                                     listDataChild.put("Semester " + selectedSemesterNr, new ArrayList<String>());
                                     listAdapter.updateView(listDataHeader, listDataChild);
-                                    Log.d("HSKL", "Listheader: " + listDataHeader);
-                                    Log.d("HSKL", "Listchild: " + listDataChild);
                                     Toast.makeText(SemesterUebersichtActivity.this, "Semester erfolgreich hinzugefügt!", Toast.LENGTH_SHORT).show();
                                 }
                             })
