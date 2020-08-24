@@ -169,8 +169,9 @@ int a;
         MasterDTO master =  (MasterDTO) adapterView.getItemAtPosition(i);
         //TODO hier später mit Eduard verknuebfen
         Intent intent = new Intent(this,SemesterUebersichtActivity.class);
-        intent.putExtra("FACHBEREICHNAME",master.getFachbereichName());
-        intent.putExtra("MorB","M");
+        //intent.putExtra("FACHBEREICHNAME",master.getFachbereichName());
+        //intent.putExtra("MorB","M");
+        intent.putExtra("FACHBEREICH_ID",master.getFachbereich_Id());
           startActivity(intent);
 
 
