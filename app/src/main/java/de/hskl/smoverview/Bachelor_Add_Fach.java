@@ -2,6 +2,7 @@ package de.hskl.smoverview;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -13,6 +14,7 @@ public class Bachelor_Add_Fach extends AppCompatActivity implements View.OnClick
     EditText addEditText;
     Button addSpeichernButton;
     Button addAbbrechenButton;
+    String fachbereich;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +40,22 @@ public class Bachelor_Add_Fach extends AppCompatActivity implements View.OnClick
         {
             Intent intentOfHomeViewFach = new Intent(this,BachelorIntent.class);
             startActivity(intentOfHomeViewFach);
+            finish();
+        }
+
+        if(view.getId() == addSpeichernButton.getId())
+        {
+            if(addEditText.getText().toString() != "" && addEditText.getText().toString() != " ")
+            {
+            fachbereich = addEditText.getText().toString();
+
+            Intent intent = new Intent();
+            intent.putExtra("FACHBEREICH",fachbereich);
+
+            setResult(Activity.RESULT_OK,intent);
+            }
+
+            finish();
         }
     }
 }

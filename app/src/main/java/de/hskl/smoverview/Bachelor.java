@@ -4,20 +4,20 @@ public class Bachelor {
 
     private int id;
     private String fachbereich;
-    private String morb;
+    private  String morb = "b";
 
 
-    public Bachelor(String fachbereich, String morb)
+    public Bachelor(String fachbereich)
     {
         this.fachbereich = fachbereich;
-        this.morb = morb;
+
     }
 
-    public Bachelor(int id, String fachbereich, String morb)
+    public Bachelor(int id, String fachbereich)
     {
         this.id = id;
         this.fachbereich = fachbereich;
-        this.morb = morb;
+
     }
 
     public int getId() {
