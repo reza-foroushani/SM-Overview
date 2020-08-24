@@ -1,8 +1,7 @@
-package de.hskl.smoverview;
+package de.hskl.smoverview.databaseClasses;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -10,6 +9,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
+
+import de.hskl.smoverview.databaseClasses.MasterDTO;
 
 public class MusterahmadDB extends SQLiteOpenHelper {
     public static final int DATENBANK_VERSION =1;
@@ -43,7 +44,7 @@ public class MusterahmadDB extends SQLiteOpenHelper {
         onCreate(db);
 
     }
-    public void addFachberecihMaster(Master master,String m_or_b ){
+    public void addFachberecihMaster(MasterDTO master, String m_or_b ){
         // copy von db für schreicben
         SQLiteDatabase db =this.getWritableDatabase();
         ContentValues values= new ContentValues();
@@ -57,8 +58,8 @@ public class MusterahmadDB extends SQLiteOpenHelper {
 
 
     }
-    public ArrayList<Master> getAllFachBereicheMaster (){
-        ArrayList<Master>   fachbereichHilfe = new ArrayList<>();
+    public ArrayList<MasterDTO> getAllFachBereicheMaster (){
+        ArrayList<MasterDTO>   fachbereichHilfe = new ArrayList<>();
         // er nimmt all daten
         String SELECT_query ="select * from " +TABELlE_FACHBEREiCH;
         // copy von db für lesen
@@ -73,15 +74,15 @@ public class MusterahmadDB extends SQLiteOpenHelper {
                 String beschreibung =cursor.getString(cursor.getColumnIndex(FACHBERECIH_BESCHREICHBUNG));
                 //ich brauche  inhalb jedes item  seine id  speichern
                 int fachbereich_ID =cursor.getInt(cursor.getColumnIndex(FACHBERECIH_ID));
-                Master master = new Master(fachbereich_ID,fachberichName,beschreibung);
+                MasterDTO master = new MasterDTO(fachbereich_ID,fachberichName,beschreibung);
                 fachbereichHilfe.add(master);
             }while (cursor.moveToNext());
         }
         return  fachbereichHilfe;
 
     }
-    public  Master getmasterbyId(int id){
-        Master master=null ;
+    public MasterDTO getmasterbyId(int id){
+        MasterDTO master=null ;
         SQLiteDatabase db  = this.getWritableDatabase();
         /* query() führtr eine SQL-anfrage aus, als Parameter wedne die Bestandteil der Anfrage übergeben
         zweite paramiter wehche spalte
@@ -93,11 +94,11 @@ public class MusterahmadDB extends SQLiteOpenHelper {
             int id_bereich =cursor.getInt(cursor.getColumnIndex(FACHBERECIH_ID));
             String   fachbereichName = cursor.getString(cursor.getColumnIndex(FACHBERECIH_NAMEN));
             String   beschreibung = cursor.getString(cursor.getColumnIndex(FACHBERECIH_BESCHREICHBUNG));
-            master=new Master(id_bereich,fachbereichName,beschreibung);
+            master=new MasterDTO(id_bereich,fachbereichName,beschreibung);
         }
         return master;
     }
-    public  void updatMaster(Master master ,int id){
+    public  void updatMaster(MasterDTO master , int id){
         SQLiteDatabase db =this.getWritableDatabase();
         ContentValues values=  new ContentValues();
         values.put(FACHBERECIH_NAMEN,master.getFachbereichName());

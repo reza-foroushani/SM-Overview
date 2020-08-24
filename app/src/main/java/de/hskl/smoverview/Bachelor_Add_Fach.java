@@ -9,6 +9,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import de.hskl.smoverview.databaseClasses.DBFachbereich;
+
 public class Bachelor_Add_Fach extends AppCompatActivity implements View.OnClickListener{
 
     EditText addEditText;

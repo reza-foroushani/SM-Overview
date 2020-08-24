@@ -1,18 +1,18 @@
-package de.hskl.smoverview;
+package de.hskl.smoverview.databaseClasses;
 
-public class Master {
+public class MasterDTO {
     private String FachbereichName;
     private String Beschreichbung;
-    int fachbereich_Id;
+    private int fachbereich_Id;
 
 
 
-    public Master(String fachbereichName, String beschreichbung) {
+    public MasterDTO(String fachbereichName, String beschreichbung) {
         this.FachbereichName = fachbereichName;
        this.Beschreichbung = beschreichbung;
     }
 
-    public Master(int fachbereich_Id,String fachbereichName, String beschreichbung) {
+    public MasterDTO(int fachbereich_Id, String fachbereichName, String beschreichbung) {
         this.FachbereichName = fachbereichName;
         this.Beschreichbung = beschreichbung;
         this.fachbereich_Id=fachbereich_Id;

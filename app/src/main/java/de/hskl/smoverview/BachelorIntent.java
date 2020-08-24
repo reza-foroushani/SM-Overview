@@ -5,17 +5,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.ActionMode;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.util.ArrayList;
+import de.hskl.smoverview.databaseClasses.BachelorDTO;
+import de.hskl.smoverview.databaseClasses.DBFachbereich;
 
 public class BachelorIntent extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener{
 
@@ -63,7 +62,7 @@ public class BachelorIntent extends AppCompatActivity implements View.OnClickLis
                 String fachbereich = data.getStringExtra("NAME");
 
                 if(fachbereich.trim().length() > 0) {
-                    Bachelor bachelor = new Bachelor(fachbereich);
+                    BachelorDTO bachelor = new BachelorDTO(fachbereich);
                     dbFachbereich.insertBachlor(bachelor,"b");
 
                     Toast toast = Toast.makeText(this, "Fachbereich wurde erfolgreich hinzugefuegt."

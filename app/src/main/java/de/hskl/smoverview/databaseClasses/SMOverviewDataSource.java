@@ -1,14 +1,9 @@
-package de.hskl.smoverview.javaclasses;
+package de.hskl.smoverview.databaseClasses;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 //Zuständig für das Bearbeiten der Daten
 public class SMOverviewDataSource

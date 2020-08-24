@@ -1,29 +1,25 @@
-package de.hskl.smoverview;
+package de.hskl.smoverview.databaseClasses;
 
-public class Bachelor {
-
+public class BachelorDTO
+{
     private int id;
     private String fachbereich;
     private  String morb = "b";
 
-
-    public Bachelor(String fachbereich)
+    public BachelorDTO(String fachbereich)
     {
         this.fachbereich = fachbereich;
-
     }
 
-    public Bachelor(int id, String fachbereich)
+    public BachelorDTO(int id, String fachbereich)
     {
         this.id = id;
         this.fachbereich = fachbereich;
-
     }
 
     public int getId() {
         return id;
     }
-
     public void setId(int id) {
         this.id = id;
     }
@@ -31,7 +27,6 @@ public class Bachelor {
     public String getFachbereich() {
         return fachbereich;
     }
-
     public void setFachbereich(String fachbereich) {
         this.fachbereich = fachbereich;
     }
@@ -39,7 +34,6 @@ public class Bachelor {
     public String getMorb() {
         return morb;
     }
-
     public void setMorb(String morb) {
         this.morb = morb;
     }

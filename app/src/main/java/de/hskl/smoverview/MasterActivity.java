@@ -4,9 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.view.ContextMenu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -17,7 +15,6 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 
@@ -25,13 +22,16 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
+import de.hskl.smoverview.databaseClasses.MasterDTO;
+import de.hskl.smoverview.databaseClasses.MusterahmadDB;
+
 public class MasterActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener  {
     //requestCode
     public final int RequestCodHinzufuegen=11;
     //dialog
 Boolean isSchowingDialog=false;
 AlertDialog beatbeitungDialog;
-Master masterDialog;
+MasterDTO masterDialog;
 String berbeitenODERlösen;
 int a;
 
@@ -144,7 +144,7 @@ int a;
             String FachbereichBeschreibung = data.getStringExtra("BESCHREIBUNG");
                 
             if(FachbereichNme.trim().length() > 0) {
-                Master master = new Master(FachbereichNme, FachbereichBeschreibung);
+                MasterDTO master = new MasterDTO(FachbereichNme, FachbereichBeschreibung);
                 db.addFachberecihMaster(master, "M");
                 // es wird  neue item hinzugefügt
 
@@ -166,7 +166,7 @@ int a;
         //Object o = fachbereichliste.getItemAtPosition(i);
         //oder
        // String selctItem = adapterView.getItemAtPosition(i).toString();
-        Master master =  (Master) adapterView.getItemAtPosition(i);
+        MasterDTO master =  (MasterDTO) adapterView.getItemAtPosition(i);
         //TODO hier später mit Eduard verknuebfen
         Intent intent = new Intent(this,SemesterUebersichtActivity.class);
         intent.putExtra("FACHBEREICHNAME",master.getFachbereichName());
@@ -205,7 +205,7 @@ int a;
 //itemselected von cotextmenu
     @Override
     public boolean onContextItemSelected(@NonNull MenuItem item) {
-        masterDialog = db.getmasterbyId(((Master ) fachbereichliste.getItemAtPosition(postion_item)).fachbereich_Id);
+        masterDialog = db.getmasterbyId(((MasterDTO) fachbereichliste.getItemAtPosition(postion_item)).getFachbereich_Id());
         if(item.getItemId()==R.id.BEARBEITEN){
          openBearbeitungDialog(masterDialog);
         }
@@ -215,7 +215,7 @@ int a;
         return super.onContextItemSelected(item);
     }
 // bearbeiten Dialog
-     public void  openBearbeitungDialog(Master master){
+     public void  openBearbeitungDialog(MasterDTO master){
          berbeitenODERlösen="bearbeiten";
 MusterahmadDB dbDialog= new MusterahmadDB(this);
          AlertDialog.Builder dialogBearbeiten= new AlertDialog.Builder(this);
@@ -225,7 +225,7 @@ MusterahmadDB dbDialog= new MusterahmadDB(this);
          final  View  bearbeitlayout =this.getLayoutInflater().inflate(R.layout.layout_dialogbearbeitenfachbereichvonmaster,null);
          dialogBearbeiten.setView(bearbeitlayout);
          // such nach ausgewähltete item in DB und bring es hier
-         final Master masterfinal = master;
+         final MasterDTO masterfinal = master;
          final EditText newText=(EditText) bearbeitlayout.findViewById(R.id.BEARBEITEN_DIALOG);
          final EditText newBeschreibung=(EditText) bearbeitlayout.findViewById(R.id.BESCHREIBUNG_DIALOG);
          newText.setText(master.getFachbereichName());
@@ -241,7 +241,7 @@ MusterahmadDB dbDialog= new MusterahmadDB(this);
 
                   //TODO hier später mit datenbank
 
-                 Master nueMaster = new Master (masterfinal.getFachbereich_Id(),newText.getText().toString(),newBeschreibung.getText().toString());
+                 MasterDTO nueMaster = new MasterDTO(masterfinal.getFachbereich_Id(),newText.getText().toString(),newBeschreibung.getText().toString());
                  db.updatMaster(nueMaster,masterfinal.getFachbereich_Id());
                  updateList();
                  Toast toast = Toast.makeText(getApplicationContext(), "geändert", Toast.LENGTH_SHORT);
@@ -267,16 +267,16 @@ MusterahmadDB dbDialog= new MusterahmadDB(this);
          beatbeitungDialog.show();
      }
      //löschen Dialog
-     public void openLoeschenDialog(Master master){
+     public void openLoeschenDialog(MasterDTO master){
          final AlertDialog.Builder dialogloeschen= new AlertDialog.Builder(this);
-         final Master masterFinal = master;
+         final MasterDTO masterFinal = master;
          dialogloeschen.setTitle("Fachbereich löschen ");
          dialogloeschen.setMessage("Sind Sie sicher ");
          dialogloeschen.setPositiveButton("löschen", new DialogInterface.OnClickListener() {
              @Override
              public void onClick(DialogInterface dialogInterface, int i) {
                  //TODO hier später mit datenbank löschen
-           db.deleteFachbereich(masterFinal.fachbereich_Id);
+           db.deleteFachbereich(masterFinal.getFachbereich_Id());
               updateList();
                  Toast toast = Toast.makeText(getApplicationContext(), "gelöcht", Toast.LENGTH_SHORT);
                  toast.show();
@@ -301,7 +301,7 @@ MusterahmadDB dbDialog= new MusterahmadDB(this);
 
 // updateliste
      public  void updateList(){
-         ArrayList<Master> test1 = db.getAllFachBereicheMaster();
+         ArrayList<MasterDTO> test1 = db.getAllFachBereicheMaster();
          masterAdapter = new MasterAdapter(this,R.layout.item_master,test1);
          fachbereichliste.setAdapter(masterAdapter);
      }
@@ -331,7 +331,7 @@ MusterahmadDB dbDialog= new MusterahmadDB(this);
             String fachname= savedInstanceState.getString("FACHNAME","");
             String fachbeschreicbung= savedInstanceState.getString("FACHBESCHREIBUNG","");
             int id= savedInstanceState.getInt("FACHID",1702);
-            Master master=new Master(id,fachname,fachbeschreicbung);
+            MasterDTO master=new MasterDTO(id,fachname,fachbeschreicbung);
             isSchowingDialog = savedInstanceState.getBoolean("IS_SHOWING_DIALOG", false);
 if(isSchowingDialog ) {
 

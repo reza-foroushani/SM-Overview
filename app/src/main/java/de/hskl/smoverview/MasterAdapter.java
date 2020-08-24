@@ -1,12 +1,10 @@
 package de.hskl.smoverview;
 
 import android.content.Context;
-import android.database.Cursor;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.CursorAdapter;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -14,7 +12,9 @@ import androidx.annotation.Nullable;
 
 import java.util.List;
 
-public class MasterAdapter extends ArrayAdapter<Master> {
+import de.hskl.smoverview.databaseClasses.MasterDTO;
+
+public class MasterAdapter extends ArrayAdapter<MasterDTO> {
   /*  LayoutInflater layoutInflater;
     int itemLayout;
     String []from ;
@@ -49,7 +49,7 @@ public class MasterAdapter extends ArrayAdapter<Master> {
 
     Context context ;
     int resource ;
-     public MasterAdapter(@NonNull Context context, int resource, @NonNull List<Master> objects) {
+     public MasterAdapter(@NonNull Context context, int resource, @NonNull List<MasterDTO> objects) {
         super(context, resource, objects);
         //weil wir das context global  geben
         this.context=context;
@@ -63,7 +63,7 @@ public class MasterAdapter extends ArrayAdapter<Master> {
         convertView = LayoutInflater.from(context).inflate(resource,parent,false);
         TextView FBName = convertView.findViewById(R.id.FACHBEREICHMASTR_NAME2);
         TextView Beschreichbung = convertView.findViewById(R.id.BESCHREIBUNG_MASTER2);
-        Master  CurrentMaster = getItem(position);
+        MasterDTO CurrentMaster = getItem(position);
         FBName.setText(CurrentMaster.getFachbereichName());
         Beschreichbung.setText(CurrentMaster.getBeschreichbung());
         return convertView;

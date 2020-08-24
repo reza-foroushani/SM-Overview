@@ -22,9 +22,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import de.hskl.smoverview.javaclasses.ModulDTO;
-import de.hskl.smoverview.javaclasses.RequestCodes;
-import de.hskl.smoverview.javaclasses.SMOverviewDataSource;
+import de.hskl.smoverview.databaseClasses.RequestCodes;
+import de.hskl.smoverview.databaseClasses.SMOverviewDataSource;
 
 public class SemesterUebersichtActivity extends AppCompatActivity
 {
