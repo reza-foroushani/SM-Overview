@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.view.ContextMenu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -16,6 +17,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 
@@ -26,15 +28,19 @@ import java.util.ArrayList;
 public class MasterActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener  {
     //requestCode
     public final int RequestCodHinzufuegen=11;
+    //dialog
+Boolean isSchowingDialog=false;
+AlertDialog beatbeitungDialog;
+Master masterDialog;
+String berbeitenODERlösen;
+int a;
 
-    ListView fachbereichliste ;
-
-    MasterAdapter masterAdapter;
-    //todo später mit SimpelCursorAdabter  arbeiten mit datenbank
+    //listView,Adapter und DB
+     ListView fachbereichliste ;
+     MasterAdapter masterAdapter;
       MusterahmadDB db;
+      //
 
-     String altetext;
-      int altertextposition;
       int postion_item;
 
 
@@ -42,6 +48,7 @@ public class MasterActivity extends AppCompatActivity implements View.OnClickLis
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_master);
+
         //füe pluss floatingButton
         FloatingActionButton myFab = (FloatingActionButton)  findViewById(R.id.fab);
         myFab.setOnClickListener(this);
@@ -87,11 +94,32 @@ public class MasterActivity extends AppCompatActivity implements View.OnClickLis
     
     }
 
+
+
+
     @Override
     protected void onResume() {
         super.onResume();
         //damit wir dirkt hinzufügen und nciht warten bis , dass benutzer raus gen
         updateList();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if(beatbeitungDialog!=null&& beatbeitungDialog.isShowing()) {
+            beatbeitungDialog.dismiss();
+
+
+        }else {
+            isSchowingDialog=false;
+        }
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+
     }
 
     @Override
@@ -131,22 +159,20 @@ public class MasterActivity extends AppCompatActivity implements View.OnClickLis
         }
         super.onActivityResult(requestCod,resultCode,data);
     }
-    @Override
-    protected  void  onStart(){
-        super.onStart();
-        //fachbereichliste.setAdapter(items);
 
-    }
     // hier wenn ich auf item gedrüct ist,aslo geh  zu activti von Eduard
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
         //Object o = fachbereichliste.getItemAtPosition(i);
         //oder
        // String selctItem = adapterView.getItemAtPosition(i).toString();
-        //TODO hier später mit Eduard verknubfung
-        // Intent intent = new Intent(this,);
-               //  startActivity();
-        Master master =  db.getmasterbyId(1);
+        Master master =  (Master) adapterView.getItemAtPosition(i);
+        //TODO hier später mit Eduard verknuebfen
+        //Intent intent = new Intent(this,SemesterUebersichtActivity.class);
+        //intent.putExtra("FACHBEREICHNAME",master.getFachbereichName());
+        //intent.putExtra("MorB","M");
+        //  startActivity(intent);
+
 
         //Cursor meinzeiger =db.getmasterbyIdCursor(3);
 
@@ -160,38 +186,37 @@ public class MasterActivity extends AppCompatActivity implements View.OnClickLis
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
         // durch  AdapterView.AdapterContextMenuInfo ich kann zielwiew (was ich lang gedrucht habe ),die ich erneut in das cast übertrage
-        AdapterView.AdapterContextMenuInfo info =
-                (AdapterView.AdapterContextMenuInfo) menuInfo;
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
       //  altetext = ((TextView) info.targetView).getText().toString();
+
+      //postiton der Item holen
         postion_item  =  info.position;
 
-//TODO selsct ein item von databank
-        altetext ="a";
-       // altertextposition=info.position;
-
+      //TODO selsct ein item von databank
 
         //die gibt objekt von class menuinfaleter
         MenuInflater inflater= getMenuInflater();
         // damit ich menue.xml zugreucfen , und zweite paramiter von cotext menu
         inflater.inflate(R.menu.master_contextmenue,menu);
-        MenuItem beabeiten  =menu.findItem(R.id.BEARBEITEN);
-        MenuItem löschen = menu.findItem(R.id.LOESCHEN);
+
     }
 
 
 //itemselected von cotextmenu
     @Override
     public boolean onContextItemSelected(@NonNull MenuItem item) {
+        masterDialog = db.getmasterbyId(((Master ) fachbereichliste.getItemAtPosition(postion_item)).fachbereich_Id);
         if(item.getItemId()==R.id.BEARBEITEN){
-         openBearbeitungDialog();
+         openBearbeitungDialog(masterDialog);
         }
         if(item.getItemId()== R.id.LOESCHEN){
-            openLoeschenDialog();
+            openLoeschenDialog(masterDialog);
         }
         return super.onContextItemSelected(item);
     }
 // bearbeiten Dialog
-     public void  openBearbeitungDialog(){
+     public void  openBearbeitungDialog(Master master){
+         berbeitenODERlösen="bearbeiten";
 MusterahmadDB dbDialog= new MusterahmadDB(this);
          AlertDialog.Builder dialogBearbeiten= new AlertDialog.Builder(this);
          dialogBearbeiten.setTitle("Fachbereichname berbeiten ");
@@ -199,7 +224,8 @@ MusterahmadDB dbDialog= new MusterahmadDB(this);
          //bring die bearbeitlayout  und mit context zusammenlegen
          final  View  bearbeitlayout =this.getLayoutInflater().inflate(R.layout.layout_dialogbearbeitenfachbereichvonmaster,null);
          dialogBearbeiten.setView(bearbeitlayout);
-         final Master master = (Master ) fachbereichliste.getItemAtPosition(postion_item);
+         // such nach ausgewähltete item in DB und bring es hier
+         final Master masterfinal = master;
          final EditText newText=(EditText) bearbeitlayout.findViewById(R.id.BEARBEITEN_DIALOG);
          final EditText newBeschreibung=(EditText) bearbeitlayout.findViewById(R.id.BESCHREIBUNG_DIALOG);
          newText.setText(master.getFachbereichName());
@@ -215,48 +241,62 @@ MusterahmadDB dbDialog= new MusterahmadDB(this);
 
                   //TODO hier später mit datenbank
 
-                 Master nueMaster = new Master (master.getFachbereich_Id(),newText.getText().toString(),newBeschreibung.getText().toString());
-                 db.updatMaster(nueMaster,master.getFachbereich_Id());
+                 Master nueMaster = new Master (masterfinal.getFachbereich_Id(),newText.getText().toString(),newBeschreibung.getText().toString());
+                 db.updatMaster(nueMaster,masterfinal.getFachbereich_Id());
                  updateList();
                  Toast toast = Toast.makeText(getApplicationContext(), "geändert", Toast.LENGTH_SHORT);
                  toast.show();
-
+                 isSchowingDialog = false;
+                 berbeitenODERlösen="";
              }
          });
          dialogBearbeiten.setNegativeButton("Abbrechen", new DialogInterface.OnClickListener() {
              @Override
              public void onClick(DialogInterface dialogInterface, int i) {
                  dialogInterface.dismiss();
+                 isSchowingDialog=false;
+                 berbeitenODERlösen="";
+                 a=1;
              }
          });
-         dialogBearbeiten.create();
-         dialogBearbeiten.show();
 
+         beatbeitungDialog=  dialogBearbeiten.create();
+
+         isSchowingDialog=true;
+
+         beatbeitungDialog.show();
      }
      //löschen Dialog
-     public void openLoeschenDialog(){
+     public void openLoeschenDialog(Master master){
          final AlertDialog.Builder dialogloeschen= new AlertDialog.Builder(this);
-         final Master master = (Master ) fachbereichliste.getItemAtPosition(postion_item);
+         final Master masterFinal = master;
          dialogloeschen.setTitle("Fachbereich löschen ");
          dialogloeschen.setMessage("Sind Sie sicher ");
          dialogloeschen.setPositiveButton("löschen", new DialogInterface.OnClickListener() {
              @Override
              public void onClick(DialogInterface dialogInterface, int i) {
                  //TODO hier später mit datenbank löschen
-           db.deleteFachbereich(master.fachbereich_Id);
+           db.deleteFachbereich(masterFinal.fachbereich_Id);
               updateList();
                  Toast toast = Toast.makeText(getApplicationContext(), "gelöcht", Toast.LENGTH_SHORT);
                  toast.show();
+                 isSchowingDialog=false;
+                 berbeitenODERlösen="";
              }
          });
          dialogloeschen.setNegativeButton("Abbrechen", new DialogInterface.OnClickListener() {
              @Override
              public void onClick(DialogInterface dialogInterface, int i) {
                  dialogInterface.dismiss();
+                 isSchowingDialog=false;
+                 berbeitenODERlösen="";
              }
          });
-         dialogloeschen.create();
-         dialogloeschen.show();
+         beatbeitungDialog= dialogloeschen.create();
+
+         isSchowingDialog=true;
+         berbeitenODERlösen="löschen";
+         beatbeitungDialog.show();
      }
 
 // updateliste
@@ -270,28 +310,38 @@ MusterahmadDB dbDialog= new MusterahmadDB(this);
 
 
      //save status 
-   /* @Override
+   @Override
     protected void onSaveInstanceState(Bundle outState) {
+        //ich ichbeischer daten von obejt der bearebeiten well
+        if(isSchowingDialog) {
+            outState.putBoolean("IS_SHOWING_DIALOG", isSchowingDialog);
+            outState.putString("FACHNAME", masterDialog.getFachbereichName());
+            outState.putString("FACHBESCHREIBUNG", masterDialog.getBeschreichbung());
+            outState.putInt("FACHID", masterDialog.getFachbereich_Id());
+        }
         super.onSaveInstanceState(outState);
 
-        ArrayList<String> title=new ArrayList<>();
-        for(int i=0;i<FachbereichMasterItem.size();i++){
 
-            title.add(FachbereichMasterItem.get(i));
-        }
-        outState.putStringArrayList("ARRYLIST",title);
-        Log.d("HSKL", "onSaveInstanceState() "+outState);
     }
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
 
-        Log.d("HSKL", "onRestoreInstanceState() "+savedInstanceState);
+        if(savedInstanceState!=null) {
+            String fachname= savedInstanceState.getString("FACHNAME","");
+            String fachbeschreicbung= savedInstanceState.getString("FACHBESCHREIBUNG","");
+            int id= savedInstanceState.getInt("FACHID",1702);
+            Master master=new Master(id,fachname,fachbeschreicbung);
+            isSchowingDialog = savedInstanceState.getBoolean("IS_SHOWING_DIALOG", false);
+if(isSchowingDialog ) {
 
-        for(int i=0;i<savedInstanceState.getStringArrayList("ARRYLIST").size();i++){
+        openBearbeitungDialog(master);
 
-            FachbereichMasterItem.add(savedInstanceState.getStringArrayList("ARRYLIST").get(i));
-        }
-    }*/
 
 }
+        }
+
+        }
+    }
+
+
