@@ -35,9 +35,10 @@ public class SubHinzufuegenFachbereichMasterActivity extends AppCompatActivity i
 
     @Override
     public void onClick(View view) {
-        if (view== speicherButton) {if (konkreteEdettext.getText().toString()!=" ") {
+        if (view== speicherButton) {
             fachbereichName = konkreteEdettext.getText().toString();
             fachbereichBeschreibung = konkreteEdettextBeschreibung.getText().toString();
+
             Intent i = new Intent();
             //neu Intent ,damit ich ,was geschriben habe, wiede zurüch schiken
             i.putExtra("NAME", fachbereichName);
@@ -45,7 +46,7 @@ public class SubHinzufuegenFachbereichMasterActivity extends AppCompatActivity i
 
             // schicke ich zurück
             setResult(Activity.RESULT_OK, i);
-        }
+
 
             finish();
         }if(view==abbrechenButton){
