@@ -41,7 +41,7 @@ public class SMOverviewDataSource
 
         return db.insert(SMOverviewDbHelper.TABLE_SEMESTER, null, values) > 0;
     }
-
+/*
     public ArrayList<SemesterDTO> getAllSemester()
     {
 
@@ -76,6 +76,5 @@ public class SMOverviewDataSource
     {
         
     }
-
-    public
+    */
 }
