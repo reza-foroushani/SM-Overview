@@ -1,6 +1,6 @@
 package de.hskl.smoverview;
 
-        import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 
 <<<<<<< HEAD
         import android.os.Bundle;
