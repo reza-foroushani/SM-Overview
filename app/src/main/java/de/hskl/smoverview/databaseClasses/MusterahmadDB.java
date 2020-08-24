@@ -61,11 +61,11 @@ public class MusterahmadDB extends SQLiteOpenHelper {
     public ArrayList<MasterDTO> getAllFachBereicheMaster (){
         ArrayList<MasterDTO>   fachbereichHilfe = new ArrayList<>();
         // er nimmt all daten
-        String SELECT_query ="select * from " +TABELlE_FACHBEREiCH;
+        //String SELECT_query ="select * from " +TABELlE_FACHBEREiCH+"WHERE"+MASTER_OR_BACHLER+ "="+ "M";
         // copy von db für lesen
         SQLiteDatabase db =this.getReadableDatabase();
         //ohne expression deswegen null ,wir haben ergebniss von select-quere genomen
-        Cursor cursor=db.rawQuery(SELECT_query,null);
+        Cursor cursor= db.query(TABELlE_FACHBEREiCH,new String[]{"id","Fachberecih","Beschrechbung"},"MorB=?",new String[]{"M"},null,null,null);
         //wenn true dann erste zeihle hat daten
         if(cursor.moveToFirst()){
             do {
