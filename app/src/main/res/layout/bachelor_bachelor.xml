@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/BACHELOR_LAYOUT"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F8FBFB"
+    android:orientation="vertical"
+    tools:context=".BachelorIntent">
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/ADD_BUTTEN"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:clickable="true"
+        android:onClick="onClick"
+
+        android:scrollbarSize="20sp"
+        android:src="@drawable/add"
+        app:backgroundTint="#89CAC4"
+        app:fabSize="auto"
+        app:maxImageSize="26sp" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="bottom|center_vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#EFEDED"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/TEXT_VIEW_BACHELOR"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="clip_horizontal|center_horizontal"
+                android:text="Bachelor Studiengänge"
+                android:textAllCaps="false"
+                android:textColor="#020202"
+                android:textSize="24sp"
+                tools:visibility="visible" />
+
+            <ListView
+                android:id="@+id/ADD_LIST_VIEW"
+                android:layout_width="410dp"
+                android:layout_height="650dp"
+                android:layout_gravity="clip_horizontal|center"
+                android:padding="20dp" />
+        </LinearLayout>
+    </ScrollView>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_gravity="bottom">
+
+        <SearchView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#BC9C92">
+
+        </SearchView>
+    </TableRow>
+
+
+</FrameLayout>
+

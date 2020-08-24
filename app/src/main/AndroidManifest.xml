@@ -8,16 +8,23 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".SemesterLoeschenActivity" />
+		
+        <activity android:name=".Fachbereich">
+        <activity android:name=".Bachelor_Add_Fach"></activity>
+        <activity android:name=".MasterIntent" />
+        <activity android:name=".BachelorIntent" />
+        <activity android:name=".MainBachelorActivity">
+		<activity android:name=".SemesterLoeschenActivity" />
         <activity android:name=".ModulBearbeitenSubActivity" />
         <activity android:name=".ModulDetailansichtActivity" />
-        <activity android:name=".SemesterUebersichtActivity">
-            <intent-filter>
+        <activity android:name=".SemesterUebersichtActivity">            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".MasterActivity"/>
+<activity android:name=".SubHinzufuegenFachbereichMasterActivity"/>
     </application>
 
 </manifest>
