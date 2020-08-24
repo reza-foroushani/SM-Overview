@@ -1,4 +1,4 @@
-package de.hskl.smoverview;
+package de.hskl.smoverview.javaclasses;
 
 public enum RequestCodes
 {

@@ -5,7 +5,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -23,6 +22,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import de.hskl.smoverview.javaclasses.ModulDTO;
+import de.hskl.smoverview.javaclasses.RequestCodes;
+import de.hskl.smoverview.javaclasses.SMOverviewDataSource;
+
 public class SemesterUebersichtActivity extends AppCompatActivity
 {
     FloatingActionButton addSemesterFab;
@@ -32,7 +35,9 @@ public class SemesterUebersichtActivity extends AppCompatActivity
     HashMap<String, List<String>> listDataChild;
 
     //TODO: Andere Max Semester?
-    final int MAXSEMESTER = 5;
+    private final int MAXSEMESTER = 5;
+
+    private SMOverviewDataSource dataSource;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -55,6 +60,10 @@ public class SemesterUebersichtActivity extends AppCompatActivity
         setupClickListenerForSemesterAdd();
 
         registerForContextMenu(expListView);
+
+        dataSource = new SMOverviewDataSource(this);
+        dataSource.open();
+        dataSource.close();
     }
 
     @Override
