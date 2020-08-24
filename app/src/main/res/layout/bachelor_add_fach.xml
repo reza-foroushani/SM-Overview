@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".Bachelor_Add_Fach">
+
+    <ImageView
+        android:id="@+id/ADD_IMAGE"
+        android:layout_width="wrap_content"
+        android:layout_height="100dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="20dp"
+        app:srcCompat="@drawable/icon_4017417_640" />
+
+    <TextView
+        android:id="@+id/ADD_TEXTVIEW"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="GEBEN SIE DEN FACHBEREICH AN:"
+        android:textAllCaps="true"
+        android:textSize="23sp" />
+
+    <EditText
+        android:id="@+id/ADD_TEXT_INPUT"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:ems="10"
+        android:gravity="center"
+        android:inputType="textPersonName"
+        android:padding="30dp"
+        android:text="Fach" />
+
+    <Button
+        android:id="@+id/ADD_SPEICHERN_BUTTON"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|center_vertical"
+        android:layout_margin="30dp"
+        android:background="#2196F3"
+        android:text="Speichern" />
+
+    <Button
+        android:id="@+id/ADD_ABBRECHEN_BUTTON"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center|center_horizontal"
+        android:layout_margin="5dp"
+        android:background="#E91E63"
+        android:text="Abbrechen" />
+
+</LinearLayout>
