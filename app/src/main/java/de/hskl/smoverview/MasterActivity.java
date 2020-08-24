@@ -168,10 +168,10 @@ int a;
        // String selctItem = adapterView.getItemAtPosition(i).toString();
         Master master =  (Master) adapterView.getItemAtPosition(i);
         //TODO hier später mit Eduard verknuebfen
-        //Intent intent = new Intent(this,SemesterUebersichtActivity.class);
-        //intent.putExtra("FACHBEREICHNAME",master.getFachbereichName());
-        //intent.putExtra("MorB","M");
-        //  startActivity(intent);
+        Intent intent = new Intent(this,SemesterUebersichtActivity.class);
+        intent.putExtra("FACHBEREICHNAME",master.getFachbereichName());
+        intent.putExtra("MorB","M");
+          startActivity(intent);
 
 
         //Cursor meinzeiger =db.getmasterbyIdCursor(3);
