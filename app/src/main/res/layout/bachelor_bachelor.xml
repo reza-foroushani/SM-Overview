@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/BACHELOR_LAYOUT"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#EDF8FA"
+    android:background="#F8FBFB"
     android:orientation="vertical"
     tools:context=".BachelorIntent">
 
@@ -23,23 +23,50 @@
         app:fabSize="auto"
         app:maxImageSize="26sp" />
 
-    <ImageView
-        android:id="@+id/IMAGE_BACHELOR"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_gravity="center_horizontal"
-        app:srcCompat="@drawable/computer_icon_2429310_640" />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="bottom|center_vertical">
 
-    <TextView
-        android:id="@+id/TEXT_VIEW_BACHELOR"
-        android:layout_width="200dp"
-        android:layout_height="30dp"
-        android:layout_margin="110dp"
-        android:text="Bachelor Studiengänge"
-        android:textAllCaps="false"
-        android:textColor="#020202"
-        android:textSize="16sp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#EFEDED"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/TEXT_VIEW_BACHELOR"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="clip_horizontal|center_horizontal"
+                android:text="Bachelor Studiengänge"
+                android:textAllCaps="false"
+                android:textColor="#020202"
+                android:textSize="24sp"
+                tools:visibility="visible" />
+
+            <ListView
+                android:id="@+id/ADD_LIST_VIEW"
+                android:layout_width="410dp"
+                android:layout_height="650dp"
+                android:layout_gravity="clip_horizontal|center"
+                android:padding="20dp" />
+        </LinearLayout>
+    </ScrollView>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_gravity="bottom">
+
+        <SearchView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#BC9C92">
+
+        </SearchView>
+    </TableRow>
 
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</FrameLayout>
 
