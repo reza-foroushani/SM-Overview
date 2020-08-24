@@ -6,19 +6,41 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+<<<<<<< HEAD
 
         <activity android:name=".Bachelor_Add_Fach"></activity>
         <activity android:name=".MasterIntent" />
         <activity android:name=".BachelorIntent" />
         <activity android:name=".MainBachelorActivity"/>
+=======
+<<<<<<< HEAD
+
+=======
+		
+        <activity android:name=".Fachbereich">
+>>>>>>> 28f7c605817321451809723e5867e7e85c108cd6
+        <activity android:name=".Bachelor_Add_Fach"></activity>
+        <activity android:name=".MasterIntent" />
+        <activity android:name=".BachelorIntent" />
+        <activity android:name=".MainBachelorActivity">
+<<<<<<< HEAD
+>>>>>>> 57c9ff8a963f66c422401cceb9b73b2b6695b142
 
         <activity android:name=".Fachbereich">
 >>>>>>> MeinBranch
             <intent-filter>
+<<<<<<< HEAD
 
+=======
+=======
+		<activity android:name=".SemesterLoeschenActivity" />
+        <activity android:name=".ModulBearbeitenSubActivity" />
+        <activity android:name=".ModulDetailansichtActivity" />
+        <activity android:name=".SemesterUebersichtActivity">            <intent-filter>
+>>>>>>> 28f7c605817321451809723e5867e7e85c108cd6
+>>>>>>> 57c9ff8a963f66c422401cceb9b73b2b6695b142
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
