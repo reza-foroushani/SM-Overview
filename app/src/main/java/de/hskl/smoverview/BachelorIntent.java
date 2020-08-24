@@ -33,7 +33,7 @@ public class BachelorIntent extends AppCompatActivity implements View.OnClickLis
 
         ausgabe = findViewById(R.id.TEXT_VIEW_BACHELOR);
         addButton = findViewById(R.id.ADD_BUTTEN);
-
+        addListView = findViewById(R.id.ADD_LIST_VIEW);
         dbFachbereich = new DBFachbereich(this);
 
         registerForContextMenu(addListView);

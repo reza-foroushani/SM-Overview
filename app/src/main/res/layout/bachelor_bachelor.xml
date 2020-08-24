@@ -57,15 +57,7 @@
     <TableRow
         android:layout_width="match_parent"
         android:layout_height="55dp"
-        android:layout_gravity="bottom">
-
-        <SearchView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#BC9C92">
-
-        </SearchView>
-    </TableRow>
+        android:layout_gravity="bottom"/>
 
 
 </FrameLayout>

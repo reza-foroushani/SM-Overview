@@ -14,7 +14,8 @@ public class MasterIntent extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.master_master);
 
-
+    
     master.findViewById(R.id.MASTER_VIEW);
+
     }
 }
