@@ -25,6 +25,10 @@ public class Bachelor_Add_Fach extends AppCompatActivity implements View.OnClick
         addEditText.setOnClickListener(this);
         addSpeichernButton.setOnClickListener(this);
         addAbbrechenButton.setOnClickListener(this);
+
+        // Datenbank wird mithilfe des Anwendungskontext (this) angelegt
+        DBFachbereich db = new DBFachbereich(this);
+
     }
 
     @Override

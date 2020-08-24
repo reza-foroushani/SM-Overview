@@ -1,0 +1,71 @@
+package de.hskl.smoverview;
+
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+
+public class DBFachbereich  extends SQLiteOpenHelper {
+
+    // Version und Name von Datenbank
+    public static final int DB_VERSION = 1;
+    public static final String DB_NAMEN = "Bachelor";
+
+    // Tabelle
+    public static final String TABELLE_NAME = "bachelor";
+    public static final String TABELLE_ID = "id";
+    public static final String TABELLE_FACHBEREICH = "fachbereich";
+    public static final String TABELLE_BACHELORORMASTER = "bORM";
+
+
+    // Anwendungskontext durch Konstruktur
+    public DBFachbereich(Context ctx)
+    {
+        super(ctx,DB_NAMEN, null, DB_VERSION);
+    }
+
+    @Override
+    public void onCreate(SQLiteDatabase sqlOncreateDB) {
+        // alle Tabelle erzeugen
+         String tabelle = "CREATE TABLE " + TABELLE_NAME + "(" +
+                TABELLE_ID + "INTEGER PRIMARY KEY AUTOINCREMENT," +
+                TABELLE_FACHBEREICH + " VARCHAR(35)," +
+                TABELLE_BACHELORORMASTER  + " VARCHAR(10)) ";
+
+        sqlOncreateDB.execSQL(tabelle);
+
+        // Tabellen mit Grunddaten füllen
+    }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int i, int i1) {
+
+        /*
+        Datensätze parken
+        Tabellen löschen
+        onCreate Methode aufrufen
+        geparkte Datensätze neu einspielen
+         */
+
+        onCreate(db);
+
+    }
+
+
+    // insert in Table
+    public void insertBachlor(Bachelor bachelor)
+    {
+        ContentValues neueZeille = new ContentValues();
+        
+    }
+
+    // Update Tabelle
+    public void updateBachelor(int id){
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+
+
+
+    }
+}
