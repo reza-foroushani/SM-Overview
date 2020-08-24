@@ -35,7 +35,7 @@ public class MainBachelorActivity extends AppCompatActivity implements View.OnCl
 
         if(view.getId() == master.getId())
         {
-            Intent intentOfMaster  = new Intent(this,MasterIntent.class);
+            Intent intentOfMaster  = new Intent(this,MasterActivity.class);
             startActivity(intentOfMaster);
         }
 
