@@ -5,6 +5,8 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.ContextMenu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -30,19 +32,19 @@ public class MasterActivity extends AppCompatActivity implements View.OnClickLis
     public final int RequestCodHinzufuegen=11;
     //dialog
 Boolean isSchowingDialog=false;
+Boolean isSchowingDialogLöschen=false;
 AlertDialog beatbeitungDialog;
 MasterDTO masterDialog;
-String berbeitenODERlösen;
-int a;
 
     //listView,Adapter und DB
      ListView fachbereichliste ;
      MasterAdapter masterAdapter;
       MusterahmadDB db;
-      //
 
+      //für postion von item
       int postion_item;
-
+//
+    EditText suchen ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,10 +62,29 @@ int a;
         });*/
 
         fachbereichliste =(ListView) findViewById(R.id.FACHBEREICH_LISTE);
+        suchen=(EditText) findViewById(R.id.SUCHEN);
+        suchen.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                 suchList(suchen.getText().toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
         //TODO Adabter für datenbank
 
         db= new MusterahmadDB(this);
-
+        updateList();
 
 
        /* Context cxt= this;
@@ -101,24 +122,40 @@ int a;
     protected void onResume() {
         super.onResume();
         //damit wir dirkt hinzufügen und nciht warten bis , dass benutzer raus gen
-        updateList();
+
+
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+
         if(beatbeitungDialog!=null&& beatbeitungDialog.isShowing()) {
             beatbeitungDialog.dismiss();
+            Toast toast = Toast.makeText(getApplicationContext(), " if onPause", Toast.LENGTH_SHORT);
+            toast.show();
 
 
         }else {
+            // wenn ich kein button ausgewält in bearbeit dialog
             isSchowingDialog=false;
+            isSchowingDialogLöschen=false;
         }
+
     }
+
 
     @Override
     protected void onRestart() {
         super.onRestart();
+
 
     }
 
@@ -142,7 +179,9 @@ int a;
 
             String FachbereichNme = data.getStringExtra("NAME");
             String FachbereichBeschreibung = data.getStringExtra("BESCHREIBUNG");
-                
+                // prüfung ob bereit da oder nciht
+                if(db.PruefBereicheMaster(FachbereichNme)){
+                    // prüfung ob leer oder nciht
             if(FachbereichNme.trim().length() > 0) {
                 MasterDTO master = new MasterDTO(FachbereichNme, FachbereichBeschreibung);
                 db.addFachberecihMaster(master, "M");
@@ -152,7 +191,22 @@ int a;
 
                 Toast toast = Toast.makeText(this, "Nuer Fachbereich hinzufügt", Toast.LENGTH_SHORT);
                 toast.show();
+
+                updateList();
+            }else {Toast toast = Toast.makeText(getApplicationContext(), " kein  Fachberecih hinzufügt feld war leer ", Toast.LENGTH_SHORT);
+                toast.show();
+
+                updateList();
             }
+
+                }else{
+
+                    suchen.setText(FachbereichNme);
+                    suchList(FachbereichNme);
+                    Toast toast = Toast.makeText(getApplicationContext(), " ist bereit da ", Toast.LENGTH_SHORT);
+                    toast.show();
+                }
+
 
             }
 
@@ -169,8 +223,8 @@ int a;
         MasterDTO master =  (MasterDTO) adapterView.getItemAtPosition(i);
         //TODO hier später mit Eduard verknuebfen
         Intent intent = new Intent(this,SemesterUebersichtActivity.class);
-        //intent.putExtra("FACHBEREICHNAME",master.getFachbereichName());
-        //intent.putExtra("MorB","M");
+        intent.putExtra("FACHBEREICHNAME",master.getFachbereichName());
+        intent.putExtra("MorB","M");
         intent.putExtra("FACHBEREICH_ID",master.getFachbereich_Id());
           startActivity(intent);
 
@@ -206,6 +260,7 @@ int a;
 //itemselected von cotextmenu
     @Override
     public boolean onContextItemSelected(@NonNull MenuItem item) {
+
         masterDialog = db.getmasterbyId(((MasterDTO) fachbereichliste.getItemAtPosition(postion_item)).getFachbereich_Id());
         if(item.getItemId()==R.id.BEARBEITEN){
          openBearbeitungDialog(masterDialog);
@@ -217,7 +272,9 @@ int a;
     }
 // bearbeiten Dialog
      public void  openBearbeitungDialog(MasterDTO master){
-         berbeitenODERlösen="bearbeiten";
+        //damit  das objeckt nicht verleren, wenn es zwei mal umgedreht wird
+         masterDialog = master;
+
 MusterahmadDB dbDialog= new MusterahmadDB(this);
          AlertDialog.Builder dialogBearbeiten= new AlertDialog.Builder(this);
          dialogBearbeiten.setTitle("Fachbereichname berbeiten ");
@@ -241,14 +298,34 @@ MusterahmadDB dbDialog= new MusterahmadDB(this);
                //  FachbereichMasterItem.set(altertextposition,newText.getText().toString());
 
                   //TODO hier später mit datenbank
+                 String neuFachbereichName=newText.getText().toString();
+                 String neuFachbereichBeschreicung=newBeschreibung.getText().toString();
 
-                 MasterDTO nueMaster = new MasterDTO(masterfinal.getFachbereich_Id(),newText.getText().toString(),newBeschreibung.getText().toString());
-                 db.updatMaster(nueMaster,masterfinal.getFachbereich_Id());
-                 updateList();
-                 Toast toast = Toast.makeText(getApplicationContext(), "geändert", Toast.LENGTH_SHORT);
-                 toast.show();
-                 isSchowingDialog = false;
-                 berbeitenODERlösen="";
+
+           // prüfung ob bereit da oder nciht
+                 if(db.PruefBereicheMaster(neuFachbereichName)){
+                     // prüfung ob leer oder nciht
+                 if(neuFachbereichName.trim().length() > 0) {
+                     MasterDTO nueMaster = new MasterDTO(masterfinal.getFachbereich_Id(), neuFachbereichName, neuFachbereichBeschreicung);
+                     db.updatMaster(nueMaster, masterfinal.getFachbereich_Id());
+                     updateList();
+                     Toast toast = Toast.makeText(getApplicationContext(), "geändert", Toast.LENGTH_SHORT);
+                     toast.show();
+                     updateList();
+                     isSchowingDialog = false;
+                 }else{
+                     Toast toast = Toast.makeText(getApplicationContext(), " kein Änderung Fachberecih feld war leer ", Toast.LENGTH_SHORT);
+                     toast.show();
+                     
+                     updateList();
+                 }
+
+                 }else{
+
+                     suchen.setText(neuFachbereichName);
+                     Toast toast = Toast.makeText(getApplicationContext(), " ist bereit da ", Toast.LENGTH_SHORT);
+                     toast.show();
+                 }
              }
          });
          dialogBearbeiten.setNegativeButton("Abbrechen", new DialogInterface.OnClickListener() {
@@ -256,8 +333,7 @@ MusterahmadDB dbDialog= new MusterahmadDB(this);
              public void onClick(DialogInterface dialogInterface, int i) {
                  dialogInterface.dismiss();
                  isSchowingDialog=false;
-                 berbeitenODERlösen="";
-                 a=1;
+
              }
          });
 
@@ -268,7 +344,8 @@ MusterahmadDB dbDialog= new MusterahmadDB(this);
          beatbeitungDialog.show();
      }
      //löschen Dialog
-     public void openLoeschenDialog(MasterDTO master){
+     public void openLoeschenDialog(final MasterDTO master){
+         masterDialog = master;
          final AlertDialog.Builder dialogloeschen= new AlertDialog.Builder(this);
          final MasterDTO masterFinal = master;
          dialogloeschen.setTitle("Fachbereich löschen ");
@@ -279,24 +356,24 @@ MusterahmadDB dbDialog= new MusterahmadDB(this);
                  //TODO hier später mit datenbank löschen
            db.deleteFachbereich(masterFinal.getFachbereich_Id());
               updateList();
-                 Toast toast = Toast.makeText(getApplicationContext(), "gelöcht", Toast.LENGTH_SHORT);
+                 Toast toast = Toast.makeText(getApplicationContext(),master.getFachbereichName()+ " ist gelöcht ", Toast.LENGTH_SHORT);
                  toast.show();
-                 isSchowingDialog=false;
-                 berbeitenODERlösen="";
+                 isSchowingDialogLöschen=false;
+
              }
          });
          dialogloeschen.setNegativeButton("Abbrechen", new DialogInterface.OnClickListener() {
              @Override
              public void onClick(DialogInterface dialogInterface, int i) {
                  dialogInterface.dismiss();
-                 isSchowingDialog=false;
-                 berbeitenODERlösen="";
+                 isSchowingDialogLöschen=false;
+
              }
          });
          beatbeitungDialog= dialogloeschen.create();
 
-         isSchowingDialog=true;
-         berbeitenODERlösen="löschen";
+         isSchowingDialogLöschen=true;
+
          beatbeitungDialog.show();
      }
 
@@ -306,6 +383,14 @@ MusterahmadDB dbDialog= new MusterahmadDB(this);
          masterAdapter = new MasterAdapter(this,R.layout.item_master,test1);
          fachbereichliste.setAdapter(masterAdapter);
      }
+
+
+     public  void suchList(String wort){
+         ArrayList<MasterDTO> test2 = db.sucheBereicheMaster(wort);
+         masterAdapter = new MasterAdapter(this,R.layout.item_master,test2);
+         fachbereichliste.setAdapter(masterAdapter);
+     }
+
 
 
 
@@ -320,9 +405,13 @@ MusterahmadDB dbDialog= new MusterahmadDB(this);
             outState.putString("FACHBESCHREIBUNG", masterDialog.getBeschreichbung());
             outState.putInt("FACHID", masterDialog.getFachbereich_Id());
         }
+        if(isSchowingDialogLöschen) {
+           outState.putBoolean("IS_SHOWING_DIALOG_loeschen", isSchowingDialogLöschen);
+           outState.putString("FACHNAME", masterDialog.getFachbereichName());
+           outState.putString("FACHBESCHREIBUNG", masterDialog.getBeschreichbung());
+           outState.putInt("FACHID", masterDialog.getFachbereich_Id());
+       }
         super.onSaveInstanceState(outState);
-
-
     }
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
@@ -334,15 +423,23 @@ MusterahmadDB dbDialog= new MusterahmadDB(this);
             int id= savedInstanceState.getInt("FACHID",1702);
             MasterDTO master=new MasterDTO(id,fachname,fachbeschreicbung);
             isSchowingDialog = savedInstanceState.getBoolean("IS_SHOWING_DIALOG", false);
-if(isSchowingDialog ) {
+            isSchowingDialogLöschen = savedInstanceState.getBoolean("IS_SHOWING_DIALOG_loeschen", false);
 
-        openBearbeitungDialog(master);
+if(isSchowingDialog) {
+
+    openBearbeitungDialog(master);
+
+}if(isSchowingDialogLöschen) {
+    openLoeschenDialog(master);
+
+
+}
 
 
 }
         }
 
         }
-    }
+
 
 

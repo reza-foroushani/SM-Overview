@@ -16,6 +16,13 @@ public class ModulDTO
         this.s_id = s_id;
     }
 
+    public ModulDTO(String modulname, String modulbeschreibung, long s_id)
+    {
+        this.modulname = modulname;
+        this.modulbeschreibung = modulbeschreibung;
+        this.s_id = s_id;
+    }
+
     public long getM_id() { return m_id; }
     public void setM_id(long m_id) { this.m_id = m_id; }
 

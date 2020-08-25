@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -22,19 +23,28 @@ public class DBFachbereich  extends SQLiteOpenHelper {
 
 
     // Anwendungskontext durch Konstruktur
-    public DBFachbereich(Context ctx) {
+    public DBFachbereich(Context ctx)
+    {
         super(ctx, DB_NAMEN, null, DB_VERSION);
     }
 
     @Override
     public void onCreate(SQLiteDatabase sqlOncreateDB) {
         // alle Tabelle erzeugen
+<<<<<<< HEAD
         String tabelle="CREATE  TABLE "+
                 TABELLE_NAME+
                 "("+TABELLE_ID+
                 " INTEGER PRIMARY KEY AUTOINCREMENT, "+
                 TABELLE_FACHBEREICH+" varchar(30),"+
                 TABELLE_BACHELORORMASTER+" varchar(30))";
+=======
+        Log.d("HSKL", "create table andere");
+        String tabelle = "CREATE TABLE " + TABELLE_NAME + "(" +
+                TABELLE_ID + "INTEGER PRIMARY KEY AUTOINCREMENT," +
+                TABELLE_FACHBEREICH + " VARCHAR(35)," +
+                TABELLE_BACHELORORMASTER + " VARCHAR(10)) ";
+>>>>>>> 41a946bfb69d909e7fec95cb25c8467a41a3526e
 
         sqlOncreateDB.execSQL(tabelle);
 

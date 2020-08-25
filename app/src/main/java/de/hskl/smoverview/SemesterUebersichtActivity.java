@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -12,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.NumberPicker;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,21 +24,26 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import de.hskl.smoverview.databaseClasses.ModulDTO;
+import de.hskl.smoverview.databaseClasses.MusterahmadDB;
 import de.hskl.smoverview.databaseClasses.RequestCodes;
-import de.hskl.smoverview.databaseClasses.SMOverviewDataSource;
+import de.hskl.smoverview.databaseClasses.SemesterDTO;
 
 public class SemesterUebersichtActivity extends AppCompatActivity
 {
     FloatingActionButton addSemesterFab;
     CostumExpandableListAdapter listAdapter;
     ExpandableListView expListView;
+    TextView studiengangNameTextView;
+
     List<String> listDataHeader;
     HashMap<String, List<String>> listDataChild;
+    public static int currentStudiengangId;
+    public static String currentStudiengangName;
 
-    //TODO: Andere Max Semester?
-    private final int MAXSEMESTER = 5;
+    public MusterahmadDB db;
 
-    private SMOverviewDataSource dataSource;
+    private static int MAXSEMESTER;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -44,25 +51,32 @@ public class SemesterUebersichtActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.semester_uebersicht_activity);
 
+        db = new MusterahmadDB(this);
+
+        Intent i = getIntent();
+        currentStudiengangName = i.getStringExtra("FACHBEREICHNAME");
+        currentStudiengangId = i.getIntExtra("FACHBEREICH_ID", -1);
+        setMaxSemesterCount(i.getStringExtra("MorB"));
+
+
+        studiengangNameTextView = (TextView) findViewById(R.id.STUDIENGANG_TEXTVIEW);
+        studiengangNameTextView.setText(currentStudiengangName);
+
         expListView = (ExpandableListView) findViewById(R.id.MEINE_LISTE);
         addSemesterFab = (FloatingActionButton) findViewById(R.id.ADDSEMESTER_FLOATINGACTIONBUTTON);
 
         listDataHeader = new ArrayList<>();
         listDataChild = new HashMap<>();
 
-        fillListWithData(); //TODO: Delete later
-
-        listAdapter = new CostumExpandableListAdapter(this, listDataHeader, listDataChild);
+        listAdapter = new CostumExpandableListAdapter(this, listDataHeader, listDataChild, db, currentStudiengangId);
         expListView.setAdapter(listAdapter);
+
+        initViewWithData(); //Fill List with Data if exists
 
         setupClickListenerForModulDetailed();
         setupClickListenerForSemesterAdd();
 
         registerForContextMenu(expListView);
-
-        dataSource = new SMOverviewDataSource(this);
-        dataSource.open();
-        dataSource.close();
     }
 
     @Override
@@ -97,19 +111,25 @@ public class SemesterUebersichtActivity extends AppCompatActivity
         switch(item.getItemId())
         {
             case R.id.CONTEXT_BEARBEITEN:
-                //TODO: Modul BEARBEITEN
                 Intent i = new Intent(this, ModulBearbeitenSubActivity.class);
+                ModulDTO modul = db.getModul(modulName, currentStudiengangId);
                 i.putExtra("CHILDINDEX", childPos);
                 i.putExtra("GROUPINDEX", groupPos);
                 i.putExtra("MODULNAME", modulName);
-                i.putExtra("MODULBESCHREIBUNG", "Modulbeschreibung");
+                i.putExtra("MODULBESCHREIBUNG", modul.getModulbeschreibung());
                 startActivityForResult(i, RequestCodes.editModuleSuccess.toInt());
                 break;
             case R.id.CONTEXT_LOESCHEN:
-                //TODO: In der Datenbank Modul löschen
                 listDataChild.get(semesterName).remove(modulName);
                 listAdapter.updateView(listDataHeader, listDataChild);
-                Toast.makeText(this, "Modul erfolgreich gelöscht!", Toast.LENGTH_SHORT).show();
+
+                SemesterDTO semester = db.getSemester(semesterName, currentStudiengangId);
+                boolean successs = db.deleteModul(semester.getS_id(), modulName);
+
+                if(successs)
+                    Toast.makeText(this, "Modul erfolgreich gelöscht!", Toast.LENGTH_SHORT).show();
+                else
+                    Toast.makeText(this, "Fehler mit Datenbank!", Toast.LENGTH_SHORT).show();
                 break;
             default:
                 return super.onContextItemSelected(item);
@@ -125,7 +145,9 @@ public class SemesterUebersichtActivity extends AppCompatActivity
         {
             if(resultCode == Activity.RESULT_OK)
             {
+                String oldModulName = data.getStringExtra("OLDMODULNAME");
                 String modulName = data.getStringExtra("MODULNAME");
+                String modulBeschreibung = data.getStringExtra("MODULBESCHREIBUNG");
                 String semesterName = listDataHeader.get(data.getIntExtra("GROUPINDEX", -1));
                 List<String> modulesList = listDataChild.get(semesterName);
                 int childIndex = data.getIntExtra("CHILDINDEX", -1);
@@ -135,7 +157,17 @@ public class SemesterUebersichtActivity extends AppCompatActivity
                 listDataChild.put(semesterName, modulesList);
 
                 listAdapter.updateView(listDataHeader, listDataChild);
-                Toast.makeText(this, "Modul erfolgreich verändert!", Toast.LENGTH_SHORT).show();
+
+                SemesterDTO semester = db.getSemester(semesterName, currentStudiengangId);
+                ModulDTO currentModul = db.getModul(oldModulName, semester.getS_id());
+                ModulDTO newModul = new ModulDTO(currentModul.getM_id(), modulName, modulBeschreibung, currentModul.getS_id());
+
+                boolean success = db.updateModul(newModul, currentModul.getM_id());
+
+                if(success)
+                    Toast.makeText(this, "Modul erfolgreich verändert!", Toast.LENGTH_SHORT).show();
+                else
+                    Toast.makeText(this, "Fehler mit Datenbank!", Toast.LENGTH_SHORT).show();
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
@@ -151,9 +183,11 @@ public class SemesterUebersichtActivity extends AppCompatActivity
             {
                 final String semesterName = listDataHeader.get(groupPosition);
                 final String modulName = listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition);
+                ModulDTO modul = db.getModul(modulName, currentStudiengangId);
                 Intent intent = new Intent(SemesterUebersichtActivity.this, ModulDetailansichtActivity.class);
                 intent.putExtra("SEMESTER", semesterName);
                 intent.putExtra("MODUL", modulName);
+                intent.putExtra("MODULBESCHREIBUNG", modul.getModulbeschreibung());
                 startActivity(intent);
                 return false;
             }
@@ -186,12 +220,19 @@ public class SemesterUebersichtActivity extends AppCompatActivity
                     builder.setTitle("Neues Semester hinzufügen")
                             .setPositiveButton("Hinzufügen", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
-                                    //TODO: Semester in Datenbank einfügen
                                     int selectedSemesterNr = Integer.parseInt(semesterNp.getDisplayedValues()[semesterNp.getValue() - 1]);
-                                    listDataHeader.add("Semester " + selectedSemesterNr);
-                                    listDataChild.put("Semester " + selectedSemesterNr, new ArrayList<String>());
+                                    String semesterName = ("Semester" + selectedSemesterNr);
+                                    listDataHeader.add(semesterName);
+                                    listDataChild.put(semesterName, new ArrayList<String>());
                                     listAdapter.updateView(listDataHeader, listDataChild);
-                                    Toast.makeText(SemesterUebersichtActivity.this, "Semester erfolgreich hinzugefügt!", Toast.LENGTH_SHORT).show();
+
+                                    SemesterDTO semester = new SemesterDTO(semesterName, currentStudiengangId);
+                                    boolean success = db.addSemester(semester);
+
+                                    if(success)
+                                        Toast.makeText(SemesterUebersichtActivity.this, "Semester erfolgreich hinzugefügt!", Toast.LENGTH_SHORT).show();
+                                    else
+                                        Toast.makeText(SemesterUebersichtActivity.this, "Fehler mit Datenbank!", Toast.LENGTH_SHORT).show();
                                 }
                             })
                             .setNegativeButton("Abbrechen", new DialogInterface.OnClickListener() {
@@ -212,7 +253,6 @@ public class SemesterUebersichtActivity extends AppCompatActivity
         ArrayList<String> availableNumbers = new ArrayList<>();
         ArrayList<Integer> usedNumbers = new ArrayList<>();
 
-        //TODO: Semester von Datenbank
         for(String str : listDataHeader) //Get Number from "Semester 1"
             usedNumbers.add(Integer.parseInt(str.replaceAll("\\D+","")));
 
@@ -225,25 +265,39 @@ public class SemesterUebersichtActivity extends AppCompatActivity
         return availableNumbers.toArray(new String[0]);
     }
 
-    private void fillListWithData()
+    private void initViewWithData()
     {
-        // Adding child data
-        listDataHeader.add("Semester 1");
-        listDataHeader.add("Semester 2");
+        List<SemesterDTO> semesterList = db.getAllSemesterForStudiengang(currentStudiengangId);
 
-        // Adding child data
-        List<String> s1 = new ArrayList<>();
-        s1.add("Test1");
-        s1.add("Test2");
-        s1.add("Test3");
+        for(SemesterDTO dto : semesterList)
+            listDataHeader.add(dto.getSemestername());
 
-        // Adding child data
-        List<String> s2 = new ArrayList<>();
-        s2.add("Test1");
-        s2.add("Test2");
-        s2.add("Test3");
+        Log.d("HSKL", "HAEDER: " + listDataHeader);
+        for(int i = 0; i<semesterList.size(); i++)
+        {
+            List<ModulDTO> modules = db.getModulesForSemester(semesterList.get(i).getS_id());
 
-        listDataChild.put(listDataHeader.get(0), s1); // Header, Child data
-        listDataChild.put(listDataHeader.get(1), s2);
+            List<String> modulnames = new ArrayList<>();
+            for(int j = 0; j < modules.size(); j++)
+                modulnames.add(modules.get(j).getModulname());
+
+            listDataChild.put(listDataHeader.get(i), modulnames);
+        }
+
+        Log.d("HSKL", "CHILD: " + listDataChild);
+        listAdapter.updateView(listDataHeader, listDataChild);
+    }
+
+    public void setMaxSemesterCount(String mOrB)
+    {
+        if(mOrB.equals("M"))
+            MAXSEMESTER = 3;
+        else if(mOrB.equals("B"))
+            MAXSEMESTER = 7;
+        else
+        {
+            Toast.makeText(this, "Fehler bei Übergabe von MorB!", Toast.LENGTH_SHORT);
+            MAXSEMESTER = 0;
+        }
     }
 }

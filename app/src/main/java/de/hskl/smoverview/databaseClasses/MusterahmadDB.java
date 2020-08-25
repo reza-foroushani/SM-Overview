@@ -5,22 +5,57 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 import de.hskl.smoverview.databaseClasses.MasterDTO;
 
-public class MusterahmadDB extends SQLiteOpenHelper {
-    public static final int DATENBANK_VERSION =1;
+public class MusterahmadDB extends SQLiteOpenHelper
+{
+    public static final int DATENBANK_VERSION = 1;
+    public static final String DATENBANK_NAMEN ="SM_Overview.db";
+
+    //Fachbereich
     public static final String TABELlE_FACHBEREiCH ="FachbereichTabelle";
     public static final String FACHBERECIH_ID ="id";
-    public static final String DATENBANK_NAMEN ="SM_Overview.db";
     public static final String FACHBERECIH_NAMEN ="Fachberecih";
     public static final String FACHBERECIH_BESCHREICHBUNG ="Beschrechbung";
     public static final String MASTER_OR_BACHLER ="MorB";
+    public static final String Create_Table = "CREATE  TABLE "+TABELlE_FACHBEREiCH+"("+FACHBERECIH_ID+" INTEGER PRIMARY KEY AUTOINCREMENT, "+FACHBERECIH_NAMEN+" varchar(30),"+FACHBERECIH_BESCHREICHBUNG+" varchar(30),"+MASTER_OR_BACHLER+" varchar(30))";
+    //Fachbereich Ende
 
+    //Modul
+    public static final String TABLE_MODUL = "Modul";
+    public static final String COLUMN_MODULID = "m_id";
+    public static final String COLUMN_MODULNAME = "modulname";
+    public static final String COLUMN_MODULBESCHREIBUNG = "modulbeschreibung";
+    public static final String COLUMN_SEMESTERIDFK = "s_id";
+
+    public static final String SQL_CREATEMODULTABLE =
+            "CREATE TABLE " + TABLE_MODUL +
+                    "( " + COLUMN_MODULID + " INTEGER PRIMARY KEY, " +
+                    COLUMN_MODULNAME + " TEXT NOT NULL, " +
+                    COLUMN_MODULBESCHREIBUNG + " TEXT NOT NULL, " +
+                    COLUMN_SEMESTERIDFK + " INTEGER NOT NULL);";
+    //Modul End
+
+    //Semester
+    public static final String TABLE_SEMESTER = "Semester";
+    public static final String COLUMN_SEMESTERID = "s_id";
+    public static final String COLUMN_SEMESTERNAME = "semestername";
+    public static final String COLUMN_STUDIENGANGID = "studiengang_id";
+
+    public static final String SQL_CREATESEMESTERTABLE =
+            "CREATE TABLE " + TABLE_SEMESTER +
+                    "( " + COLUMN_SEMESTERID + " INTEGER PRIMARY KEY, " +
+                    COLUMN_SEMESTERNAME + " TEXT NOT NULL, " +
+                    COLUMN_STUDIENGANGID + " INTEGER NOT NULL);";
+    //Semester End
 
 
     public MusterahmadDB(@Nullable Context context) {
@@ -29,21 +64,171 @@ public class MusterahmadDB extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String Create_Table="CREATE  TABLE "+TABELlE_FACHBEREiCH+"("+FACHBERECIH_ID+" INTEGER PRIMARY KEY AUTOINCREMENT, "+FACHBERECIH_NAMEN+" varchar(30),"+FACHBERECIH_BESCHREICHBUNG+" varchar(30),"+MASTER_OR_BACHLER+" varchar(30))";
+        Log.d("HSKL", "create table");
         db.execSQL(Create_Table);
-        //TODO Eduard tabele
+        db.execSQL(SQL_CREATESEMESTERTABLE);
+        db.execSQL(SQL_CREATEMODULTABLE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int i, int i1) {
-        db.execSQL("DROP TABLE IF  EXISTS " +TABELlE_FACHBEREiCH);
-
-        //TODO Eduard tabele
-
-
+        db.execSQL("DROP TABLE IF EXISTS " + TABELlE_FACHBEREiCH);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_SEMESTER);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_MODUL);
         onCreate(db);
-
     }
+    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    public boolean addSemester(SemesterDTO semester)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_SEMESTERNAME, semester.getSemestername());
+        values.put(COLUMN_STUDIENGANGID, semester.getStudiengang_id());
+
+        boolean success = db.insert(TABLE_SEMESTER, null, values) > 0;
+        return success;
+    }
+
+    public boolean deleteSemester(long semesterid){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String where = COLUMN_SEMESTERID + "=?";
+        String[] whereArg = new String[]{String.valueOf(semesterid)};
+        boolean success = db.delete(TABLE_SEMESTER, where, whereArg) > 0;
+        success = db.delete(TABLE_MODUL, where, whereArg) > 0;
+        return success;
+    }
+
+    public boolean addModul(ModulDTO modul)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_MODULNAME, modul.getModulname());
+        values.put(COLUMN_MODULBESCHREIBUNG, modul.getModulbeschreibung());
+        values.put(COLUMN_SEMESTERIDFK, modul.getS_id());
+
+        boolean success = db.insert(TABLE_MODUL, null, values) > 0;
+        return success;
+    }
+
+    public boolean deleteModul(long s_id, String modulname)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String where = COLUMN_SEMESTERIDFK + "=? AND " + COLUMN_MODULNAME + "=?";
+        String[] whereArg = new String[]{String.valueOf(s_id), modulname};
+        boolean success = db.delete(TABLE_MODUL, where, whereArg) > 0;
+        return success;
+    }
+
+    public boolean updateModul(ModulDTO modul, long modulid)
+    {
+        Log.d("HSKL", "UODATE");
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        Log.d("HSKL", modul.getModulbeschreibung());
+        Log.d("HSKL", modul.getModulname());
+        values.put(COLUMN_MODULNAME, modul.getModulname());
+        values.put(COLUMN_MODULBESCHREIBUNG, modul.getModulbeschreibung());
+        String where = COLUMN_MODULID + "=?";
+        String[] whereArg = new String[]{String.valueOf(modulid)};
+        boolean success = db.update(TABLE_MODUL,values,where,whereArg) > 0;
+        return success;
+    }
+
+    public ModulDTO getModul(String mname, long s_id)
+    {
+        Log.d("HSKL", "GET MODUL YOOO");
+        Log.d("HSKL", "SID:" + s_id);
+        Log.d("HSKL", "MODULNAME:" + mname);
+        ModulDTO modul;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor= db.query(TABLE_MODUL,
+                new String[]{"m_id","modulname","modulbeschreibung","s_id"}
+                ,"s_id=? AND modulname=?",new String[]{String.valueOf(s_id), mname}
+                ,null,null,null);
+
+        Log.d("HSKL", "FASTCHECK");
+        if(cursor.moveToFirst())
+        {
+            Log.d("HSKL", "CHECKM8");
+            long modulid = cursor.getLong(cursor.getColumnIndex(COLUMN_MODULID));
+            String modulname = cursor.getString(cursor.getColumnIndex(COLUMN_MODULNAME));
+            String modulbeschreibung = cursor.getString(cursor.getColumnIndex(COLUMN_MODULBESCHREIBUNG));
+            long semesterid = cursor.getLong(cursor.getColumnIndex(COLUMN_SEMESTERIDFK));
+            Log.d("HSKL", "MODULNAME: " + modulname);
+            Log.d("HSKL", "MID: " + modulid);
+            Log.d("HSKL", "SID: " + semesterid);
+            modul = new ModulDTO(modulid, modulname, modulbeschreibung, semesterid);
+            return modul;
+        }
+        return null;
+    }
+
+    public SemesterDTO getSemester(String semestername, int studiengangId)
+    {
+        SemesterDTO semester;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor= db.query(TABLE_SEMESTER,
+                new String[]{"s_id","semestername","studiengang_id"}
+                ,"studiengang_id=? AND semestername=?"
+                ,new String[]{String.valueOf(studiengangId), semestername}
+                ,null,null,null);
+
+        if(cursor.moveToFirst())
+        {
+            long semesterId = cursor.getLong(cursor.getColumnIndex(COLUMN_SEMESTERID));
+            String semesterName = cursor.getString(cursor.getColumnIndex(COLUMN_SEMESTERNAME));
+            int sid = cursor.getInt(cursor.getColumnIndex(COLUMN_STUDIENGANGID));
+            semester = new SemesterDTO(semesterId, semesterName, sid);
+            return semester;
+        }
+        return null;
+    }
+
+    public ArrayList<SemesterDTO> getAllSemesterForStudiengang(int studiengang_id)
+    {
+        ArrayList<SemesterDTO> semesterList = new ArrayList<>();
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor= db.query(TABLE_SEMESTER,
+                new String[]{"s_id","semestername","studiengang_id"}
+                ,"studiengang_id=?",new String[]{String.valueOf(studiengang_id)},null,null,null);
+
+        if(cursor.moveToFirst()){
+            do {
+                long semesterId = cursor.getLong(cursor.getColumnIndex(COLUMN_SEMESTERID));
+                String semesterName = cursor.getString(cursor.getColumnIndex(COLUMN_SEMESTERNAME));
+                int studiengangId = cursor.getInt(cursor.getColumnIndex(COLUMN_STUDIENGANGID));
+                SemesterDTO semester = new SemesterDTO(semesterId, semesterName, studiengangId);
+                semesterList.add(semester);
+            }while (cursor.moveToNext());
+        }
+        return semesterList;
+    }
+
+    public ArrayList<ModulDTO> getModulesForSemester(long s_id)
+    {
+        ArrayList<ModulDTO> modules = new ArrayList<>();
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor= db.query(TABLE_MODUL,
+                new String[]{"m_id","modulname","modulbeschreibung","s_id"}
+                ,"s_id=?",new String[]{String.valueOf(s_id)},null,null,null);
+
+        if(cursor.moveToFirst()){
+            do {
+                long modulid = cursor.getLong(cursor.getColumnIndex(COLUMN_MODULID));
+                String modulname = cursor.getString(cursor.getColumnIndex(COLUMN_MODULNAME));
+                String modulbeschreibung = cursor.getString(cursor.getColumnIndex(COLUMN_MODULBESCHREIBUNG));
+                long semesterid = cursor.getLong(cursor.getColumnIndex(COLUMN_SEMESTERIDFK));
+                ModulDTO modul = new ModulDTO(modulid, modulname, modulbeschreibung, semesterid);
+                modules.add(modul);
+            }while (cursor.moveToNext());
+        }
+        return modules;
+    }
+    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     public void addFachberecihMaster(MasterDTO master, String m_or_b ){
         // copy von db für schreicben
         SQLiteDatabase db =this.getWritableDatabase();
@@ -117,6 +302,57 @@ public class MusterahmadDB extends SQLiteOpenHelper {
         String[] whereArg = new String[]{Integer.toString(Id)};
         db.delete(TABELlE_FACHBEREiCH,where,whereArg);
     }
+
+    public ArrayList<MasterDTO> sucheBereicheMaster (String wort){
+        ArrayList<MasterDTO>   fachbereichHilfe = new ArrayList<>();
+        String M="M";
+        // er nimmt all daten
+        //String SELECT_query ="select * from " +TABELlE_FACHBEREiCH+"WHERE"+MASTER_OR_BACHLER+ "="+ "M";
+        // copy von db für lesen
+        SQLiteDatabase db =this.getReadableDatabase();
+        Cursor cursor=  db.rawQuery("select * from FachbereichTabelle where Fachberecih like '%"+wort+"%' and MorB ='M' ",null);
+        //ohne expression deswegen null ,wir haben ergebniss von select-quere genomen
+       // Cursor cursor= db.query(TABELlE_FACHBEREiCH,new String[]{"id","Fachberecih","Beschrechbung"},"MorB=? and Fachberecih=?",new String[]{"M", '%"+wort+"%'},null,null,null);
+        //wenn true dann erste zeihle hat daten
+        if(cursor.moveToFirst()){
+            do {
+                //cursor.getColumnIndex er sucht index von spalte
+                String fachberichName=cursor.getString(cursor.getColumnIndex(FACHBERECIH_NAMEN));
+                String beschreibung =cursor.getString(cursor.getColumnIndex(FACHBERECIH_BESCHREICHBUNG));
+                //ich brauche  inhalb jedes item  seine id  speichern
+                int fachbereich_ID =cursor.getInt(cursor.getColumnIndex(FACHBERECIH_ID));
+                MasterDTO master = new MasterDTO(fachbereich_ID,fachberichName,beschreibung);
+                fachbereichHilfe.add(master);
+            }while (cursor.moveToNext());
+        }
+        return  fachbereichHilfe;
+
+    }
+    public Boolean PruefBereicheMaster (String wort){
+
+        // er nimmt all daten
+        SQLiteDatabase db =this.getReadableDatabase();
+        Cursor cursor=  db.rawQuery("select * from FachbereichTabelle where Fachberecih like '%"+wort+"%' and MorB ='M' ",null);
+        if(cursor.moveToFirst()){
+                //cursor.getColumnIndex er sucht index von spalte
+                String fachberichName=cursor.getString(cursor.getColumnIndex(FACHBERECIH_NAMEN));
+                String beschreibung =cursor.getString(cursor.getColumnIndex(FACHBERECIH_BESCHREICHBUNG));
+                //ich brauche  inhalb jedes item  seine id  speichern
+                int fachbereich_ID =cursor.getInt(cursor.getColumnIndex(FACHBERECIH_ID));
+               if(wort.equals(fachberichName)){
+                   return false;
+               }else {
+                   return true  ;
+
+               }
+        }else {
+            return true  ;
+
+        }
+
+    }
+
+
 
     /*public  Cursor getmasterbyIdCursor(int id){
         SQLiteDatabase db  = this.getWritableDatabase();
