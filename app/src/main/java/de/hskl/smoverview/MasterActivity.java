@@ -30,17 +30,16 @@ public class MasterActivity extends AppCompatActivity implements View.OnClickLis
     public final int RequestCodHinzufuegen=11;
     //dialog
 Boolean isSchowingDialog=false;
+Boolean isSchowingDialogLöschen=false;
 AlertDialog beatbeitungDialog;
 MasterDTO masterDialog;
-String berbeitenODERlösen;
-int a;
 
     //listView,Adapter und DB
      ListView fachbereichliste ;
      MasterAdapter masterAdapter;
       MusterahmadDB db;
-      //
 
+      //für postion von item
       int postion_item;
 
 
@@ -101,24 +100,34 @@ int a;
     protected void onResume() {
         super.onResume();
         //damit wir dirkt hinzufügen und nciht warten bis , dass benutzer raus gen
+
+
         updateList();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+
         if(beatbeitungDialog!=null&& beatbeitungDialog.isShowing()) {
             beatbeitungDialog.dismiss();
+            Toast toast = Toast.makeText(getApplicationContext(), " if onPause", Toast.LENGTH_SHORT);
+            toast.show();
 
 
         }else {
+            // wenn ich kein button ausgewält in bearbeit dialog
             isSchowingDialog=false;
+            isSchowingDialogLöschen=false;
         }
+
     }
+
 
     @Override
     protected void onRestart() {
         super.onRestart();
+
 
     }
 
@@ -206,6 +215,7 @@ int a;
 //itemselected von cotextmenu
     @Override
     public boolean onContextItemSelected(@NonNull MenuItem item) {
+
         masterDialog = db.getmasterbyId(((MasterDTO) fachbereichliste.getItemAtPosition(postion_item)).getFachbereich_Id());
         if(item.getItemId()==R.id.BEARBEITEN){
          openBearbeitungDialog(masterDialog);
@@ -217,7 +227,9 @@ int a;
     }
 // bearbeiten Dialog
      public void  openBearbeitungDialog(MasterDTO master){
-         berbeitenODERlösen="bearbeiten";
+        //damit  das objeckt nicht verleren, wenn es zwei mal umgedreht wird
+         masterDialog = master;
+
 MusterahmadDB dbDialog= new MusterahmadDB(this);
          AlertDialog.Builder dialogBearbeiten= new AlertDialog.Builder(this);
          dialogBearbeiten.setTitle("Fachbereichname berbeiten ");
@@ -248,7 +260,7 @@ MusterahmadDB dbDialog= new MusterahmadDB(this);
                  Toast toast = Toast.makeText(getApplicationContext(), "geändert", Toast.LENGTH_SHORT);
                  toast.show();
                  isSchowingDialog = false;
-                 berbeitenODERlösen="";
+
              }
          });
          dialogBearbeiten.setNegativeButton("Abbrechen", new DialogInterface.OnClickListener() {
@@ -256,8 +268,7 @@ MusterahmadDB dbDialog= new MusterahmadDB(this);
              public void onClick(DialogInterface dialogInterface, int i) {
                  dialogInterface.dismiss();
                  isSchowingDialog=false;
-                 berbeitenODERlösen="";
-                 a=1;
+
              }
          });
 
@@ -268,7 +279,8 @@ MusterahmadDB dbDialog= new MusterahmadDB(this);
          beatbeitungDialog.show();
      }
      //löschen Dialog
-     public void openLoeschenDialog(MasterDTO master){
+     public void openLoeschenDialog(final MasterDTO master){
+         masterDialog = master;
          final AlertDialog.Builder dialogloeschen= new AlertDialog.Builder(this);
          final MasterDTO masterFinal = master;
          dialogloeschen.setTitle("Fachbereich löschen ");
@@ -279,24 +291,24 @@ MusterahmadDB dbDialog= new MusterahmadDB(this);
                  //TODO hier später mit datenbank löschen
            db.deleteFachbereich(masterFinal.getFachbereich_Id());
               updateList();
-                 Toast toast = Toast.makeText(getApplicationContext(), "gelöcht", Toast.LENGTH_SHORT);
+                 Toast toast = Toast.makeText(getApplicationContext(),master.getFachbereichName()+ " ist gelöcht ", Toast.LENGTH_SHORT);
                  toast.show();
-                 isSchowingDialog=false;
-                 berbeitenODERlösen="";
+                 isSchowingDialogLöschen=false;
+
              }
          });
          dialogloeschen.setNegativeButton("Abbrechen", new DialogInterface.OnClickListener() {
              @Override
              public void onClick(DialogInterface dialogInterface, int i) {
                  dialogInterface.dismiss();
-                 isSchowingDialog=false;
-                 berbeitenODERlösen="";
+                 isSchowingDialogLöschen=false;
+
              }
          });
          beatbeitungDialog= dialogloeschen.create();
 
-         isSchowingDialog=true;
-         berbeitenODERlösen="löschen";
+         isSchowingDialogLöschen=true;
+
          beatbeitungDialog.show();
      }
 
@@ -320,8 +332,15 @@ MusterahmadDB dbDialog= new MusterahmadDB(this);
             outState.putString("FACHBESCHREIBUNG", masterDialog.getBeschreichbung());
             outState.putInt("FACHID", masterDialog.getFachbereich_Id());
         }
-        super.onSaveInstanceState(outState);
+        if(isSchowingDialogLöschen) {
+           outState.putBoolean("IS_SHOWING_DIALOG_loeschen", isSchowingDialogLöschen);
+           outState.putString("FACHNAME", masterDialog.getFachbereichName());
+           outState.putString("FACHBESCHREIBUNG", masterDialog.getBeschreichbung());
+           outState.putInt("FACHID", masterDialog.getFachbereich_Id());
+       }
 
+
+        super.onSaveInstanceState(outState);
 
     }
     @Override
@@ -334,15 +353,25 @@ MusterahmadDB dbDialog= new MusterahmadDB(this);
             int id= savedInstanceState.getInt("FACHID",1702);
             MasterDTO master=new MasterDTO(id,fachname,fachbeschreicbung);
             isSchowingDialog = savedInstanceState.getBoolean("IS_SHOWING_DIALOG", false);
-if(isSchowingDialog ) {
+            isSchowingDialogLöschen = savedInstanceState.getBoolean("IS_SHOWING_DIALOG_loeschen", false);
 
-        openBearbeitungDialog(master);
+if(isSchowingDialog) {
+
+    openBearbeitungDialog(master);
+
+
+}if(isSchowingDialogLöschen) {
+
+    openLoeschenDialog(master);
+
+
+}
 
 
 }
         }
 
         }
-    }
+
 
 
