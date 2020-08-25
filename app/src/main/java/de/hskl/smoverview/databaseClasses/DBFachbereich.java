@@ -47,6 +47,8 @@ public class DBFachbereich  extends SQLiteOpenHelper {
         // Tabellen mit Grunddaten füllen
     }
 
+
+    // Datenbank löschen und wieder erstellen
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
@@ -58,13 +60,26 @@ public class DBFachbereich  extends SQLiteOpenHelper {
 
     // insert in Table
     public boolean insertBachlor(BachelorDTO bachelor, String mORb) {
+        // key-value
         SQLiteDatabase db = this.getWritableDatabase();
-        //key_Value
         ContentValues neueZeille = new ContentValues();
+
         neueZeille.put(TABELLE_FACHBEREICH, bachelor.getFachbereich());
         neueZeille.put(TABELLE_BACHELORORMASTER, mORb);
-        db.insert(TABELLE_NAME, null, neueZeille);
-        return true;
+
+        Log.d(DB_NAMEN, "addData: Adding " + bachelor + " to " + TABELLE_NAME);
+
+        long result = db.insert(TABELLE_NAME, null, neueZeille);
+
+        // falls Datensatz vorhanden ist
+
+        if(result == -1)
+        {
+            return  false;
+        } else
+        {
+            return true;
+        }
     }
 
 
@@ -87,25 +102,6 @@ public class DBFachbereich  extends SQLiteOpenHelper {
 
         SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
         ArrayList<String> fachList = new ArrayList<>();
-       // String SELECT_QUERY = "SELECT * FROM " + DB_NAMEN;
-      /*
-        Cursor cursor= dbSql.query
-                (TABELLE_NAME,new String[]{"id","fachbereich"},
-                        "MorB=?",new String[]
-                        {"B"},null,null,null);
-
-        if (cursor.moveToFirst()) {
-            do {
-                String fachName = cursor.getString(cursor.getColumnIndex(TABELLE_FACHBEREICH));
-                int fachId = cursor.getInt(cursor.getColumnIndex(TABELLE_ID));
-                BachelorDTO bachelor = new BachelorDTO(fachId, fachName);
-                fachList.add(bachelor);
-
-            } while (cursor.moveToNext());
-        }
-        return fachList;
-
-       */
 
       Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM " + TABELLE_NAME,null);
       cursor.moveToFirst();
@@ -143,14 +139,18 @@ public class DBFachbereich  extends SQLiteOpenHelper {
 
 
     // Datensatze loeschen
-    public void remoteFach (int id)
-    {
-        SQLiteDatabase database = this.getWritableDatabase();
-        String source = TABELLE_ID  + "=?";
-        String [] sourceAsArray = new String [] {
-                Integer.toString(id)
-        };
-        database.delete(DB_NAMEN,source,sourceAsArray);
+    public boolean delete(int id) {
+        boolean result = true;
+        try {
+            SQLiteDatabase sqLiteDatabase = getWritableDatabase();
+            result = sqLiteDatabase.delete(TABELLE_NAME, TABELLE_ID +
+                    " = ?", new String[]{ String.valueOf(id) }) > 0;
+        } catch (Exception e) {
+            result = false;
+        }
+        return result;
     }
+
+
 
 }
