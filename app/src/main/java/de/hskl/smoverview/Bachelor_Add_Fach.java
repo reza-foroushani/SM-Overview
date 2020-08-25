@@ -6,17 +6,29 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.Toast;
 
+import java.util.ArrayList;
+
+import de.hskl.smoverview.databaseClasses.BachelorDTO;
 import de.hskl.smoverview.databaseClasses.DBFachbereich;
 
 public class Bachelor_Add_Fach extends AppCompatActivity implements View.OnClickListener{
 
+    // Eingabefeld
     EditText addEditText;
+    //zwei Button
     Button addSpeichernButton;
     Button addAbbrechenButton;
-    String fachbereich;
+
+    // DB
+    DBFachbereich dbFachbereich;
+    ArrayList arrayList;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,37 +39,58 @@ public class Bachelor_Add_Fach extends AppCompatActivity implements View.OnClick
         addSpeichernButton = findViewById(R.id.ADD_SPEICHERN_BUTTON);
         addAbbrechenButton = findViewById(R.id.ADD_ABBRECHEN_BUTTON);
         addEditText.setOnClickListener(this);
-        addSpeichernButton.setOnClickListener(this);
         addAbbrechenButton.setOnClickListener(this);
+        addSpeichernButton.setOnClickListener(this);
 
-        // Datenbank wird mithilfe des Anwendungskontext (this) angelegt
-        DBFachbereich db = new DBFachbereich(this);
+        // Datenbank Connect
+        dbFachbereich = new DBFachbereich(Bachelor_Add_Fach.this);
+
+        // Add Daten
+        arrayList = dbFachbereich.getALLFachBachelor();
+
+
+
 
     }
 
     @Override
     public void onClick(View view) {
 
-        if(view.getId() == addAbbrechenButton.getId())
-        {
-            Intent intentOfHomeViewFach = new Intent(this,BachelorIntent.class);
-            startActivity(intentOfHomeViewFach);
-            finish();
+        if(view.getId() == addAbbrechenButton.getId()){
+            Intent intentOfViewBachelor = new Intent(this,BachelorIntent.class);
+            startActivity(intentOfViewBachelor);
+            Toast toast = Toast.makeText(this,"Fachbereich",Toast.LENGTH_SHORT);
+            toast.show();
+
         }
 
         if(view.getId() == addSpeichernButton.getId())
         {
-            if(addEditText.getText().toString() != "" && addEditText.getText().toString() != " ")
-            {
-            fachbereich = addEditText.getText().toString();
+            String text = addEditText.getText().toString();
+            BachelorDTO bachelorDTO = new BachelorDTO(text);
 
-            Intent intent = new Intent();
-            intent.putExtra("FACHBEREICH",fachbereich);
+            if (!text.isEmpty()) {
+                if (dbFachbereich.insertBachlor(bachelorDTO,"b")) {
+                    addEditText.setText("");
+                    Toast.makeText(Bachelor_Add_Fach.this, "..::: Fachbereich Bachelor :::..", Toast.LENGTH_SHORT).show();
+                    arrayList.clear();
+                    arrayList.addAll(dbFachbereich.getALLFachBachelor());
 
-            setResult(Activity.RESULT_OK,intent);
+                    //Refresh List
+
+                    //arrayAdapter.notifyDataSetChanged();
+
+                }
             }
 
-            finish();
+            Intent intentOfBachelorIntent = new Intent(this,BachelorIntent.class);
+            startActivity(intentOfBachelorIntent);
+
+            Toast toast = Toast.makeText(this,"erfolgreich gespeichert",Toast.LENGTH_SHORT);
+            toast.show();
         }
+        finish();
     }
+
+
 }

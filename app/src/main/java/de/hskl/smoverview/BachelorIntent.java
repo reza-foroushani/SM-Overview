@@ -7,23 +7,27 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.ArrayList;
+
 import de.hskl.smoverview.databaseClasses.BachelorDTO;
 import de.hskl.smoverview.databaseClasses.DBFachbereich;
 
-public class BachelorIntent extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener{
+public class BachelorIntent extends AppCompatActivity implements View.OnClickListener{
 
     TextView ausgabe;
     FloatingActionButton addButton;
     ListView addListView;
-    public final int requestAdd = 10;
-
+    ArrayList arrayList;
+    ArrayAdapter arrayAdapter;
     DBFachbereich dbFachbereich;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,10 +37,17 @@ public class BachelorIntent extends AppCompatActivity implements View.OnClickLis
         ausgabe = findViewById(R.id.TEXT_VIEW_BACHELOR);
         addButton = findViewById(R.id.ADD_BUTTEN);
         addListView = findViewById(R.id.ADD_LIST_VIEW);
-        dbFachbereich = new DBFachbereich(this);
+        //registerForContextMenu(addListView);
 
-        registerForContextMenu(addListView);
+        dbFachbereich = new DBFachbereich(BachelorIntent.this);
+        arrayList = dbFachbereich.getALLFachBachelor();
+        arrayAdapter = new ArrayAdapter(BachelorIntent.this,
+                                        android.R.layout.simple_list_item_1,arrayList);
 
+        addListView.setAdapter(arrayAdapter);
+        arrayAdapter.notifyDataSetChanged();
+        addListView.invalidateViews();
+        addListView.refreshDrawableState();
     }
 
     @Override
@@ -48,43 +59,12 @@ public class BachelorIntent extends AppCompatActivity implements View.OnClickLis
             Intent intentOfAddFach = new Intent(this,Bachelor_Add_Fach.class);
             startActivity(intentOfAddFach);
 
-            Toast toast = Toast.makeText(this,"ADD",Toast.LENGTH_SHORT);
+            Toast toast = Toast.makeText(this,"Fachbereich hinzufügen",Toast.LENGTH_SHORT);
             toast.show();
         }
     }
 
-    @Override
-    protected void onActivityResult(int requestCod ,int resultCode , Intent data){
-        if(requestCod == requestAdd ){
-            if(resultCode== Activity.RESULT_OK){
-                //TODO hier sp?ter mit datenbank
-
-                String fachbereich = data.getStringExtra("NAME");
-
-                if(fachbereich.trim().length() > 0) {
-                    BachelorDTO bachelor = new BachelorDTO(fachbereich);
-                    dbFachbereich.insertBachlor(bachelor,"b");
-
-                    Toast toast = Toast.makeText(this, "Fachbereich wurde erfolgreich hinzugefuegt."
-                            , Toast.LENGTH_SHORT);
-                    toast.show();
-                }
-
-            }
-
-        }
-        super.onActivityResult(requestCod,resultCode,data);
-    }
-
-    @Override
-    protected void onResume()
-    {
-        super.onResume();
-    }
 
 
-    @Override
-    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-    }
 }

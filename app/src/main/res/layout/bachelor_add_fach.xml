@@ -32,9 +32,9 @@
         android:layout_gravity="center_horizontal"
         android:ems="10"
         android:gravity="center"
+        android:hint="z.B BWL"
         android:inputType="textPersonName"
-        android:padding="30dp"
-        android:text="Fach" />
+        android:padding="30dp" />
 
     <Button
         android:id="@+id/ADD_SPEICHERN_BUTTON"

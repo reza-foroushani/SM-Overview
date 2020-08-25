@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import de.hskl.smoverview.databaseClasses.DBFachbereich;
+
 
 public class MainBachelorActivity extends AppCompatActivity implements View.OnClickListener {
 

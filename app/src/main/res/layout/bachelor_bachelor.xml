@@ -47,17 +47,11 @@
 
             <ListView
                 android:id="@+id/ADD_LIST_VIEW"
-                android:layout_width="410dp"
-                android:layout_height="650dp"
-                android:layout_gravity="clip_horizontal|center"
-                android:padding="20dp" />
+                android:layout_width="match_parent"
+                android:layout_height="563dp"
+                android:layout_margin="10dp" />
         </LinearLayout>
     </ScrollView>
-
-    <TableRow
-        android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:layout_gravity="bottom"/>
 
 
 </FrameLayout>

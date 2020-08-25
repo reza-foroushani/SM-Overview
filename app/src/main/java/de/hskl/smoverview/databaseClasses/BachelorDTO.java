@@ -4,12 +4,16 @@ public class BachelorDTO
 {
     private int id;
     private String fachbereich;
-    private  String morb = "b";
+    private  String morb;
 
-    public BachelorDTO(String fachbereich)
+    public BachelorDTO(String fachbereich )
     {
+
         this.fachbereich = fachbereich;
+        //this.morb = morb;
     }
+
+
 
     public BachelorDTO(int id, String fachbereich)
     {

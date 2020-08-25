@@ -8,16 +8,14 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import java.util.ArrayList;
 
-import de.hskl.smoverview.databaseClasses.BachelorDTO;
-
 public class DBFachbereich  extends SQLiteOpenHelper {
 
-    // Version und Name von Datenbank
+    // Version und Name von Datenbank und Tabelle
     public static final int DB_VERSION = 1;
-    public static final String DB_NAMEN = "Bachelor";
-
-    // Tabelle
+    public static final String DB_NAMEN = "Bachelor_db";
     public static final String TABELLE_NAME = "bachelor";
+
+    // Spalten von Tabelle
     public static final String TABELLE_ID = "id";
     public static final String TABELLE_FACHBEREICH = "fachbereich";
     public static final String TABELLE_BACHELORORMASTER = "bORM";
@@ -31,10 +29,12 @@ public class DBFachbereich  extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase sqlOncreateDB) {
         // alle Tabelle erzeugen
-        String tabelle = "CREATE TABLE " + TABELLE_NAME + "(" +
-                TABELLE_ID + "INTEGER PRIMARY KEY AUTOINCREMENT," +
-                TABELLE_FACHBEREICH + " VARCHAR(35)," +
-                TABELLE_BACHELORORMASTER + " VARCHAR(10)) ";
+        String tabelle="CREATE  TABLE "+
+                TABELLE_NAME+
+                "("+TABELLE_ID+
+                " INTEGER PRIMARY KEY AUTOINCREMENT, "+
+                TABELLE_FACHBEREICH+" varchar(30),"+
+                TABELLE_BACHELORORMASTER+" varchar(30))";
 
         sqlOncreateDB.execSQL(tabelle);
 
@@ -42,28 +42,23 @@ public class DBFachbereich  extends SQLiteOpenHelper {
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase db, int i, int i1) {
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
-        /*
-        Datensätze parken
-        Tabellen löschen
-        onCreate Methode aufrufen
-        geparkte Datensätze neu einspielen
-         */
-
+        db.execSQL("DROP TABLE IF EXISTS " + TABELLE_NAME);
         onCreate(db);
 
     }
 
 
     // insert in Table
-    public void insertBachlor(BachelorDTO bachelor, String mORb) {
+    public boolean insertBachlor(BachelorDTO bachelor, String mORb) {
         SQLiteDatabase db = this.getWritableDatabase();
+        //key_Value
         ContentValues neueZeille = new ContentValues();
         neueZeille.put(TABELLE_FACHBEREICH, bachelor.getFachbereich());
-        neueZeille.put(TABELLE_BACHELORORMASTER, bachelor.getMorb());
-
-        db.insert(DB_NAMEN, null, neueZeille);
+        neueZeille.put(TABELLE_BACHELORORMASTER, mORb);
+        db.insert(TABELLE_NAME, null, neueZeille);
+        return true;
     }
 
 
@@ -81,13 +76,17 @@ public class DBFachbereich  extends SQLiteOpenHelper {
         db.update(DB_NAMEN,values,where,whereAsArray);
     }
 
+    // List Bachelor
+    public ArrayList getALLFachBachelor() {
 
-    public ArrayList<BachelorDTO> getALLFachBachelor() {
-        ArrayList<BachelorDTO> fachList = new ArrayList<>();
-        String SELECT_QUERY = "SELECT * FROM " + DB_NAMEN;
-
-        SQLiteDatabase dbSql = this.getReadableDatabase();
-        Cursor cursor = dbSql.rawQuery(SELECT_QUERY, null);
+        SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
+        ArrayList<String> fachList = new ArrayList<>();
+       // String SELECT_QUERY = "SELECT * FROM " + DB_NAMEN;
+      /*
+        Cursor cursor= dbSql.query
+                (TABELLE_NAME,new String[]{"id","fachbereich"},
+                        "MorB=?",new String[]
+                        {"B"},null,null,null);
 
         if (cursor.moveToFirst()) {
             do {
@@ -99,8 +98,21 @@ public class DBFachbereich  extends SQLiteOpenHelper {
             } while (cursor.moveToNext());
         }
         return fachList;
+
+       */
+
+      Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM " + TABELLE_NAME,null);
+      cursor.moveToFirst();
+      while (!cursor.isAfterLast())
+      {
+          fachList.add(cursor.getString(cursor.getColumnIndex(TABELLE_FACHBEREICH)));
+          cursor.moveToNext();
+      }
+      return fachList;
     }
 
+
+    // call Bachelor Fachbereich by ID
     public BachelorDTO getBachelorById(int id)
     {
         BachelorDTO bachelor = null;
@@ -118,14 +130,21 @@ public class DBFachbereich  extends SQLiteOpenHelper {
         {
             int idFach = cursor.getInt(cursor.getColumnIndex(TABELLE_ID));
             String fachbereich = cursor.getString(cursor.getColumnIndex(TABELLE_FACHBEREICH));
-
             bachelor  = new BachelorDTO(idFach,fachbereich);
         }
-
         return bachelor;
     }
 
 
-
+    // Datensatze loeschen
+    public void remoteFach (int id)
+    {
+        SQLiteDatabase database = this.getWritableDatabase();
+        String source = TABELLE_ID  + "=?";
+        String [] sourceAsArray = new String [] {
+                Integer.toString(id)
+        };
+        database.delete(DB_NAMEN,source,sourceAsArray);
+    }
 
 }
