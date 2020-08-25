@@ -68,4 +68,9 @@ public class MasterAdapter extends ArrayAdapter<MasterDTO> {
         Beschreichbung.setText(CurrentMaster.getBeschreichbung());
         return convertView;
     }
+
+    @Override
+    public void clear() {
+        super.clear();
+    }
 }

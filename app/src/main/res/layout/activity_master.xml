@@ -19,6 +19,15 @@
         android:text="Fachbereiche von Master"
         android:textSize="30sp" />
 
+    <EditText
+        android:id="@+id/SUCHEN"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/ic_search_black_24dp"
+        android:ems="10"
+        android:hint="Suchen"
+        android:inputType="textPersonName" />
+
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
