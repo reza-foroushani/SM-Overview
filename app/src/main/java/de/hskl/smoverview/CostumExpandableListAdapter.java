@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Typeface;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,18 +17,26 @@ import android.widget.Toast;
 import java.util.HashMap;
 import java.util.List;
 
+import de.hskl.smoverview.databaseClasses.ModulDTO;
+import de.hskl.smoverview.databaseClasses.MusterahmadDB;
+import de.hskl.smoverview.databaseClasses.SemesterDTO;
+
 public class CostumExpandableListAdapter extends BaseExpandableListAdapter
 {
     private Context _context;
     private List<String> _listDataHeader;
     private HashMap<String, List<String>> _listDataChild;
+    private MusterahmadDB db;
+    private int studiengangId;
 
     public CostumExpandableListAdapter(Context context, List<String> listDataHeader,
-                                 HashMap<String, List<String>> listChildData)
+                                 HashMap<String, List<String>> listChildData, MusterahmadDB db, int studiengangId)
     {
         this._context = context;
         this._listDataHeader = listDataHeader;
         this._listDataChild = listChildData;
+        this.db = db;
+        this.studiengangId = studiengangId;
     }
 
     @Override
@@ -128,7 +137,7 @@ public class CostumExpandableListAdapter extends BaseExpandableListAdapter
             public void onClick(View view)
             {
                 AlertDialog.Builder builder = new AlertDialog.Builder(_context);
-                LayoutInflater inflater = LayoutInflater.from(_context);
+                final LayoutInflater inflater = LayoutInflater.from(_context);
                 final View inflateView = inflater.inflate(R.layout.modul_hinzufuegen_dialog, null);
                 AlertDialog dialog;
                 builder.setView(inflateView);
@@ -136,19 +145,28 @@ public class CostumExpandableListAdapter extends BaseExpandableListAdapter
                 builder.setTitle("Neues Modul hinzufügen")
                         .setPositiveButton("Hinzufügen", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                //TODO: Add to Database
                                 final EditText modulNameEditText = (EditText) inflateView.findViewById(R.id.MODULNAME_EDITTEXT);
+                                final EditText modulBeschreibungEditText = (EditText) inflateView.findViewById(R.id.MODULBESCHREIBUNG_EDITTEXT);
                                 String neuesModul = modulNameEditText.getText().toString();
                                 String semesterName = (String)getGroup(groupPosition);
+                                String modulBeschreibung = modulBeschreibungEditText.getText().toString();
 
-                                if(!neuesModul.isEmpty())
+                                if(!neuesModul.isEmpty() && !modulBeschreibung.isEmpty())
                                 {
                                     _listDataChild.get(semesterName).add(neuesModul);
                                     notifyDataSetChanged();
-                                    Toast.makeText(_context, "Modul erfolgreich hinzugefügt!", Toast.LENGTH_SHORT).show();
+
+                                    SemesterDTO semester = db.getSemester(semesterName, studiengangId);
+                                    ModulDTO modul = new ModulDTO(neuesModul, modulBeschreibung, semester.getS_id());
+                                    boolean success = db.addModul(modul);
+
+                                    if(success)
+                                        Toast.makeText(_context, "Modul erfolgreich hinzugefügt!", Toast.LENGTH_SHORT).show();
+                                    else
+                                        Toast.makeText(_context, "Fehler mit Datenbank!", Toast.LENGTH_SHORT).show();
                                 }
                                 else
-                                    Toast.makeText(_context, "Leere Modulnamen nicht erlaubt!", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(_context, "Felder dürfen nicht leer sein!", Toast.LENGTH_SHORT).show();
                             }
                         })
                         .setNegativeButton("Abbrechen", new DialogInterface.OnClickListener() {
@@ -171,7 +189,6 @@ public class CostumExpandableListAdapter extends BaseExpandableListAdapter
             public void onClick(View view)
             {
                 AlertDialog.Builder builder = new AlertDialog.Builder(_context);
-                LayoutInflater inflater = LayoutInflater.from(_context);
                 AlertDialog dialog;
 
                 final String semesterName = _listDataHeader.get(groupPosition);
@@ -179,11 +196,16 @@ public class CostumExpandableListAdapter extends BaseExpandableListAdapter
                 builder.setTitle("Willst du wirklich das Semester \"" + semesterName + "\" löschen?")
                         .setPositiveButton("Bestätigen", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                //TODO: Delete from Database
                                 _listDataHeader.remove(semesterName);
                                 _listDataChild.remove(semesterName);
                                 notifyDataSetChanged();
-                                Toast.makeText(_context, "Semester erfolgreich gelöscht!", Toast.LENGTH_SHORT).show();
+                                SemesterDTO semester = db.getSemester(semesterName, studiengangId);
+                                boolean success = db.deleteSemester(semester.getS_id());
+
+                                if(success)
+                                    Toast.makeText(_context, "Semester erfolgreich gelöscht!", Toast.LENGTH_SHORT).show();
+                                else
+                                    Toast.makeText(_context, "Fehler mit Datenbank!", Toast.LENGTH_SHORT).show();
                             }
                         })
                         .setNegativeButton("Abbrechen", new DialogInterface.OnClickListener() {

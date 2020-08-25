@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
 
 public class ModulDetailansichtActivity extends AppCompatActivity
@@ -19,11 +20,9 @@ public class ModulDetailansichtActivity extends AppCompatActivity
 
         modulName = findViewById(R.id.MODULNAME_TEXTVIEW);
         modulBeschreibung = findViewById(R.id.BESCHREIBUNGMODUL_TEXTVIEW);
-
-        //TODO: Daten aus Datenbank, mit Semester und Modul Name müsste reichen
         Intent intent = getIntent();
-        modulName.setText(intent.getStringExtra("SEMESTER") + ": " + intent.getStringExtra("MODUL"));
-        modulBeschreibung.setText("(TODO) Modulbeschreibung kommt aus der Datenbank ;)");
 
+        modulName.setText(intent.getStringExtra("SEMESTER") + ": " + intent.getStringExtra("MODUL"));
+        modulBeschreibung.setText(intent.getStringExtra("MODULBESCHREIBUNG"));
     }
 }

@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:text="Platzhalter für Modulnamen"
+        android:text="{Semester}: {Modulname}"
         android:textAlignment="center"
         android:textSize="30sp" />
 
@@ -20,7 +20,7 @@
         android:id="@+id/BESCHREIBUNGMODUL_TEXTVIEW"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Platzhalter für Modulbeschreibung"
+        android:text="Hier könnte ihre Modulbeschreibung stehen!"
         android:textSize="20sp" />
 
 </LinearLayout>

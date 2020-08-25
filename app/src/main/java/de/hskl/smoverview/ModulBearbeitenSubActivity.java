@@ -40,6 +40,7 @@ public class ModulBearbeitenSubActivity extends AppCompatActivity
     public void saveData(View v)
     {
         Intent i = new Intent();
+        i.putExtra("OLDMODULNAME", modulName);
         i.putExtra("MODULNAME", modulNameEditText.getText().toString());
         i.putExtra("MODULBESCHREIBUNG", modulBeschreibungEditText.getText().toString());
         i.putExtra("CHILDINDEX", childindex);
