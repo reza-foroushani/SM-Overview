@@ -42,7 +42,7 @@
             android:scrollX="0px"
             android:scrollY="0px"
             android:scrollbarAlwaysDrawVerticalTrack="true"
-            android:scrollbarSize="20dip"
+            android:scrollbarSize="4dp"
             android:scrollbars="vertical">
             <!-- Das hier macht Master Button kaputt!
             <TextView
