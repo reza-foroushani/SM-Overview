@@ -42,12 +42,13 @@
             android:scrollbarAlwaysDrawVerticalTrack="true"
             android:scrollbarSize="20dip"
             android:scrollbars="vertical">
-
+            <!-- Das hier macht Master Button kaputt!
             <TextView
                 android:id="@+id/ITEM_OF_VIEW_BACHELOR"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="TextView" />
+            -->
         </ListView>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton

@@ -157,7 +157,7 @@ public class SemesterUebersichtActivity extends AppCompatActivity
                 listDataChild.put(semesterName, modulesList);
 
                 listAdapter.updateView(listDataHeader, listDataChild);
-
+                
                 SemesterDTO semester = db.getSemester(semesterName, currentStudiengangId);
                 ModulDTO currentModul = db.getModul(oldModulName, semester.getS_id());
                 ModulDTO newModul = new ModulDTO(currentModul.getM_id(), modulName, modulBeschreibung, currentModul.getS_id());
@@ -183,7 +183,8 @@ public class SemesterUebersichtActivity extends AppCompatActivity
             {
                 final String semesterName = listDataHeader.get(groupPosition);
                 final String modulName = listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition);
-                ModulDTO modul = db.getModul(modulName, currentStudiengangId);
+                SemesterDTO semester = db.getSemester(semesterName, currentStudiengangId);
+                ModulDTO modul = db.getModul(modulName, semester.getS_id());
                 Intent intent = new Intent(SemesterUebersichtActivity.this, ModulDetailansichtActivity.class);
                 intent.putExtra("SEMESTER", semesterName);
                 intent.putExtra("MODUL", modulName);
