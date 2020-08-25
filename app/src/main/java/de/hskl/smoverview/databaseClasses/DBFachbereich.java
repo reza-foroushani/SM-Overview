@@ -31,20 +31,16 @@ public class DBFachbereich  extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase sqlOncreateDB) {
         // alle Tabelle erzeugen
-<<<<<<< HEAD
+        Log.d("HSKL", "create table andere");
         String tabelle="CREATE  TABLE "+
                 TABELLE_NAME+
                 "("+TABELLE_ID+
                 " INTEGER PRIMARY KEY AUTOINCREMENT, "+
                 TABELLE_FACHBEREICH+" varchar(30),"+
                 TABELLE_BACHELORORMASTER+" varchar(30))";
-=======
-        Log.d("HSKL", "create table andere");
-        String tabelle = "CREATE TABLE " + TABELLE_NAME + "(" +
-                TABELLE_ID + "INTEGER PRIMARY KEY AUTOINCREMENT," +
-                TABELLE_FACHBEREICH + " VARCHAR(35)," +
-                TABELLE_BACHELORORMASTER + " VARCHAR(10)) ";
->>>>>>> 41a946bfb69d909e7fec95cb25c8467a41a3526e
+
+        
+
 
         sqlOncreateDB.execSQL(tabelle);
 
