@@ -29,13 +29,15 @@
         android:inputType="textPersonName" />
 
     <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_width="390dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal">
 
         <ListView
             android:id="@+id/FACHBEREICH_LISTE"
-            android:layout_width="match_parent"
+            android:layout_width="350dp"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
             android:fadeScrollbars="false"
             android:scrollX="0px"
             android:scrollY="0px"
