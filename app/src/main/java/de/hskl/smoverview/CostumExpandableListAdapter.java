@@ -157,8 +157,7 @@ public class CostumExpandableListAdapter extends BaseExpandableListAdapter
                                     notifyDataSetChanged();
 
                                     SemesterDTO semester = db.getSemester(semesterName, studiengangId);
-                                    Log.d("HSKL", "SID BEI ADD RICHTIG? : " + semester.getS_id());
-                                    ModulDTO modul = new ModulDTO(neuesModul, modulBeschreibung, semester.getS_id());
+                                    ModulDTO modul = new ModulDTO(neuesModul, modulBeschreibung, semester.getS_id(), studiengangId);
                                     boolean success = db.addModul(modul);
 
                                     if(success)

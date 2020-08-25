@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -54,12 +55,7 @@ MasterDTO masterDialog;
         //füe pluss floatingButton
         FloatingActionButton myFab = (FloatingActionButton)  findViewById(R.id.fab);
         myFab.setOnClickListener(this);
-       /* myFab.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Toast toast = Toast.makeText(getApplicationContext(), "add", Toast.LENGTH_SHORT);
-                toast.show();
-            }
-        });*/
+
 
         fachbereichliste =(ListView) findViewById(R.id.FACHBEREICH_LISTE);
         suchen=(EditText) findViewById(R.id.SUCHEN);
@@ -87,20 +83,7 @@ MasterDTO masterDialog;
         updateList();
 
 
-       /* Context cxt= this;
-        db= new MusterahmadDB(this);
-        int itemLayout = android.R.layout.simple_list_item_2;
-        // lifert von datenbank alle Einträger
-        Cursor cursor = db.gettAllMaster();
-        //anzeigen alle werte aus der spalte
-        String[ ]  from = new String[] {db.FACHBERECIH_NAMEN,db.FACHBERECIH_BESCHREICHBUNG};
-        //die werte aus spalte weden in das tex1 eingefügt
-                int[] to = new int [] {android.R.id.text1,android.R.id.text2};
-       // MasterAdapter simpleCursorAdapter = new MasterAdapter(cxt,itemLayout,cursor,from,to,0);
-
-        SimpleCursorAdapter s = new SimpleCursorAdapter(cxt,itemLayout,cursor,from,to,0);
-        fachbereichliste.setAdapter(s);*/
-        // es wird listeview mit cotextmnue verbunden
+//es wird listview mit contextmune verbunden
         registerForContextMenu(fachbereichliste);
 
 
@@ -166,8 +149,7 @@ MasterDTO masterDialog;
         // ich schicke Intent und ích warte
        startActivityForResult(i,RequestCodHinzufuegen);
 
-        Toast toast = Toast.makeText(this, "add", Toast.LENGTH_SHORT);
-        toast.show();
+
     }
 
     @Override
@@ -189,11 +171,11 @@ MasterDTO masterDialog;
 
                 //  FachbereichMasterItem.add(data.getStringExtra("NAME"));
 
-                Toast toast = Toast.makeText(this, "Nuer Fachbereich hinzufügt", Toast.LENGTH_SHORT);
+                Toast toast = Toast.makeText(this, "Nuer Studiengang hinzufügt", Toast.LENGTH_SHORT);
                 toast.show();
-
+                Log.d("HSKL", "HAEDER: " + master);
                 updateList();
-            }else {Toast toast = Toast.makeText(getApplicationContext(), " kein  Fachberecih hinzufügt feld war leer ", Toast.LENGTH_SHORT);
+            }else {Toast toast = Toast.makeText(getApplicationContext(), " keine Änderung  felder dürfen nicht leer sein ", Toast.LENGTH_SHORT);
                 toast.show();
 
                 updateList();
@@ -229,11 +211,7 @@ MasterDTO masterDialog;
           startActivity(intent);
 
 
-        //Cursor meinzeiger =db.getmasterbyIdCursor(3);
 
-        //String pen = o.toString();
-        Toast toast = Toast.makeText(getApplicationContext(), "id "+master.getFachbereich_Id() , Toast.LENGTH_SHORT);
-        toast.show();
     }
 
 //context menu
@@ -309,12 +287,12 @@ MusterahmadDB dbDialog= new MusterahmadDB(this);
                      MasterDTO nueMaster = new MasterDTO(masterfinal.getFachbereich_Id(), neuFachbereichName, neuFachbereichBeschreicung);
                      db.updatMaster(nueMaster, masterfinal.getFachbereich_Id());
                      updateList();
-                     Toast toast = Toast.makeText(getApplicationContext(), "geändert", Toast.LENGTH_SHORT);
+                     Toast toast = Toast.makeText(getApplicationContext(), "erfolgreich verändert!", Toast.LENGTH_SHORT);
                      toast.show();
                      updateList();
                      isSchowingDialog = false;
                  }else{
-                     Toast toast = Toast.makeText(getApplicationContext(), " kein Änderung Fachberecih feld war leer ", Toast.LENGTH_SHORT);
+                     Toast toast = Toast.makeText(getApplicationContext(), " keine Änderung  felder dürfen nicht leer sein ", Toast.LENGTH_SHORT);
                      toast.show();
                      
                      updateList();
@@ -356,7 +334,7 @@ MusterahmadDB dbDialog= new MusterahmadDB(this);
                  //TODO hier später mit datenbank löschen
            db.deleteFachbereich(masterFinal.getFachbereich_Id());
               updateList();
-                 Toast toast = Toast.makeText(getApplicationContext(),master.getFachbereichName()+ " ist gelöcht ", Toast.LENGTH_SHORT);
+                 Toast toast = Toast.makeText(getApplicationContext(),master.getFachbereichName()+ " erfolgreich gelöscht! ", Toast.LENGTH_SHORT);
                  toast.show();
                  isSchowingDialogLöschen=false;
 
