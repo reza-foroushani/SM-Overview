@@ -8,16 +8,14 @@
         android:id="@+id/MODULNAME_EDITTEXT"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="25dp"
-        android:layout_weight="1"
+        android:gravity="center"
         android:hint="Modulname" />
 
     <EditText
         android:id="@+id/MODULBESCHREIBUNG_EDITTEXT"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="25dp"
-        android:layout_weight="1"
+        android:gravity="center"
         android:hint="Modulbeschreibung"
         android:inputType="textPersonName" />
 

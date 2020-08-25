@@ -1,58 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/BACHELOR_LAYOUT"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F8FBFB"
-    android:orientation="vertical"
-    tools:context=".BachelorIntent">
+    android:fillViewport="true">
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/ADD_BUTTEN"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:clickable="true"
-        android:onClick="onClick"
-
-        android:scrollbarSize="20sp"
-        android:src="@drawable/add"
-        app:backgroundTint="#014E8A"
-        app:fabSize="auto"
-        app:maxImageSize="26sp" />
-
-    <ScrollView
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="bottom|center_vertical">
+        android:layout_height="wrap_content"
+        android:background="#F8FBFB">
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/TEXT_VIEW_BACHELOR"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#EFEDED"
-            android:orientation="vertical">
+            android:gravity="center"
+            android:paddingLeft="20dp"
+            android:paddingTop="10dp"
+            android:paddingRight="20dp"
+            android:paddingBottom="10dp"
+            android:text="Bachelor Studiengänge"
+            android:textSize="30sp" />
 
-            <TextView
-                android:id="@+id/TEXT_VIEW_BACHELOR"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="clip_horizontal|center_horizontal"
-                android:text="Bachelor Studiengänge"
-                android:textAllCaps="false"
-                android:textColor="#020202"
-                android:textSize="24sp"
-                tools:visibility="visible" />
+        <ListView
+            android:id="@+id/ADD_LIST_VIEW"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/TEXT_VIEW_BACHELOR"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp" />
 
-            <ListView
-                android:id="@+id/ADD_LIST_VIEW"
-                android:layout_width="match_parent"
-                android:layout_height="563dp"
-                android:layout_margin="10dp" />
-        </LinearLayout>
-    </ScrollView>
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/ADD_BUTTEN"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
 
-
-</FrameLayout>
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="28dp"
+            android:layout_marginLeft="28dp"
+            android:layout_marginTop="28dp"
+            android:layout_marginEnd="28dp"
+            android:layout_marginRight="28dp"
+            android:layout_marginBottom="28dp"
+            android:clickable="true"
+            android:onClick="onClick"
+            android:scrollbarSize="20sp"
+            android:src="@drawable/ic_add_white_48dp"
+            app:backgroundTint="@android:color/holo_blue_dark"
+            app:fabSize="auto"
+            app:maxImageSize="26sp" />
+    </RelativeLayout>
+</ScrollView>
 
