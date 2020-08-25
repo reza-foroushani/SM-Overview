@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.ContextMenu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -37,7 +39,7 @@ public class BachelorIntent extends AppCompatActivity implements View.OnClickLis
         ausgabe = findViewById(R.id.TEXT_VIEW_BACHELOR);
         addButton = findViewById(R.id.ADD_BUTTEN);
         addListView = findViewById(R.id.ADD_LIST_VIEW);
-        //registerForContextMenu(addListView);
+        registerForContextMenu(addListView);
 
         dbFachbereich = new DBFachbereich(BachelorIntent.this);
         arrayList = dbFachbereich.getALLFachBachelor();
@@ -64,6 +66,30 @@ public class BachelorIntent extends AppCompatActivity implements View.OnClickLis
         }
     }
 
+    // update
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo)
+    {
+        super.onCreateContextMenu(menu,view,menuInfo);
+        menu.setHeaderTitle("Select The Action");
+        menu.add(0,view.getId(),0,"Bearbeiten");
+        menu.add(0, view.getId(),0,"Löschen");
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item)
+    {
+        if(item.getTitle() == "Löschen") {
+            Toast.makeText(getApplicationContext(), "löschen", Toast.LENGTH_LONG).show();
+        }else if(item.getTitle() == "Bearbeiten")
+        {
+            Toast.makeText(getApplicationContext(),"wird bearbeitet",Toast.LENGTH_LONG).show();
+        }else
+        {
+            return  false;
+        }
+        return  true;
+    }
 
 
 
