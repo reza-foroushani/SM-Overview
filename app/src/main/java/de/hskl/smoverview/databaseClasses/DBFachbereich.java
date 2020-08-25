@@ -136,4 +136,73 @@ public class DBFachbereich  extends SQLiteOpenHelper {
         boolean success = db.delete(TABELLE_NAME, where, whereArg) > 0;
         return success;
     }
+
+    public int updateBachelor(BachelorDTO bachelor)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(TABELLE_FACHBEREICH,bachelor.getFachbereich());
+        return db.update(TABELLE_NAME,values,TABELLE_ID + " = ?",
+                new String[]{ String.valueOf(bachelor.getId())});
+    }
+
+     /*
+    // Update Datensatz
+    public void updateBestellungBezahlt(BachelorDTO bachelorDTO, int id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(TABELLE_FACHBEREICH, bachelorDTO.getFachbereich());
+        String where = TABELLE_ID + "=?";
+        String[] whereArg = new String[]{Integer.toString(id)};
+        db.update(TABELLE_NAME, values, where, whereArg);
+    }
+
+
+
+
+
+
+    // scuhe nach Datensatz in View
+    public ArrayList<BachelorDTO> sucheBachelorFach (String wort){
+        ArrayList<BachelorDTO>  ListBachelor = new ArrayList<>();
+        String M="M";
+
+        SQLiteDatabase db =this.getReadableDatabase();
+        Cursor cursor=  db.rawQuery("SELECT * FROM " + TABELLE_NAME + " WHERE " +
+                TABELLE_FACHBEREICH + " LIKE '%" + wort + "%' AND " + TABELLE_BACHELORORMASTER +
+                " ='b' ",null);
+        if(cursor.moveToFirst()){
+            do {
+
+                String fachberichName=cursor.getString(cursor.getColumnIndex(TABELLE_FACHBEREICH));
+                int idFach =cursor.getInt(cursor.getColumnIndex(TABELLE_ID));
+                BachelorDTO bachelorDTO = new BachelorDTO(idFach,fachberichName);
+                ListBachelor.add(bachelorDTO);
+            }while (cursor.moveToNext());
+        }
+        return  ListBachelor;
+
+    }
+
+
+    // check Datensatz
+
+    public Boolean checkDaten (String wort){
+        SQLiteDatabase db =this.getReadableDatabase();
+        Cursor cursor=  db.rawQuery("SELECT * FROM bachelor  where fachbereich like '%"+wort+"%' and mORb ='b' ",null);
+        if(cursor.moveToFirst()){
+            String fachberichName = cursor.getString(cursor.getColumnIndex(TABELLE_FACHBEREICH));
+            int fachbereich_ID =cursor.getInt(cursor.getColumnIndex(TABELLE_ID));
+            if(wort.equals(fachberichName)){
+                return false;
+            }else {
+                return true  ;
+            }
+        }else {
+            return true  ;
+        }
+    }
+*/
+
+
 }
