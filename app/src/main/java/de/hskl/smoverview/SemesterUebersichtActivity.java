@@ -107,12 +107,15 @@ public class SemesterUebersichtActivity extends AppCompatActivity
 
         final String semesterName = listDataHeader.get(groupPos);
         final String modulName = listDataChild.get(listDataHeader.get(groupPos)).get(childPos);
+        SemesterDTO semester = new SemesterDTO(semesterName, currentStudiengangId);
 
         switch(item.getItemId())
         {
             case R.id.CONTEXT_BEARBEITEN:
                 Intent i = new Intent(this, ModulBearbeitenSubActivity.class);
-                ModulDTO modul = db.getModul(modulName, currentStudiengangId);
+                Log.d("HSKL", "Contextbearbeiten modulname: " + modulName);
+                Log.d("HSKL", "Contextbearbeiten semestername: " + semesterName);
+                ModulDTO modul = db.getModul(modulName, semester.getS_id());
                 i.putExtra("CHILDINDEX", childPos);
                 i.putExtra("GROUPINDEX", groupPos);
                 i.putExtra("MODULNAME", modulName);
@@ -123,7 +126,6 @@ public class SemesterUebersichtActivity extends AppCompatActivity
                 listDataChild.get(semesterName).remove(modulName);
                 listAdapter.updateView(listDataHeader, listDataChild);
 
-                SemesterDTO semester = db.getSemester(semesterName, currentStudiengangId);
                 boolean successs = db.deleteModul(semester.getS_id(), modulName);
 
                 if(successs)
@@ -157,10 +159,11 @@ public class SemesterUebersichtActivity extends AppCompatActivity
                 listDataChild.put(semesterName, modulesList);
 
                 listAdapter.updateView(listDataHeader, listDataChild);
-                
+                Log.d("HSKL", "Semester: " + semesterName);
                 SemesterDTO semester = db.getSemester(semesterName, currentStudiengangId);
+                Log.d("HSKL", "Semesterid:" + semester.getS_id());
                 ModulDTO currentModul = db.getModul(oldModulName, semester.getS_id());
-                ModulDTO newModul = new ModulDTO(currentModul.getM_id(), modulName, modulBeschreibung, currentModul.getS_id());
+                ModulDTO newModul = new ModulDTO(currentModul.getM_id(), modulName, modulBeschreibung, currentModul.getS_id(), currentModul.getStudiengang_id());
 
                 boolean success = db.updateModul(newModul, currentModul.getM_id());
 
