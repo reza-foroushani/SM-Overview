@@ -13,6 +13,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="TextView"
-            android:textSize="30sp" />
+            android:textColor="#0C0C0C"
+            android:textSize="20sp" />
     </LinearLayout>
 </LinearLayout>
