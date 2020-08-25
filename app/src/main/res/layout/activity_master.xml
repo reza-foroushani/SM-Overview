@@ -12,11 +12,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:gravity="center"
         android:paddingLeft="20dp"
         android:paddingTop="10dp"
         android:paddingRight="20dp"
         android:paddingBottom="10dp"
-        android:text="Fachbereiche von Master"
+        android:text="Master Studiengänge"
         android:textSize="30sp" />
 
     <EditText
@@ -28,21 +29,19 @@
         android:hint="Suchen"
         android:inputType="textPersonName" />
 
-    <FrameLayout
-        android:layout_width="390dp"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center_horizontal">
 
         <ListView
             android:id="@+id/FACHBEREICH_LISTE"
-            android:layout_width="350dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:fadeScrollbars="false"
             android:scrollX="0px"
             android:scrollY="0px"
-            android:scrollbarAlwaysDrawVerticalTrack="true"
-            android:scrollbarSize="4dp"
+            android:scrollbarAlwaysDrawVerticalTrack="false"
             android:scrollbars="vertical">
             <!-- Das hier macht Master Button kaputt!
             <TextView
@@ -57,13 +56,22 @@
             android:id="@+id/fab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="end|bottom"
-            android:layout_margin="16dp"
 
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="28dp"
+            android:layout_marginLeft="28dp"
+            android:layout_marginTop="28dp"
+            android:layout_marginEnd="28dp"
+            android:layout_marginRight="28dp"
+            android:layout_marginBottom="28dp"
             android:baselineAlignBottom="false"
             android:src="@drawable/ic_add_white_48dp"
-            app:backgroundTint="#3F51B5" />
-    </FrameLayout>
+            app:backgroundTint="@android:color/holo_blue_dark"
+            app:elevation="6dp"
+            app:pressedTranslationZ="12dp" />
+
+    </RelativeLayout>
 
 
 </LinearLayout>

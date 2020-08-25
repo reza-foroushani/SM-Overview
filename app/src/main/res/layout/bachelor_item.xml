@@ -6,5 +6,14 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"/>
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/FACHBEREICHBACHELOR_TEXTVIEW"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="TextView"
+            android:textColor="#0C0C0C"
+            android:textSize="20sp" />
+    </LinearLayout>
 </LinearLayout>
