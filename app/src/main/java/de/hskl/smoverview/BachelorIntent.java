@@ -10,6 +10,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.UserDictionary;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
@@ -50,15 +51,24 @@ public class BachelorIntent extends AppCompatActivity implements View.OnClickLis
         registerForContextMenu(addListView);
 
         dbFachbereich = new DBFachbereich(BachelorIntent.this);
-        arrayList = dbFachbereich.getALLFachBachelor();
-        arrayAdapter = new ArrayAdapter(BachelorIntent.this,
-                                        android.R.layout.simple_list_item_1,arrayList);
-
-        addListView.setAdapter(arrayAdapter);
+        updateList();
         arrayAdapter.notifyDataSetChanged();
         addListView.invalidateViews();
         addListView.refreshDrawableState();
-        loadData();
+
+        addListView.setOnItemClickListener(new AdapterView.OnItemClickListener()
+        {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id)
+            {
+                BachelorDTO bachelor = (BachelorDTO) adapterView.getItemAtPosition(position);
+                Intent intent = new Intent(BachelorIntent.this,SemesterUebersichtActivity.class);
+                intent.putExtra("FACHBEREICHNAME", bachelor.getFachbereich());
+                intent.putExtra("MorB", "B");
+                intent.putExtra("FACHBEREICH_ID", bachelor.getId());
+                startActivity(intent);
+            }
+        });
 
     }
 
@@ -69,12 +79,23 @@ public class BachelorIntent extends AppCompatActivity implements View.OnClickLis
         if(view.getId() == addButton.getId())
         {
             Intent intentOfAddFach = new Intent(this,Bachelor_Add_Fach.class);
-            startActivity(intentOfAddFach);
+            startActivityForResult(intentOfAddFach, 10);
 
             Toast toast = Toast.makeText(this,"Fachbereich hinzufügen",Toast.LENGTH_SHORT);
             toast.show();
         }
     } // onClick
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        if(requestCode == 10)
+        {
+            updateList();
+            Log.d("HSKL", "ADDED BRUDI");
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
 
     // update
     @Override
@@ -84,6 +105,14 @@ public class BachelorIntent extends AppCompatActivity implements View.OnClickLis
        menu.setHeaderTitle("Was möchten Sie tun?");
         menu.add(0,view.getId(),0,"Bearbeiten");
         menu.add(0, view.getId(),0,"Löschen");
+    }
+
+    public void updateList()
+    {
+        ArrayList<BachelorDTO> test1 = dbFachbereich.getALLFachBachelor();
+        Log.d("HSKL", "LISTILIST: " + test1);
+        arrayAdapter = new BachelorAdapter(this,R.layout.bachelor_item,test1);
+        addListView.setAdapter(arrayAdapter);
     }
 
     private void loadData() {

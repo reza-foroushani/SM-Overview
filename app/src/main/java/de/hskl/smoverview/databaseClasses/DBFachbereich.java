@@ -60,26 +60,14 @@ public class DBFachbereich  extends SQLiteOpenHelper {
 
     // insert in Table
     public boolean insertBachlor(BachelorDTO bachelor, String mORb) {
-        // key-value
         SQLiteDatabase db = this.getWritableDatabase();
+        //key_Value
         ContentValues neueZeille = new ContentValues();
-
         neueZeille.put(TABELLE_FACHBEREICH, bachelor.getFachbereich());
         neueZeille.put(TABELLE_BACHELORORMASTER, mORb);
-
-        Log.d(DB_NAMEN, "addData: Adding " + bachelor + " to " + TABELLE_NAME);
-
-        long result = db.insert(TABELLE_NAME, null, neueZeille);
-
-        // falls Datensatz vorhanden ist
-
-        if(result == -1)
-        {
-            return  false;
-        } else
-        {
-            return true;
-        }
+        boolean success = db.insert(TABELLE_NAME, null, neueZeille) > 0;
+        Log.d("HSKL", "SUCC: " + success);
+        return success;
     }
 
 
@@ -98,19 +86,20 @@ public class DBFachbereich  extends SQLiteOpenHelper {
     }
 
     // List Bachelor
-    public ArrayList getALLFachBachelor() {
-
-        SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
-        ArrayList<String> fachList = new ArrayList<>();
-
-      Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM " + TABELLE_NAME,null);
-      cursor.moveToFirst();
-      while (!cursor.isAfterLast())
-      {
-          fachList.add(cursor.getString(cursor.getColumnIndex(TABELLE_FACHBEREICH)));
-          cursor.moveToNext();
-      }
-      return fachList;
+    public ArrayList<BachelorDTO> getALLFachBachelor() {
+        ArrayList<BachelorDTO> fachbereichHilfe = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor= db.query(TABELLE_NAME,new String[]{"id","fachbereich","bORM"},"bORM=?",new String[]{"B"},null,null,null);
+        if(cursor.moveToFirst()){
+            do {
+                String fachberichName=cursor.getString(cursor.getColumnIndex(TABELLE_FACHBEREICH));
+                String beschreibung =cursor.getString(cursor.getColumnIndex(TABELLE_BACHELORORMASTER));
+                int fachbereich_ID =cursor.getInt(cursor.getColumnIndex(TABELLE_ID));
+                BachelorDTO bachelor = new BachelorDTO(fachbereich_ID,fachberichName,beschreibung);
+                fachbereichHilfe.add(bachelor);
+            }while (cursor.moveToNext());
+        }
+        return fachbereichHilfe;
     }
 
 

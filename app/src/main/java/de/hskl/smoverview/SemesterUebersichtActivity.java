@@ -2,6 +2,7 @@ package de.hskl.smoverview;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ExpandableListView;
 import android.widget.NumberPicker;
 import android.widget.TextView;
@@ -206,10 +208,10 @@ public class SemesterUebersichtActivity extends AppCompatActivity
                     Toast.makeText(SemesterUebersichtActivity.this, "Maximum an Semester erreicht!", Toast.LENGTH_SHORT).show();
                 else
                 {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(SemesterUebersichtActivity.this);
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(SemesterUebersichtActivity.this);
                     LayoutInflater inflater = LayoutInflater.from(SemesterUebersichtActivity.this);
                     View inflateView = inflater.inflate(R.layout.semester_hinzufuegen_dialog, null);
-                    AlertDialog dialog;
+                    final AlertDialog dialog;
                     builder.setView(inflateView);
 
                     String[] numbers = getAvailableSemesterNumberArray();

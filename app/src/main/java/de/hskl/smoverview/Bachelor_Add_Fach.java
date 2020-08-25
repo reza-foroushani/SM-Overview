@@ -82,21 +82,18 @@ public class Bachelor_Add_Fach extends AppCompatActivity implements View.OnClick
 
             } else {
                 if (!text.isEmpty() ) {
-                    if (dbFachbereich.insertBachlor(bachelorDTO, "b")) {
+                    if (dbFachbereich.insertBachlor(bachelorDTO, "B")) {
                         addEditText.setText("");
                         Toast.makeText(Bachelor_Add_Fach.this,
                                 "..::: Fachbereich Bachelor :::..",
                                 Toast.LENGTH_SHORT).show();
-                        arrayList.clear();
-                        arrayList.addAll(dbFachbereich.getALLFachBachelor());
-
-
                     }
                 }
 
 
-            Intent intentOfBachelorIntent = new Intent(this,BachelorIntent.class);
-            startActivity(intentOfBachelorIntent);
+                Intent i = new Intent();
+                setResult(Activity.RESULT_OK, i);
+                finish();
 
             Toast toast = Toast.makeText(this,"Datenstz erfolgreich gespeichert",Toast.LENGTH_SHORT);
             toast.show();

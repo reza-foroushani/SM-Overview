@@ -6,19 +6,23 @@ public class BachelorDTO
     private String fachbereich;
     private  String morb;
 
-    public BachelorDTO(String fachbereich )
+    public BachelorDTO(int id, String fachbereich, String morb)
     {
-
+        this.id = id;
         this.fachbereich = fachbereich;
-        //this.morb = morb;
+        this.morb = morb;
     }
-
-
 
     public BachelorDTO(int id, String fachbereich)
     {
         this.id = id;
         this.fachbereich = fachbereich;
+    }
+
+    public BachelorDTO(String fachbereich)
+    {
+        this.fachbereich = fachbereich;
+        //this.morb = morb;
     }
 
     public int getId() {
