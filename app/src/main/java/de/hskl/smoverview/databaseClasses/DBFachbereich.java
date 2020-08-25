@@ -128,18 +128,12 @@ public class DBFachbereich  extends SQLiteOpenHelper {
 
 
     // Datensatze loeschen
-    public boolean delete(int id) {
-        boolean result = true;
-        try {
-            SQLiteDatabase sqLiteDatabase = getWritableDatabase();
-            result = sqLiteDatabase.delete(TABELLE_NAME, TABELLE_ID +
-                    " = ?", new String[]{ String.valueOf(id) }) > 0;
-        } catch (Exception e) {
-            result = false;
-        }
-        return result;
+    public boolean delete(int id)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String where = TABELLE_ID + "=?";
+        String[] whereArg = new String[]{String.valueOf(id)};
+        boolean success = db.delete(TABELLE_NAME, where, whereArg) > 0;
+        return success;
     }
-
-
-
 }

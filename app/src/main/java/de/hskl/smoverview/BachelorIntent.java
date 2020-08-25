@@ -140,12 +140,12 @@ public class BachelorIntent extends AppCompatActivity implements View.OnClickLis
                 try {
                     AdapterView.AdapterContextMenuInfo adapterContextMenuInfo =
                             (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-                    TextView textViewId = adapterContextMenuInfo.targetView.findViewById(R.id.ADD_LIST_VIEW);
-                    int id = Integer.parseInt(textViewId.getText().toString());
+                    BachelorDTO bachelor = (BachelorDTO) addListView.getItemAtPosition(adapterContextMenuInfo.position);
+                    int id = bachelor.getId();
                     DBFachbereich dbFachbereich = new DBFachbereich(getApplicationContext());
                     if(dbFachbereich.delete(id))
                     {
-                        loadData();
+                        updateList();
                     }else
                     {
                         Toast.makeText(getApplicationContext(), getText(R.string.delete_failed),
@@ -215,5 +215,4 @@ public class BachelorIntent extends AppCompatActivity implements View.OnClickLis
         //beatbeitungDialog.show();
     }
     */
-
 }
