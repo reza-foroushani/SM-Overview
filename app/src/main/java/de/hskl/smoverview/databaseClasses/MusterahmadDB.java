@@ -110,7 +110,6 @@ public class MusterahmadDB extends SQLiteOpenHelper
         return success;
     }
 
-
     public boolean addModul(ModulDTO modul)
     {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -136,11 +135,8 @@ public class MusterahmadDB extends SQLiteOpenHelper
 
     public boolean updateModul(ModulDTO modul, long modulid)
     {
-        Log.d("HSKL", "UODATE");
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        Log.d("HSKL", modul.getModulbeschreibung());
-        Log.d("HSKL", modul.getModulname());
         values.put(COLUMN_MODULNAME, modul.getModulname());
         values.put(COLUMN_MODULBESCHREIBUNG, modul.getModulbeschreibung());
         String where = COLUMN_MODULID + "=?";
@@ -151,9 +147,6 @@ public class MusterahmadDB extends SQLiteOpenHelper
 
     public ModulDTO getModul(String mname, long s_id)
     {
-        Log.d("HSKL", "GET MODUL YOOO");
-        Log.d("HSKL", "SID:" + s_id);
-        Log.d("HSKL", "MODULNAME:" + mname);
         ModulDTO modul;
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor= db.query(TABLE_MODUL,
@@ -161,18 +154,13 @@ public class MusterahmadDB extends SQLiteOpenHelper
                 ,"s_id=? AND modulname=?",new String[]{String.valueOf(s_id), mname}
                 ,null,null,null);
 
-        Log.d("HSKL", "FASTCHECK");
         if(cursor.moveToFirst())
         {
-            Log.d("HSKL", "CHECKM8");
             long modulid = cursor.getLong(cursor.getColumnIndex(COLUMN_MODULID));
             String modulname = cursor.getString(cursor.getColumnIndex(COLUMN_MODULNAME));
             String modulbeschreibung = cursor.getString(cursor.getColumnIndex(COLUMN_MODULBESCHREIBUNG));
             long semesterid = cursor.getLong(cursor.getColumnIndex(COLUMN_SEMESTERIDFK));
             int studiengangid = cursor.getInt(cursor.getColumnIndex(COLUMN_STUDIENGANGIDFK));
-            Log.d("HSKL", "MODULNAME: " + modulname);
-            Log.d("HSKL", "MID: " + modulid);
-            Log.d("HSKL", "SID: " + semesterid);
             modul = new ModulDTO(modulid, modulname, modulbeschreibung, semesterid, studiengangid);
             return modul;
         }

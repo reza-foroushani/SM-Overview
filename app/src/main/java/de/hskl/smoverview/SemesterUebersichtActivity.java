@@ -107,14 +107,12 @@ public class SemesterUebersichtActivity extends AppCompatActivity
 
         final String semesterName = listDataHeader.get(groupPos);
         final String modulName = listDataChild.get(listDataHeader.get(groupPos)).get(childPos);
-        SemesterDTO semester = new SemesterDTO(semesterName, currentStudiengangId);
+        SemesterDTO semester = db.getSemester(semesterName, currentStudiengangId);
 
         switch(item.getItemId())
         {
             case R.id.CONTEXT_BEARBEITEN:
                 Intent i = new Intent(this, ModulBearbeitenSubActivity.class);
-                Log.d("HSKL", "Contextbearbeiten modulname: " + modulName);
-                Log.d("HSKL", "Contextbearbeiten semestername: " + semesterName);
                 ModulDTO modul = db.getModul(modulName, semester.getS_id());
                 i.putExtra("CHILDINDEX", childPos);
                 i.putExtra("GROUPINDEX", groupPos);
@@ -159,9 +157,8 @@ public class SemesterUebersichtActivity extends AppCompatActivity
                 listDataChild.put(semesterName, modulesList);
 
                 listAdapter.updateView(listDataHeader, listDataChild);
-                Log.d("HSKL", "Semester: " + semesterName);
+
                 SemesterDTO semester = db.getSemester(semesterName, currentStudiengangId);
-                Log.d("HSKL", "Semesterid:" + semester.getS_id());
                 ModulDTO currentModul = db.getModul(oldModulName, semester.getS_id());
                 ModulDTO newModul = new ModulDTO(currentModul.getM_id(), modulName, modulBeschreibung, currentModul.getS_id(), currentModul.getStudiengang_id());
 
@@ -276,7 +273,6 @@ public class SemesterUebersichtActivity extends AppCompatActivity
         for(SemesterDTO dto : semesterList)
             listDataHeader.add(dto.getSemestername());
 
-        Log.d("HSKL", "HAEDER: " + listDataHeader);
         for(int i = 0; i<semesterList.size(); i++)
         {
             List<ModulDTO> modules = db.getModulesForSemester(semesterList.get(i).getS_id());
@@ -288,7 +284,6 @@ public class SemesterUebersichtActivity extends AppCompatActivity
             listDataChild.put(listDataHeader.get(i), modulnames);
         }
 
-        Log.d("HSKL", "CHILD: " + listDataChild);
         listAdapter.updateView(listDataHeader, listDataChild);
     }
 
