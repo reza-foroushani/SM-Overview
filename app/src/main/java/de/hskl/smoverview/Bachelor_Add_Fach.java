@@ -72,13 +72,12 @@ public class Bachelor_Add_Fach extends AppCompatActivity implements View.OnClick
             if (!text.isEmpty()) {
                 if (dbFachbereich.insertBachlor(bachelorDTO,"b")) {
                     addEditText.setText("");
-                    Toast.makeText(Bachelor_Add_Fach.this, "..::: Fachbereich Bachelor :::..", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Bachelor_Add_Fach.this,
+                            "..::: Fachbereich Bachelor :::..",
+                            Toast.LENGTH_SHORT).show();
                     arrayList.clear();
                     arrayList.addAll(dbFachbereich.getALLFachBachelor());
 
-                    //Refresh List
-
-                    //arrayAdapter.notifyDataSetChanged();
 
                 }
             }
