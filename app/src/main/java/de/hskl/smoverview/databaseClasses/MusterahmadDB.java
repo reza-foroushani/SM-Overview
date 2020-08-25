@@ -352,34 +352,4 @@ public class MusterahmadDB extends SQLiteOpenHelper
 
     }
 
-
-
-    /*public  Cursor getmasterbyIdCursor(int id){
-        SQLiteDatabase db  = this.getWritableDatabase();
-
-        Cursor cursor = db.rawQuery("SELECT * FROM "+TABELlE_FACHBEREiCH+"WHERE"+FACHBERECIH_ID+"="+id,null);
-        cursor.moveToFirst();
-
-        return cursor;
-    }*/
-   /* public Cursor gettAllMaster(){
-        SQLiteDatabase db =this.getReadableDatabase();
-        Cursor cursor=db.rawQuery(" SELECT * FROM "+ TABELlE_FACHBEREiCH,null);
-        cursor.moveToFirst();
-        return cursor;
-    }*/
-  /* public  Master getmasterbyId2(int id){
-       Master master=null ;
-       SQLiteDatabase db  = this.getWritableDatabase();
-       String  select_query ="SELECT * FROM "+TABELlE_FACHBEREiCH+"WHERE id ="+id;
-       Cursor cursor = db.rawQuery(select_query,null);
-       // wenn ein
-       if(cursor.moveToFirst()){
-           int id_bereich =cursor.getInt(cursor.getColumnIndex(FACHBERECIH_ID));
-           String   fachbereichName = cursor.getString(cursor.getColumnIndex(FACHBERECIH_NAMEN));
-           String   beschreibung = cursor.getString(cursor.getColumnIndex(FACHBERECIH_BESCHREICHBUNG));
-           master=new Master(id_bereich,fachbereichName,beschreibung);
-       }
-       return master;
-   }*/
 }
