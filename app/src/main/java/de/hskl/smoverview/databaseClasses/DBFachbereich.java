@@ -39,7 +39,7 @@ public class DBFachbereich  extends SQLiteOpenHelper {
                 TABELLE_FACHBEREICH+" varchar(30),"+
                 TABELLE_BACHELORORMASTER+" varchar(30))";
 
-        
+
 
 
         sqlOncreateDB.execSQL(tabelle);
