@@ -400,7 +400,7 @@ public class DatenbankManager extends SQLiteOpenHelper
         }
         return fachbereichHilfe;
     }
-    
+
 
     // Datensatze loeschen
     public boolean delete(int id)
