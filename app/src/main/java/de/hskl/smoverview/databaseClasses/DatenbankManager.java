@@ -400,8 +400,7 @@ public class DatenbankManager extends SQLiteOpenHelper
         }
         return fachbereichHilfe;
     }
-
-<<<<<<< HEAD
+    
 
     // Datensatze loeschen
     public boolean delete(int id)
@@ -414,8 +413,7 @@ public class DatenbankManager extends SQLiteOpenHelper
     }
 
     // Update Datensatz
-=======
->>>>>>> cc42625c4eab36a8d3fd3822663d2a2d6755065d
+
     public boolean updateBachelor(BachelorDTO bachelor)
     {
         SQLiteDatabase db = this.getWritableDatabase();
