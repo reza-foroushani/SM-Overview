@@ -5,13 +5,12 @@
     android:id="@+id/BACHELOR_LAYOUT"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F8FBFB"
+    android:background="@drawable/pencil_2935369_640"
     android:fillViewport="true">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#F8FBFB">
+        android:layout_height="wrap_content">
 
         <TextView
             android:id="@+id/TEXT_VIEW_BACHELOR"
