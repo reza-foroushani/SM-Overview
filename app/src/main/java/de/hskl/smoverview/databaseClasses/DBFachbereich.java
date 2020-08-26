@@ -145,6 +145,26 @@ public class DBFachbereich  extends SQLiteOpenHelper {
         return db.update(TABELLE_NAME,values,TABELLE_ID + " = ?",
                 new String[]{ String.valueOf(bachelor.getId())});
     }
+    //---------------------------------------------------------------------
+    public ArrayList<BachelorDTO> sucheBereicheBachlor (String wort){
+        ArrayList<BachelorDTO>   fachbereichHilfe = new ArrayList<>();
+        SQLiteDatabase db =this.getReadableDatabase();
+        Cursor cursor=  db.rawQuery("select * from bachelor where fachbereich like '%"+wort+"%' and bORM ='B' ",null);
+
+        if(cursor.moveToFirst()){
+            do {
+                //cursor.getColumnIndex er sucht index von spalte
+                String fachberichName=cursor.getString(cursor.getColumnIndex(TABELLE_FACHBEREICH));
+                //ich brauche  inhalb jedes item  seine id  speichern
+                int fachbereich_ID =cursor.getInt(cursor.getColumnIndex(TABELLE_ID));
+                BachelorDTO Bachlor = new BachelorDTO(fachbereich_ID,fachberichName);
+                fachbereichHilfe.add(Bachlor);
+            }while (cursor.moveToNext());
+        }
+        return  fachbereichHilfe;
+
+    }
+    //-------------------------------------------------------------
 
      /*
     // Update Datensatz

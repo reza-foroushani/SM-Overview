@@ -10,6 +10,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.UserDictionary;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuItem;
@@ -29,6 +31,7 @@ import java.util.List;
 import de.hskl.smoverview.databaseClasses.BachelorDTO;
 import de.hskl.smoverview.databaseClasses.DBFachbereich;
 import de.hskl.smoverview.databaseClasses.MasterDTO;
+import de.hskl.smoverview.databaseClasses.MusterahmadDB;
 
 public class BachelorIntent extends AppCompatActivity implements View.OnClickListener {
 
@@ -37,10 +40,12 @@ public class BachelorIntent extends AppCompatActivity implements View.OnClickLis
     ListView addListView;
     ArrayAdapter arrayAdapter;
     DBFachbereich dbFachbereich;
+    //das ist haupt MusterahmadDB
+    MusterahmadDB db;
     String bachelorEdit;
     int poition;
     List<ListView> listOfItem;
-
+    EditText suchen ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +56,8 @@ public class BachelorIntent extends AppCompatActivity implements View.OnClickLis
         addButton = findViewById(R.id.ADD_BUTTEN);
         addListView = findViewById(R.id.ADD_LIST_VIEW);
         registerForContextMenu(addListView);
+
+
 
         dbFachbereich = new DBFachbereich(BachelorIntent.this);
         updateList();
@@ -68,6 +75,25 @@ public class BachelorIntent extends AppCompatActivity implements View.OnClickLis
                 intent.putExtra("MorB", "B");
                 intent.putExtra("FACHBEREICH_ID", bachelor.getId());
                 startActivity(intent);
+            }
+        });
+        //___________________________________ suchen
+        suchen=(EditText) findViewById(R.id.SUCHEN2);
+        suchen.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                suchList(suchen.getText().toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
             }
         });
 
@@ -110,6 +136,13 @@ public class BachelorIntent extends AppCompatActivity implements View.OnClickLis
         ArrayList<BachelorDTO> test1 = dbFachbereich.getALLFachBachelor();
         Log.d("HSKL", "LISTILIST: " + test1);
         arrayAdapter = new BachelorAdapter(this, R.layout.bachelor_item, test1);
+        addListView.setAdapter(arrayAdapter);
+    }
+
+    public  void suchList(String wort){
+        Toast.makeText(getApplicationContext()," im Such", Toast.LENGTH_LONG).show();
+        ArrayList<BachelorDTO> test2 = dbFachbereich.sucheBereicheBachlor(wort);
+        arrayAdapter = new BachelorAdapter(this,R.layout.item_master,test2);
         addListView.setAdapter(arrayAdapter);
     }
 
