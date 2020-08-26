@@ -10,27 +10,26 @@ import java.util.ArrayList;
 
 public class DBFachbereich  extends SQLiteOpenHelper {
 
-    // Version und Name von Datenbank und Tabelle
-    public static final int DB_VERSION = 1;
-    public static final String DB_NAMEN = "Bachelor_db";
-    public static final String TABELLE_NAME = "bachelor";
+    public static final int DATENBANK_VERSION = 1;
+    public static final String DATENBANK_NAMEN ="SM_Overview.db";
+    public static final String TABELLE_NAME ="FachbereichTabelle";
 
-    // Spalten von Tabelle
-    public static final String TABELLE_ID = "id";
-    public static final String TABELLE_FACHBEREICH = "fachbereich";
-    public static final String TABELLE_BACHELORORMASTER = "bORM";
 
-    public static final String SQL_CREATEBACHELORTABLE ="CREATE  TABLE "+
-            TABELLE_NAME+
-            "("+TABELLE_ID+
-            " INTEGER PRIMARY KEY AUTOINCREMENT, "+
-            TABELLE_FACHBEREICH+" varchar(30),"+
-            TABELLE_BACHELORORMASTER+" varchar(30))";
+    //Fachbereich
+    public static final String FACHBERECIH_ID ="id";
+    public static final String FACHBERECIH_NAMEN ="Fachberecih";
+    public static final String FACHBERECIH_BESCHREICHBUNG ="Beschrechbung";
+    public static final String MASTER_OR_BACHLER ="MorB";
+
+    public static final String SQL_CREATEBACHELORTABLE = "CREATE  TABLE "+ TABELLE_NAME +
+            "("+FACHBERECIH_ID+" INTEGER PRIMARY KEY AUTOINCREMENT, "+
+            FACHBERECIH_NAMEN+" varchar(30),"+FACHBERECIH_BESCHREICHBUNG+
+            " varchar(30),"+MASTER_OR_BACHLER+" varchar(30))";
 
     // Anwendungskontext durch Konstruktur
     public DBFachbereich(Context ctx)
     {
-        super(ctx, DB_NAMEN, null, DB_VERSION);
+        super(ctx, DATENBANK_NAMEN, null, DATENBANK_VERSION);
     }
 
     @Override
@@ -52,8 +51,8 @@ public class DBFachbereich  extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         //key_Value
         ContentValues neueZeille = new ContentValues();
-        neueZeille.put(TABELLE_FACHBEREICH, bachelor.getFachbereich());
-        neueZeille.put(TABELLE_BACHELORORMASTER, mORb);
+        neueZeille.put(FACHBERECIH_NAMEN, bachelor.getFachbereich());
+        neueZeille.put(MASTER_OR_BACHLER, mORb);
         boolean success = db.insert(TABELLE_NAME, null, neueZeille) > 0;
         return success;
     }
@@ -62,12 +61,12 @@ public class DBFachbereich  extends SQLiteOpenHelper {
     public ArrayList<BachelorDTO> getALLFachBachelor() {
         ArrayList<BachelorDTO> fachbereichHilfe = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor= db.query(TABELLE_NAME,new String[]{"id","fachbereich","bORM"},"bORM=?",new String[]{"B"},null,null,null);
+        Cursor cursor= db.query(TABELLE_NAME,new String[]{"id","Fachberecih","MorB"},"MorB=?",new String[]{"B"},null,null,null);
         if(cursor.moveToFirst()){
             do {
-                String fachberichName=cursor.getString(cursor.getColumnIndex(TABELLE_FACHBEREICH));
-                String beschreibung =cursor.getString(cursor.getColumnIndex(TABELLE_BACHELORORMASTER));
-                int fachbereich_ID =cursor.getInt(cursor.getColumnIndex(TABELLE_ID));
+                String fachberichName=cursor.getString(cursor.getColumnIndex(FACHBERECIH_NAMEN));
+                String beschreibung =cursor.getString(cursor.getColumnIndex(MASTER_OR_BACHLER));
+                int fachbereich_ID =cursor.getInt(cursor.getColumnIndex(FACHBERECIH_ID));
                 BachelorDTO bachelor = new BachelorDTO(fachbereich_ID,fachberichName,beschreibung);
                 fachbereichHilfe.add(bachelor);
             }while (cursor.moveToNext());
@@ -79,7 +78,7 @@ public class DBFachbereich  extends SQLiteOpenHelper {
     public boolean delete(int id)
     {
         SQLiteDatabase db = this.getWritableDatabase();
-        String where = TABELLE_ID + "=?";
+        String where = FACHBERECIH_ID + "=?";
         String[] whereArg = new String[]{String.valueOf(id)};
         boolean success = db.delete(TABELLE_NAME, where, whereArg) > 0;
         return success;
@@ -89,8 +88,8 @@ public class DBFachbereich  extends SQLiteOpenHelper {
     {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(TABELLE_FACHBEREICH,bachelor.getFachbereich());
-        boolean success = db.update(TABELLE_NAME,values,TABELLE_ID + " = ?",
+        values.put(FACHBERECIH_NAMEN,bachelor.getFachbereich());
+        boolean success = db.update(TABELLE_NAME,values,FACHBERECIH_ID + " = ?",
                 new String[]{ String.valueOf(bachelor.getId())}) > 0;
         return success;
     }
@@ -98,12 +97,12 @@ public class DBFachbereich  extends SQLiteOpenHelper {
     public ArrayList<BachelorDTO> sucheBereicheBachlor (String wort){
         ArrayList<BachelorDTO>   fachbereichHilfe = new ArrayList<>();
         SQLiteDatabase db =this.getReadableDatabase();
-        Cursor cursor=  db.rawQuery("select * from bachelor where fachbereich like '"+wort+"%' and bORM ='B' ",null);
+        Cursor cursor=  db.rawQuery("select * from FachbereichTabelle where Fachberecih like '"+wort+"%' and MorB ='B' ",null);
 
         if(cursor.moveToFirst()){
             do {
-                String fachberichName=cursor.getString(cursor.getColumnIndex(TABELLE_FACHBEREICH));
-                int fachbereich_ID =cursor.getInt(cursor.getColumnIndex(TABELLE_ID));
+                String fachberichName=cursor.getString(cursor.getColumnIndex(FACHBERECIH_NAMEN));
+                int fachbereich_ID =cursor.getInt(cursor.getColumnIndex(FACHBERECIH_ID));
                 BachelorDTO Bachlor = new BachelorDTO(fachbereich_ID,fachberichName);
                 fachbereichHilfe.add(Bachlor);
             }while (cursor.moveToNext());
