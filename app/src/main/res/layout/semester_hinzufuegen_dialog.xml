@@ -11,6 +11,7 @@
         android:layout_gravity="center"
         android:layout_margin="25dp"
         android:layout_weight="1"
+        android:background="#BBC837"
         android:gravity="center" />
 
 </LinearLayout>
