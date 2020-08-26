@@ -25,7 +25,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
 
 import de.hskl.smoverview.databaseClasses.MasterDTO;
-import de.hskl.smoverview.databaseClasses.MusterahmadDB;
+import de.hskl.smoverview.databaseClasses.DatenbankManager;
 
 public class MasterActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener  {
     //requestCode
@@ -39,7 +39,7 @@ public class MasterActivity extends AppCompatActivity implements View.OnClickLis
     //listView,Adapter und DB
     ListView fachbereichliste ;
     MasterAdapter masterAdapter;
-    MusterahmadDB db;
+    DatenbankManager db;
 
     //für postion von item
     int postion_item;
@@ -72,7 +72,7 @@ public class MasterActivity extends AppCompatActivity implements View.OnClickLis
 
         //TODO Adabter für datenbank
 
-        db= new MusterahmadDB(this);
+        db= new DatenbankManager(this);
         updateList();
 
         //es wird listview mit contextmune verbunden

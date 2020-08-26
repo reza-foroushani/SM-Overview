@@ -2,17 +2,14 @@ package de.hskl.smoverview;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.ExpandableListView;
 import android.widget.NumberPicker;
 import android.widget.TextView;
@@ -27,7 +24,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import de.hskl.smoverview.databaseClasses.ModulDTO;
-import de.hskl.smoverview.databaseClasses.MusterahmadDB;
+import de.hskl.smoverview.databaseClasses.DatenbankManager;
 import de.hskl.smoverview.databaseClasses.RequestCodes;
 import de.hskl.smoverview.databaseClasses.SemesterDTO;
 
@@ -43,7 +40,7 @@ public class SemesterUebersichtActivity extends AppCompatActivity
     public static int currentStudiengangId;
     public static String currentStudiengangName;
 
-    public MusterahmadDB db;
+    public DatenbankManager db;
 
     private static int MAXSEMESTER;
 
@@ -53,7 +50,7 @@ public class SemesterUebersichtActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.semester_uebersicht_activity);
 
-        db = new MusterahmadDB(this);
+        db = new DatenbankManager(this);
 
         Intent i = getIntent();
         currentStudiengangName = i.getStringExtra("FACHBEREICHNAME");

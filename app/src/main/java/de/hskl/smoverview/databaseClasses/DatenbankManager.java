@@ -11,7 +11,7 @@ import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
 
-public class MusterahmadDB extends SQLiteOpenHelper
+public class DatenbankManager extends SQLiteOpenHelper
 {
     public static final int DATENBANK_VERSION = 1;
     public static final String DATENBANK_NAMEN ="SM_Overview.db";
@@ -55,7 +55,7 @@ public class MusterahmadDB extends SQLiteOpenHelper
                     COLUMN_STUDIENGANGID + " INTEGER NOT NULL);";
     //Semester End
 
-    public MusterahmadDB(@Nullable Context context) {
+    public DatenbankManager(@Nullable Context context) {
         super(context, DATENBANK_NAMEN, null, DATENBANK_VERSION);
     }
 

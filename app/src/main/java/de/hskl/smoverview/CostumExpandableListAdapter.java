@@ -17,7 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import de.hskl.smoverview.databaseClasses.ModulDTO;
-import de.hskl.smoverview.databaseClasses.MusterahmadDB;
+import de.hskl.smoverview.databaseClasses.DatenbankManager;
 import de.hskl.smoverview.databaseClasses.SemesterDTO;
 
 public class CostumExpandableListAdapter extends BaseExpandableListAdapter
@@ -25,11 +25,11 @@ public class CostumExpandableListAdapter extends BaseExpandableListAdapter
     private Context _context;
     private List<String> _listDataHeader;
     private HashMap<String, List<String>> _listDataChild;
-    private MusterahmadDB db;
+    private DatenbankManager db;
     private int studiengangId;
 
     public CostumExpandableListAdapter(Context context, List<String> listDataHeader,
-                                 HashMap<String, List<String>> listChildData, MusterahmadDB db, int studiengangId)
+                                       HashMap<String, List<String>> listChildData, DatenbankManager db, int studiengangId)
     {
         this._context = context;
         this._listDataHeader = listDataHeader;

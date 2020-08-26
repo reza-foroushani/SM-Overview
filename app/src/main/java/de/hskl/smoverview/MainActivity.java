@@ -10,7 +10,7 @@ import android.widget.Button;
 
 
 
-public class MainBachelorActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     Button master;
     Button bachelor;
 

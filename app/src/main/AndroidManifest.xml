@@ -12,7 +12,7 @@
         <activity android:name=".Bachelor_Add_Fach"/>
         <activity android:name=".MasterIntent" />
         <activity android:name=".BachelorIntent" />
-        <activity android:name=".MainBachelorActivity">
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
     

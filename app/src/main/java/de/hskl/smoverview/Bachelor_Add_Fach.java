@@ -14,7 +14,7 @@ import java.util.ArrayList;
 
 import de.hskl.smoverview.databaseClasses.BachelorDTO;
 
-import de.hskl.smoverview.databaseClasses.MusterahmadDB;
+import de.hskl.smoverview.databaseClasses.DatenbankManager;
 
 public class Bachelor_Add_Fach extends AppCompatActivity implements View.OnClickListener{
     // Eingabefeld
@@ -26,7 +26,7 @@ public class Bachelor_Add_Fach extends AppCompatActivity implements View.OnClick
 
     // DB
    // DBFachbereich dbFachbereich;
-    MusterahmadDB dbFachbereich;
+    DatenbankManager dbFachbereich;
 
     ArrayList arrayList;
 
@@ -43,7 +43,7 @@ public class Bachelor_Add_Fach extends AppCompatActivity implements View.OnClick
         addSpeichernButton.setOnClickListener(this);
 
         // Datenbank Connect
-        dbFachbereich = new MusterahmadDB(Bachelor_Add_Fach.this);
+        dbFachbereich = new DatenbankManager(Bachelor_Add_Fach.this);
 
         // Add Daten
         arrayList = dbFachbereich.getALLFachBachelor();
