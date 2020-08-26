@@ -24,10 +24,7 @@ public class Bachelor_Add_Fach extends AppCompatActivity implements View.OnClick
     Button addSpeichernButton;
     Button addAbbrechenButton;
 
-    // DB
-   // DBFachbereich dbFachbereich;
     DatenbankManager dbFachbereich;
-
     ArrayList arrayList;
 
     @Override
@@ -44,7 +41,6 @@ public class Bachelor_Add_Fach extends AppCompatActivity implements View.OnClick
 
         // Datenbank Connect
         dbFachbereich = new DatenbankManager(Bachelor_Add_Fach.this);
-
         // Add Daten
         arrayList = dbFachbereich.getALLFachBachelor();
     }
@@ -58,36 +54,28 @@ public class Bachelor_Add_Fach extends AppCompatActivity implements View.OnClick
             toast.show();
         }
 
-        if(view.getId() == addSpeichernButton.getId())
-        {
-            String leer = " ";
+        if(view.getId() == addSpeichernButton.getId()) {
             String text = addEditText.getText().toString();
             BachelorDTO bachelorDTO = new BachelorDTO(text);
 
-            if(text.isEmpty() || text.equals(leer) ){
-                Toast toast = Toast.makeText(this,"Kein Datensatz wurde gespeichert!",Toast.LENGTH_SHORT);
-                toast.show();
-                Intent intentOfBachelorIntent = new Intent(this,BachelorIntent.class);
-                startActivity(intentOfBachelorIntent);
-            } else {
-                if (!text.isEmpty() ) {
-                    if (dbFachbereich.insertBachlor(bachelorDTO, "B")) {
-                        addEditText.setText("");
-                        Toast.makeText(Bachelor_Add_Fach.this,
-                                "..::: Fachbereich Bachelor :::..",
-                                Toast.LENGTH_SHORT).show();
-                    }
+            if (!text.isEmpty() && text.trim().length() > 0) {
+                if (dbFachbereich.insertBachlor(bachelorDTO, "B")) {
+                    addEditText.setText("");
+                    Toast toast = Toast.makeText(this,"Datensatz erfolgreich gespeichert",Toast.LENGTH_SHORT);
+                    toast.show();
                 }
-
+            }else {
+                Toast toast = Toast.makeText(this, "Felder dürfen nicht leer sein!", Toast.LENGTH_SHORT);
+                toast.show();
+                Intent intentOfBachelorIntent = new Intent(this, BachelorIntent.class);
+                startActivity(intentOfBachelorIntent);
+            }
+            }
                 Intent i = new Intent();
                 setResult(Activity.RESULT_OK, i);
                 finish();
-
-                Toast toast = Toast.makeText(this,"Datensatz erfolgreich gespeichert",Toast.LENGTH_SHORT);
-                toast.show();
             }
-        }
 
-        finish();
-    }
+
+
 }

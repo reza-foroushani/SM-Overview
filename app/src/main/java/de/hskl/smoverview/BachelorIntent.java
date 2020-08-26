@@ -181,15 +181,20 @@ public class BachelorIntent extends AppCompatActivity implements View.OnClickLis
                             BachelorDTO bachelor = (BachelorDTO) addListView.getItemAtPosition(adapterContextMenuInfo.position);
                             bachelor.setFachbereich(fachbereichName);
                             DatenbankManager dbFachbereich = new DatenbankManager(getApplicationContext());
-                            if (dbFachbereich.updateBachelor(bachelor)) {
-                                updateList();
-                            } else {
-                                Toast.makeText(getApplicationContext(), getText(R.string.update_failed),
-                                        Toast.LENGTH_LONG).show();
+                            if (bachelor.getFachbereich().trim().length() > 0 && !bachelor.getFachbereich().isEmpty()) {
+                                if (dbFachbereich.updateBachelor(bachelor)) {
+                                    updateList();
+                                    Toast.makeText(getApplicationContext(), "Änderung wurde erfolgreich durchgeführt!",
+                                            Toast.LENGTH_LONG).show();
+                                }
+                            }else {
+                                    Toast.makeText(getApplicationContext(), "Felder dürfen nicht leer sein!",
+                                            Toast.LENGTH_LONG).show();
+                                }
+                            } catch(Exception e){
+                                Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
                             }
-                        } catch (Exception e) {
-                            Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
-                        }
+
                     }
                 });
 

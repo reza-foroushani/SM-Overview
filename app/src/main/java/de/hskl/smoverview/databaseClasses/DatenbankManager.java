@@ -74,7 +74,15 @@ public class DatenbankManager extends SQLiteOpenHelper
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_MODUL);
         onCreate(db);
     }
-    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+    // ======================================================================================  //
+    //
+    //                              Semester hinzufuegen
+    //
+    // ======================================================================================  //
+
+
     public boolean addSemester(SemesterDTO semester)
     {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -226,7 +234,15 @@ public class DatenbankManager extends SQLiteOpenHelper
         }
         return modules;
     }
-    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+    // ======================================================================================  //
+    //
+    //                                 Master-DB
+    //
+    // ======================================================================================  //
+
+
     public void addFachberecihMaster(MasterDTO master, String m_or_b ){
         // copy von db für schreicben
         SQLiteDatabase db =this.getWritableDatabase();
@@ -348,12 +364,17 @@ public class DatenbankManager extends SQLiteOpenHelper
         }else {
             return true  ;
         }
-
     }
 
-    //--------------------------------------------------------------------------------------------------------------------------------
+
+    // ======================================================================================  //
+    //
+    //                                 Bachelor-DB
+    //
+    // ======================================================================================  //
+
 // insert in Table
-public boolean insertBachlor(BachelorDTO bachelor, String mORb) {
+    public boolean insertBachlor(BachelorDTO bachelor, String mORb) {
     SQLiteDatabase db = this.getWritableDatabase();
     //key_Value
     ContentValues neueZeille = new ContentValues();
@@ -363,11 +384,13 @@ public boolean insertBachlor(BachelorDTO bachelor, String mORb) {
     return success;
 }
 
-    // List Bachelor
+    // List von Datensatz Bachelor
     public ArrayList<BachelorDTO> getALLFachBachelor() {
         ArrayList<BachelorDTO> fachbereichHilfe = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor= db.query(TABELlE_FACHBEREiCH,new String[]{"id","Fachberecih","MorB"},"MorB=?",new String[]{"B"},null,null,null);
+        Cursor cursor= db.query(TABELlE_FACHBEREiCH,
+                new String[]{"id","Fachberecih","MorB"}
+                ,"MorB=?",new String[]{"B"},null,null,null);
         if(cursor.moveToFirst()){
             do {
                 String fachberichName=cursor.getString(cursor.getColumnIndex(FACHBERECIH_NAMEN));
@@ -380,6 +403,7 @@ public boolean insertBachlor(BachelorDTO bachelor, String mORb) {
         return fachbereichHilfe;
     }
 
+
     // Datensatze loeschen
     public boolean delete(int id)
     {
@@ -390,6 +414,7 @@ public boolean insertBachlor(BachelorDTO bachelor, String mORb) {
         return success;
     }
 
+    // Update Datensatz
     public boolean updateBachelor(BachelorDTO bachelor)
     {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -400,10 +425,12 @@ public boolean insertBachlor(BachelorDTO bachelor, String mORb) {
         return success;
     }
 
+    // Suchen nach Datensatz
     public ArrayList<BachelorDTO> sucheBereicheBachlor (String wort){
         ArrayList<BachelorDTO>   fachbereichHilfe = new ArrayList<>();
         SQLiteDatabase db =this.getReadableDatabase();
-        Cursor cursor=  db.rawQuery("select * from FachbereichTabelle where Fachberecih like '"+wort+"%' and MorB ='B' ",null);
+        Cursor cursor=  db.rawQuery("SELECT * FROM FachbereichTabelle " +
+                "WHERE Fachberecih LIKE '"+wort+"%' AND MorB ='B' ",null);
 
         if(cursor.moveToFirst()){
             do {
