@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ModulBearbeitenSubActivity">
+
+    <EditText
+        android:id="@+id/EDIMODULENAME_EDITTEXT"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginBottom="30dp"
+        android:ems="10"
+        android:gravity="center"
+        android:hint="Modulname"
+        android:inputType="textPersonName" />
+
+    <EditText
+        android:id="@+id/EDITMODULBESCHREIBUNG_EDITTEXT"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/EDIMODULENAME_EDITTEXT"
+        android:layout_marginStart="30dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginBottom="30dp"
+        android:ems="10"
+        android:gravity="center"
+        android:hint="Modulbeschreibung"
+        android:inputType="textPersonName" />
+
+    <Button
+        android:id="@+id/EDITMODUL_BUTTON"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/EDITMODULBESCHREIBUNG_EDITTEXT"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="30dp"
+        android:background="#2196F3"
+        android:onClick="saveData"
+        android:text="Speichern" />
+</RelativeLayout>

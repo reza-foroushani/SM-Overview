@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/FACHBEREICHMASTR_NAME2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:text="test"
+            android:textColor="#0C0C0C"
+            android:textSize="20dp" />
+
+        <TextView
+            android:id="@+id/BESCHREIBUNG_MASTER2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:text="test2"
+            android:textSize="15dp" />
+    </LinearLayout>
+
+</LinearLayout>
