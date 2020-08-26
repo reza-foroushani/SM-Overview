@@ -25,11 +25,21 @@
             android:text="Bachelor Studiengänge"
             android:textSize="30sp" />
 
+        <EditText
+            android:id="@+id/SUCHEN2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/TEXT_VIEW_BACHELOR"
+            android:drawableLeft="@drawable/ic_search_black_24dp"
+            android:ems="10"
+            android:hint="Suchen"
+            android:inputType="textPersonName" />
+
         <ListView
             android:id="@+id/ADD_LIST_VIEW"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/TEXT_VIEW_BACHELOR"
+            android:layout_below="@id/SUCHEN2"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp" />
 
@@ -63,14 +73,6 @@
             android:layout_marginRight="38dp"
             android:orientation="vertical">
 
-            <EditText
-                android:id="@+id/SUCHEN2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/ic_search_black_24dp"
-                android:ems="10"
-                android:hint="Suchen"
-                android:inputType="textPersonName" />
         </LinearLayout>
     </RelativeLayout>
 </ScrollView>

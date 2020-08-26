@@ -315,7 +315,7 @@ public class MusterahmadDB extends SQLiteOpenHelper
         //String SELECT_query ="select * from " +TABELlE_FACHBEREiCH+"WHERE"+MASTER_OR_BACHLER+ "="+ "M";
         // copy von db für lesen
         SQLiteDatabase db =this.getReadableDatabase();
-        Cursor cursor=  db.rawQuery("select * from FachbereichTabelle where Fachberecih like '%"+wort+"%' and MorB ='M' ",null);
+        Cursor cursor=  db.rawQuery("select * from FachbereichTabelle where Fachberecih like '"+wort+"%' and MorB ='M' ",null);
         //ohne expression deswegen null ,wir haben ergebniss von select-quere genomen
        // Cursor cursor= db.query(TABELlE_FACHBEREiCH,new String[]{"id","Fachberecih","Beschrechbung"},"MorB=? and Fachberecih=?",new String[]{"M", '%"+wort+"%'},null,null,null);
         //wenn true dann erste zeihle hat daten

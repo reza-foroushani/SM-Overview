@@ -14,6 +14,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.ContextMenu;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -24,6 +25,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -116,7 +119,6 @@ public class BachelorIntent extends AppCompatActivity implements View.OnClickLis
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 10) {
             updateList();
-            Log.d("HSKL", "ADDED BRUDI");
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
@@ -134,15 +136,13 @@ public class BachelorIntent extends AppCompatActivity implements View.OnClickLis
     // ViewList aktualisieren
     public void updateList() {
         ArrayList<BachelorDTO> test1 = dbFachbereich.getALLFachBachelor();
-        Log.d("HSKL", "LISTILIST: " + test1);
         arrayAdapter = new BachelorAdapter(this, R.layout.bachelor_item, test1);
         addListView.setAdapter(arrayAdapter);
     }
 
-    public  void suchList(String wort){
-        Toast.makeText(getApplicationContext()," im Such", Toast.LENGTH_LONG).show();
+    public void suchList(String wort){
         ArrayList<BachelorDTO> test2 = dbFachbereich.sucheBereicheBachlor(wort);
-        arrayAdapter = new BachelorAdapter(this,R.layout.item_master,test2);
+        arrayAdapter = new BachelorAdapter(this,R.layout.bachelor_item,test2);
         addListView.setAdapter(arrayAdapter);
     }
 
@@ -197,41 +197,48 @@ public class BachelorIntent extends AppCompatActivity implements View.OnClickLis
             builder.show();
         }
 
-/*
         // Bearbeiten
         else if (item.getTitle() == "Bearbeiten") {
 
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("Name des Fachbereich ändern ");
-            builder.setMessage("Geben Sie neue Namen ein:");
+            AlertDialog dialog;
+            final LayoutInflater inflater = LayoutInflater.from(this);
+            final View inflateView = inflater.inflate(R.layout.bachelor_bearbeiten, null);
+            builder.setView(inflateView);
 
-            builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    try {
-                        AdapterView.AdapterContextMenuInfo adapterContextMenuInfo =
-                                (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-                        BachelorDTO bachelor = (BachelorDTO) addListView.getItemAtPosition(adapterContextMenuInfo.position);
-                      // BachelorDTO data = new BachelorDTO(bachelor.getId());
+            builder.setTitle("Name des Fachbereich ändern ")
+                .setMessage("Geben Sie neue Namen ein:")
+                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener()
+                {
+                    public void onClick(DialogInterface dialogInterface, int i)
+                    {
+                        try {
+                            AdapterView.AdapterContextMenuInfo adapterContextMenuInfo =
+                                    (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
 
-                        DBFachbereich dbFachbereich = new DBFachbereich(getApplicationContext());
-                        if (dbFachbereich.updateBachelor(bachelor.getFachbereich())) {
-                            updateList();
-                        } else {
-                            Toast.makeText(getApplicationContext(), getText(R.string.update_failed),
-                                    Toast.LENGTH_LONG).show();
+                            final EditText fachbereichTextView = (EditText) inflateView.findViewById(R.id.BEARBEITEN_BACHELOR);
+                            String fachbereichName = fachbereichTextView.getText().toString();
+                            BachelorDTO bachelor = (BachelorDTO) addListView.getItemAtPosition(adapterContextMenuInfo.position);
+                            bachelor.setFachbereich(fachbereichName);
+                            DBFachbereich dbFachbereich = new DBFachbereich(getApplicationContext());
+                            if (dbFachbereich.updateBachelor(bachelor)) {
+                                updateList();
+                            } else {
+                                Toast.makeText(getApplicationContext(), getText(R.string.update_failed),
+                                        Toast.LENGTH_LONG).show();
+                            }
+                        } catch (Exception e) {
+                            Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
                         }
-                    } catch (Exception e) {
-                        Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
                     }
-                }
-            });
+                });
+
+            dialog = builder.create();
+            dialog.show();
 
             Toast.makeText(getApplicationContext(), "Bearbeiten", Toast.LENGTH_LONG).show();
         }
-
- */
-            return super.onContextItemSelected(item);
+        return super.onContextItemSelected(item);
 
         }
 
