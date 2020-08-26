@@ -258,10 +258,10 @@ public class DatenbankManager extends SQLiteOpenHelper
     public ArrayList<MasterDTO> getAllFachBereicheMaster (){
         ArrayList<MasterDTO>   fachbereichHilfe = new ArrayList<>();
         // er nimmt all daten
-        //String SELECT_query ="select * from " +TABELlE_FACHBEREiCH+"WHERE"+MASTER_OR_BACHLER+ "="+ "M";
+
         // copy von db für lesen
         SQLiteDatabase db =this.getReadableDatabase();
-        //ohne expression deswegen null ,wir haben ergebniss von select-quere genomen
+        //ohne expression deswegen null
         Cursor cursor= db.query(TABELlE_FACHBEREiCH,new String[]{"id","Fachberecih","Beschrechbung"},"MorB=?",new String[]{"M"},null,null,null);
         //wenn true dann erste zeihle hat daten
         if(cursor.moveToFirst()){
@@ -327,7 +327,7 @@ public class DatenbankManager extends SQLiteOpenHelper
         SQLiteDatabase db =this.getReadableDatabase();
         Cursor cursor=  db.rawQuery("select * from FachbereichTabelle where Fachberecih like '"+wort+"%' and MorB ='M' ",null);
         //ohne expression deswegen null ,wir haben ergebniss von select-quere genomen
-       // Cursor cursor= db.query(TABELlE_FACHBEREiCH,new String[]{"id","Fachberecih","Beschrechbung"},"MorB=? and Fachberecih=?",new String[]{"M", '%"+wort+"%'},null,null,null);
+
         //wenn true dann erste zeihle hat daten
         if(cursor.moveToFirst()){
             do {

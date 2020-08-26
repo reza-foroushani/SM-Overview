@@ -70,7 +70,7 @@ public class MasterActivity extends AppCompatActivity implements View.OnClickLis
             public void afterTextChanged(Editable editable) {}
         });
 
-        //TODO Adabter für datenbank
+        //Adabter für datenbank
 
         db= new DatenbankManager(this);
         updateList();
@@ -78,10 +78,8 @@ public class MasterActivity extends AppCompatActivity implements View.OnClickLis
         //es wird listview mit contextmune verbunden
         registerForContextMenu(fachbereichliste);
 
-       /* // arryadapter  in view-liste
-         items = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, FachbereichMasterItem);
-        fachbereichliste.setAdapter(items);
-        //wenn ich auf Item von lister gedrükt, listern für items in viewliste*/
+
+        //wenn ich auf Item von lister gedrükt, listern für items in viewliste
         fachbereichliste.setOnItemClickListener(this);
     }
 
@@ -102,8 +100,7 @@ public class MasterActivity extends AppCompatActivity implements View.OnClickLis
 
         if(beatbeitungDialog!=null&& beatbeitungDialog.isShowing()) {
             beatbeitungDialog.dismiss();
-            Toast toast = Toast.makeText(getApplicationContext(), " if onPause", Toast.LENGTH_SHORT);
-            toast.show();
+
         }else {
             // wenn ich kein button ausgewält in bearbeit dialog
             isSchowingDialog=false;
@@ -115,6 +112,12 @@ public class MasterActivity extends AppCompatActivity implements View.OnClickLis
     protected void onRestart() {
         super.onRestart();
     }
+
+    // ======================================================================================  //
+    //
+    //                                add click
+    //
+    // ======================================================================================  //
 
     @Override
     public void onClick(View view) {
@@ -128,7 +131,7 @@ public class MasterActivity extends AppCompatActivity implements View.OnClickLis
     protected void onActivityResult(int requestCod ,int resultCode , Intent data){
         if(requestCod==RequestCodHinzufuegen ){
             if(resultCode== Activity.RESULT_OK){
-                //TODO hier später mit datenbank
+                //hier später mit datenbank
 
                 String FachbereichNme = data.getStringExtra("NAME");
                 String FachbereichBeschreibung = data.getStringExtra("BESCHREIBUNG");
@@ -155,13 +158,19 @@ public class MasterActivity extends AppCompatActivity implements View.OnClickLis
                 } else {
                     suchen.setText(FachbereichNme);
                     suchList(FachbereichNme);
-                    Toast toast = Toast.makeText(getApplicationContext(), " ist bereit da ", Toast.LENGTH_SHORT);
+                    Toast toast = Toast.makeText(getApplicationContext(), " Fachberecih existiert bereit  ", Toast.LENGTH_SHORT);
                     toast.show();
                 }
             }
         }
         super.onActivityResult(requestCod,resultCode,data);
     }
+
+    // ======================================================================================  //
+    //
+    //                                 item seleckt und click
+    //
+    // ======================================================================================  //
 
     // hier wenn ich auf item gedrüct ist,aslo geh  zu activti von Eduard
     @Override
@@ -170,7 +179,7 @@ public class MasterActivity extends AppCompatActivity implements View.OnClickLis
         //oder
         // String selctItem = adapterView.getItemAtPosition(i).toString();
         MasterDTO master =  (MasterDTO) adapterView.getItemAtPosition(i);
-        //TODO hier später mit Eduard verknuebfen
+        // hier später mit Eduard verknuebfen
         Intent intent = new Intent(this,SemesterUebersichtActivity.class);
         intent.putExtra("FACHBEREICHNAME",master.getFachbereichName());
         intent.putExtra("MorB","M");
@@ -184,14 +193,10 @@ public class MasterActivity extends AppCompatActivity implements View.OnClickLis
         super.onCreateContextMenu(menu, v, menuInfo);
         // durch  AdapterView.AdapterContextMenuInfo ich kann zielwiew (was ich lang gedrucht habe ),die ich erneut in das cast übertrage
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
-        //  altetext = ((TextView) info.targetView).getText().toString();
 
         //postiton der Item holen
         postion_item  =  info.position;
 
-        //TODO selsct ein item von databank
-
-        //die gibt objekt von class menuinfaleter
         MenuInflater inflater= getMenuInflater();
         // damit ich menue.xml zugreucfen , und zweite paramiter von cotext menu
         inflater.inflate(R.menu.master_contextmenue,menu);
@@ -225,8 +230,38 @@ public class MasterActivity extends AppCompatActivity implements View.OnClickLis
         final MasterDTO masterfinal = master;
         final EditText newText=(EditText) bearbeitlayout.findViewById(R.id.BEARBEITEN_DIALOG);
         final EditText newBeschreibung=(EditText) bearbeitlayout.findViewById(R.id.BESCHREIBUNG_DIALOG);
-        newText.setText(master.getFachbereichName());
-        newBeschreibung.setText(master.getBeschreichbung());
+       // Name=newText.getText().toString();
+
+            newText.setText(master.getFachbereichName());
+            newBeschreibung.setText(master.getBeschreichbung());
+
+
+            newText.addTextChangedListener( new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    masterDialog.setFachbereichName(newText.getText().toString());
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {}
+            });
+        newBeschreibung.addTextChangedListener( new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                masterDialog.setBeschreichbung(newBeschreibung.getText().toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {}
+        });
+
+
 
         dialogBearbeiten.setPositiveButton("Speichern", new DialogInterface.OnClickListener() {
             @Override
@@ -234,7 +269,7 @@ public class MasterActivity extends AppCompatActivity implements View.OnClickLis
                 //ich füge die neu Bearbeitung  in alter position hinzu und aktuallisieren
                 //FachbereichMasterItem.set(altertextposition,newText.getText().toString());
 
-                //TODO hier später mit datenbank
+                // hier später mit datenbank
                 String neuFachbereichName=newText.getText().toString();
                 String neuFachbereichBeschreicung=newBeschreibung.getText().toString();
 
@@ -285,7 +320,7 @@ public class MasterActivity extends AppCompatActivity implements View.OnClickLis
         dialogloeschen.setPositiveButton("Löschen", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                //TODO hier später mit datenbank löschen
+                // hier später mit datenbank löschen
                 db.deleteFachbereich(masterFinal.getFachbereich_Id());
                 updateList();
                 Toast toast = Toast.makeText(getApplicationContext(),master.getFachbereichName()+ " erfolgreich gelöscht! ", Toast.LENGTH_SHORT);
@@ -305,8 +340,11 @@ public class MasterActivity extends AppCompatActivity implements View.OnClickLis
         isSchowingDialogLöschen=true;
         beatbeitungDialog.show();
     }
-
-    // updateliste
+    // ======================================================================================  //
+    //
+    //                                 updateliste
+    //
+    // ======================================================================================  //
     public  void updateList(){
         ArrayList<MasterDTO> test1 = db.getAllFachBereicheMaster();
         masterAdapter = new MasterAdapter(this,R.layout.item_master,test1);
@@ -319,15 +357,19 @@ public class MasterActivity extends AppCompatActivity implements View.OnClickLis
         masterAdapter = new MasterAdapter(this,R.layout.item_master,test2);
         fachbereichliste.setAdapter(masterAdapter);
     }
+    // ======================================================================================  //
+    //
+    //                                 save status
+    //
+    // ======================================================================================  //
 
-    //save status
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         //ich ichbeischer daten von obejt der bearebeiten well
         if(isSchowingDialog) {
             outState.putBoolean("IS_SHOWING_DIALOG", isSchowingDialog);
-            outState.putString("FACHNAME", masterDialog.getFachbereichName());
-            outState.putString("FACHBESCHREIBUNG", masterDialog.getBeschreichbung());
+            outState.putString("FACHNAME",masterDialog.getFachbereichName());
+            outState.putString("FACHBESCHREIBUNG",masterDialog.getBeschreichbung());
             outState.putInt("FACHID", masterDialog.getFachbereich_Id());
         }
         if(isSchowingDialogLöschen) {
