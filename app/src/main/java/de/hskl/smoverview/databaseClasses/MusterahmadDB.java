@@ -10,10 +10,6 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
-import de.hskl.smoverview.databaseClasses.MasterDTO;
 
 public class MusterahmadDB extends SQLiteOpenHelper
 {
@@ -58,7 +54,6 @@ public class MusterahmadDB extends SQLiteOpenHelper
                     COLUMN_SEMESTERNAME + " TEXT NOT NULL, " +
                     COLUMN_STUDIENGANGID + " INTEGER NOT NULL);";
     //Semester End
-
 
     public MusterahmadDB(@Nullable Context context) {
         super(context, DATENBANK_NAMEN, null, DATENBANK_VERSION);
@@ -286,7 +281,7 @@ public class MusterahmadDB extends SQLiteOpenHelper
         }
         return master;
     }
-    public  void updatMaster(MasterDTO master , int id){
+    public void updatMaster(MasterDTO master , int id){
         SQLiteDatabase db =this.getWritableDatabase();
         ContentValues values=  new ContentValues();
         values.put(FACHBERECIH_NAMEN,master.getFachbereichName());
@@ -299,6 +294,7 @@ public class MusterahmadDB extends SQLiteOpenHelper
 
 //db.update(TABELlE_FACHBEREiCH,values, "id=?",new String[]{String.valueOf(master.getFachbereich_Id())});
     }
+
     public void deleteFachbereich(int Id){
         SQLiteDatabase  db= this.getWritableDatabase();
         String where = FACHBERECIH_ID + "=?";
@@ -348,38 +344,9 @@ public class MusterahmadDB extends SQLiteOpenHelper
                    return false;
                }else {
                    return true  ;
-
                }
         }else {
             return true  ;
-
         }
-
     }
-    //___________________________________________________________________________
-    public ArrayList<BachelorDTO> sucheBereicheBachlor (String wort){
-        ArrayList<BachelorDTO>   fachbereichHilfe = new ArrayList<>();
-
-        // er nimmt all daten
-        //String SELECT_query ="select * from " +TABELlE_FACHBEREiCH+"WHERE"+MASTER_OR_BACHLER+ "="+ "M";
-        // copy von db für lesen
-        SQLiteDatabase db =this.getReadableDatabase();
-        Cursor cursor=  db.rawQuery("select * from FachbereichTabelle where Fachberecih like '%"+wort+"%' and MorB ='B' ",null);
-        //ohne expression deswegen null ,wir haben ergebniss von select-quere genomen
-        // Cursor cursor= db.query(TABELlE_FACHBEREiCH,new String[]{"id","Fachberecih","Beschrechbung"},"MorB=? and Fachberecih=?",new String[]{"M", '%"+wort+"%'},null,null,null);
-        //wenn true dann erste zeihle hat daten
-        if(cursor.moveToFirst()){
-            do {
-                //cursor.getColumnIndex er sucht index von spalte
-                String fachberichName=cursor.getString(cursor.getColumnIndex(FACHBERECIH_NAMEN));
-                //ich brauche  inhalb jedes item  seine id  speichern
-                int fachbereich_ID =cursor.getInt(cursor.getColumnIndex(FACHBERECIH_ID));
-                BachelorDTO Bachlor = new BachelorDTO(fachbereich_ID,fachberichName);
-                fachbereichHilfe.add(Bachlor);
-            }while (cursor.moveToNext());
-        }
-        return  fachbereichHilfe;
-
-    }
-
 }

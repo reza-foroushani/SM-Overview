@@ -38,13 +38,8 @@ public class ModulDTO
     public long getS_id() { return s_id; }
     public void setS_id(long s_id) { this.s_id = s_id; }
 
-    public int getStudiengang_id() {
-        return studiengang_id;
-    }
-
-    public void setStudiengang_id(int studiengang_id) {
-        this.studiengang_id = studiengang_id;
-    }
+    public int getStudiengang_id() { return studiengang_id; }
+    public void setStudiengang_id(int studiengang_id) { this.studiengang_id = studiengang_id; }
 
     @Override
     public String toString() {

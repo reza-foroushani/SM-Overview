@@ -3,17 +3,11 @@ package de.hskl.smoverview;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
-import android.content.ContentValues;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.ContextMenu;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -22,9 +16,9 @@ import de.hskl.smoverview.databaseClasses.BachelorDTO;
 import de.hskl.smoverview.databaseClasses.DBFachbereich;
 
 public class Bachelor_Add_Fach extends AppCompatActivity implements View.OnClickListener{
-
     // Eingabefeld
     EditText addEditText;
+
     //zwei Button
     Button addSpeichernButton;
     Button addAbbrechenButton;
@@ -32,7 +26,6 @@ public class Bachelor_Add_Fach extends AppCompatActivity implements View.OnClick
     // DB
     DBFachbereich dbFachbereich;
     ArrayList arrayList;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,21 +44,15 @@ public class Bachelor_Add_Fach extends AppCompatActivity implements View.OnClick
 
         // Add Daten
         arrayList = dbFachbereich.getALLFachBachelor();
-
-
-
-
     }
 
     @Override
     public void onClick(View view) {
-
         if(view.getId() == addAbbrechenButton.getId()){
             Intent intentOfViewBachelor = new Intent(this,BachelorIntent.class);
             startActivity(intentOfViewBachelor);
             Toast toast = Toast.makeText(this,"Fachbereich",Toast.LENGTH_SHORT);
             toast.show();
-
         }
 
         if(view.getId() == addSpeichernButton.getId())
@@ -75,11 +62,10 @@ public class Bachelor_Add_Fach extends AppCompatActivity implements View.OnClick
             BachelorDTO bachelorDTO = new BachelorDTO(text);
 
             if(text.isEmpty() || text.equals(leer) ){
-                Toast toast = Toast.makeText(this,"kein Datenstz wurde gespeichert",Toast.LENGTH_SHORT);
+                Toast toast = Toast.makeText(this,"Kein Datensatz wurde gespeichert!",Toast.LENGTH_SHORT);
                 toast.show();
                 Intent intentOfBachelorIntent = new Intent(this,BachelorIntent.class);
                 startActivity(intentOfBachelorIntent);
-
             } else {
                 if (!text.isEmpty() ) {
                     if (dbFachbereich.insertBachlor(bachelorDTO, "B")) {
@@ -90,21 +76,15 @@ public class Bachelor_Add_Fach extends AppCompatActivity implements View.OnClick
                     }
                 }
 
-
                 Intent i = new Intent();
                 setResult(Activity.RESULT_OK, i);
                 finish();
 
-            Toast toast = Toast.makeText(this,"Datenstz erfolgreich gespeichert",Toast.LENGTH_SHORT);
-            toast.show();
+                Toast toast = Toast.makeText(this,"Datensatz erfolgreich gespeichert",Toast.LENGTH_SHORT);
+                toast.show();
             }
         }
 
         finish();
     }
-
-
-
-
-
 }

@@ -15,8 +15,6 @@ import java.util.List;
 import de.hskl.smoverview.databaseClasses.MasterDTO;
 
 public class MasterAdapter extends ArrayAdapter<MasterDTO> {
-
-
     Context context ;
     int resource ;
      public MasterAdapter(@NonNull Context context, int resource, @NonNull List<MasterDTO> objects) {
@@ -29,7 +27,7 @@ public class MasterAdapter extends ArrayAdapter<MasterDTO> {
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-         // er braucht context,R.layout.activity_master = resource
+        // er braucht context,R.layout.activity_master = resource
         convertView = LayoutInflater.from(context).inflate(resource,parent,false);
         TextView FBName = convertView.findViewById(R.id.FACHBEREICHMASTR_NAME2);
         TextView Beschreichbung = convertView.findViewById(R.id.BESCHREIBUNG_MASTER2);

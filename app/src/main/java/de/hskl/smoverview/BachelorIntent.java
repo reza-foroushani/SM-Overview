@@ -2,17 +2,12 @@ package de.hskl.smoverview;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.UserDictionary;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -26,28 +21,19 @@ import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
-import java.util.List;
 
 import de.hskl.smoverview.databaseClasses.BachelorDTO;
 import de.hskl.smoverview.databaseClasses.DBFachbereich;
-import de.hskl.smoverview.databaseClasses.MasterDTO;
-import de.hskl.smoverview.databaseClasses.MusterahmadDB;
+import de.hskl.smoverview.databaseClasses.RequestCodes;
 
 public class BachelorIntent extends AppCompatActivity implements View.OnClickListener {
-
     TextView ausgabe;
     FloatingActionButton addButton;
     ListView addListView;
     ArrayAdapter arrayAdapter;
     DBFachbereich dbFachbereich;
-    //das ist haupt MusterahmadDB
-    MusterahmadDB db;
-    String bachelorEdit;
-    int poition;
-    List<ListView> listOfItem;
+
     EditText suchen ;
 
     @Override
@@ -59,8 +45,6 @@ public class BachelorIntent extends AppCompatActivity implements View.OnClickLis
         addButton = findViewById(R.id.ADD_BUTTEN);
         addListView = findViewById(R.id.ADD_LIST_VIEW);
         registerForContextMenu(addListView);
-
-
 
         dbFachbereich = new DBFachbereich(BachelorIntent.this);
         updateList();
@@ -80,44 +64,33 @@ public class BachelorIntent extends AppCompatActivity implements View.OnClickLis
                 startActivity(intent);
             }
         });
-        //___________________________________ suchen
-        suchen=(EditText) findViewById(R.id.SUCHEN2);
+
+        suchen = (EditText) findViewById(R.id.SUCHEN2);
         suchen.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
                 suchList(suchen.getText().toString());
             }
 
             @Override
-            public void afterTextChanged(Editable editable) {
-
-            }
+            public void afterTextChanged(Editable editable) {}
         });
-
     }
 
     @Override
     public void onClick(View view) {
-
-
         if (view.getId() == addButton.getId()) {
             Intent intentOfAddFach = new Intent(this, Bachelor_Add_Fach.class);
             startActivityForResult(intentOfAddFach, 10);
-
-            Toast toast = Toast.makeText(this, "Fachbereich hinzufügen", Toast.LENGTH_SHORT);
-            toast.show();
         }
     } // onClick
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == 10) {
+        if (requestCode == RequestCodes.addBachelorSuccess.toInt()) {
             updateList();
         }
         super.onActivityResult(requestCode, resultCode, data);
@@ -132,7 +105,6 @@ public class BachelorIntent extends AppCompatActivity implements View.OnClickLis
         menu.add(0, view.getId(), 0, "Löschen");
     }
 
-
     // ViewList aktualisieren
     public void updateList() {
         ArrayList<BachelorDTO> test1 = dbFachbereich.getALLFachBachelor();
@@ -144,19 +116,6 @@ public class BachelorIntent extends AppCompatActivity implements View.OnClickLis
         ArrayList<BachelorDTO> test2 = dbFachbereich.sucheBereicheBachlor(wort);
         arrayAdapter = new BachelorAdapter(this,R.layout.bachelor_item,test2);
         addListView.setAdapter(arrayAdapter);
-    }
-
-    // Liste von Datensatz laden
-    private void loadData() {
-        DBFachbereich dbFachbereich = new DBFachbereich(getApplicationContext());
-        ArrayList list = dbFachbereich.getALLFachBachelor();
-        if (list != null) {
-            addListView.setAdapter(arrayAdapter);
-            arrayAdapter.notifyDataSetChanged();
-            addListView.invalidateViews();
-            addListView.refreshDrawableState();
-
-        }
     }
 
     // Löschen und Bearbeiten ein Datensatz
@@ -187,7 +146,6 @@ public class BachelorIntent extends AppCompatActivity implements View.OnClickLis
                 }
             });
 
-            Toast.makeText(getApplicationContext(), "löschen", Toast.LENGTH_LONG).show();
             builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
@@ -199,7 +157,6 @@ public class BachelorIntent extends AppCompatActivity implements View.OnClickLis
 
         // Bearbeiten
         else if (item.getTitle() == "Bearbeiten") {
-
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             AlertDialog dialog;
             final LayoutInflater inflater = LayoutInflater.from(this);
@@ -235,15 +192,7 @@ public class BachelorIntent extends AppCompatActivity implements View.OnClickLis
 
             dialog = builder.create();
             dialog.show();
-
-            Toast.makeText(getApplicationContext(), "Bearbeiten", Toast.LENGTH_LONG).show();
         }
         return super.onContextItemSelected(item);
-
         }
-
-
-
 }
-
-

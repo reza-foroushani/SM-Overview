@@ -4,7 +4,7 @@ public class BachelorDTO
 {
     private int id;
     private String fachbereich;
-    private  String morb;
+    private String morb;
 
     public BachelorDTO(int id, String fachbereich, String morb)
     {
@@ -22,7 +22,6 @@ public class BachelorDTO
     public BachelorDTO(String fachbereich)
     {
         this.fachbereich = fachbereich;
-        //this.morb = morb;
     }
 
     public int getId() {

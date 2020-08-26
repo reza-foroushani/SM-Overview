@@ -11,20 +11,18 @@ import de.hskl.smoverview.databaseClasses.DBFachbereich;
 
 
 public class MainBachelorActivity extends AppCompatActivity implements View.OnClickListener {
-
     Button master;
     Button bachelor;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_bachelor);
 
-    bachelor = findViewById(R.id.BACHELOR_BUTTON);
-    master = findViewById(R.id.MASTER_BUTTON);
-    bachelor.setOnClickListener(this);
-    master.setOnClickListener(this);
-
-
+        bachelor = findViewById(R.id.BACHELOR_BUTTON);
+        master = findViewById(R.id.MASTER_BUTTON);
+        bachelor.setOnClickListener(this);
+        master.setOnClickListener(this);
     }
 
     @Override
@@ -33,13 +31,12 @@ public class MainBachelorActivity extends AppCompatActivity implements View.OnCl
         {
             Intent intentOfBachelor = new Intent(this,BachelorIntent.class);
             startActivity(intentOfBachelor);
-        }//if
+        }
 
         if(view.getId() == master.getId())
         {
             Intent intentOfMaster  = new Intent(this,MasterActivity.class);
             startActivity(intentOfMaster);
         }
-
     }
 }
