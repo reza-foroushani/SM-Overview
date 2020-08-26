@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import de.hskl.smoverview.databaseClasses.BachelorDTO;
 
 import de.hskl.smoverview.databaseClasses.DatenbankManager;
-import de.hskl.smoverview.databaseClasses.RequestCodes;
+import de.hskl.smoverview.javaClasses.RequestCodes;
 
 public class BachelorIntent extends AppCompatActivity implements View.OnClickListener {
     TextView ausgabe;
@@ -137,7 +137,7 @@ public class BachelorIntent extends AppCompatActivity implements View.OnClickLis
                         BachelorDTO bachelor = (BachelorDTO) addListView.getItemAtPosition(adapterContextMenuInfo.position);
                         int id = bachelor.getId();
                         DatenbankManager dbFachbereich = new DatenbankManager(getApplicationContext());
-                        if (dbFachbereich.delete(id)) {
+                        if (dbFachbereich.deleteFachbereich(id)) {
                             updateList();
                         } else {
                             Toast.makeText(getApplicationContext(), getText(R.string.delete_failed),

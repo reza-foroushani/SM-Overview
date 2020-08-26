@@ -25,7 +25,7 @@ import java.util.List;
 
 import de.hskl.smoverview.databaseClasses.ModulDTO;
 import de.hskl.smoverview.databaseClasses.DatenbankManager;
-import de.hskl.smoverview.databaseClasses.RequestCodes;
+import de.hskl.smoverview.javaClasses.RequestCodes;
 import de.hskl.smoverview.databaseClasses.SemesterDTO;
 
 public class SemesterUebersichtActivity extends AppCompatActivity
@@ -139,7 +139,6 @@ public class SemesterUebersichtActivity extends AppCompatActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
-        //TODO: In Datenbank speichern
         if(requestCode == RequestCodes.editModuleSuccess.toInt())
         {
             if(resultCode == Activity.RESULT_OK)

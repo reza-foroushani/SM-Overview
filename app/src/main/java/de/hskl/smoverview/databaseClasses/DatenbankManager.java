@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 import androidx.annotation.Nullable;
 
@@ -61,7 +60,6 @@ public class DatenbankManager extends SQLiteOpenHelper
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        Log.d("HSKL", "create table");
         db.execSQL(Create_Table);
         db.execSQL(SQL_CREATESEMESTERTABLE);
         db.execSQL(SQL_CREATEMODULTABLE);
@@ -100,7 +98,7 @@ public class DatenbankManager extends SQLiteOpenHelper
         String where = COLUMN_SEMESTERID + "=?";
         String[] whereArg = new String[]{String.valueOf(semesterid)};
         boolean success = db.delete(TABLE_SEMESTER, where, whereArg) > 0;
-        success = db.delete(TABLE_MODUL, where, whereArg) > 0;
+        db.delete(TABLE_MODUL, where, whereArg); //Semester kann auch keine Module haben, deswegen keien Zuweisung =)
         return success;
     }
 
@@ -311,13 +309,13 @@ public class DatenbankManager extends SQLiteOpenHelper
 //db.update(TABELlE_FACHBEREiCH,values, "id=?",new String[]{String.valueOf(master.getFachbereich_Id())});
     }
 
-    public void deleteFachbereich(int Id){
+    public boolean deleteFachbereich(int Id){
         SQLiteDatabase  db= this.getWritableDatabase();
         String where = FACHBERECIH_ID + "=?";
         String[] whereArg = new String[]{Integer.toString(Id)};
-        db.delete(TABELlE_FACHBEREiCH,where,whereArg);
-
-        deleteSemesterFromFachbereich(Id);
+        boolean success = db.delete(TABELlE_FACHBEREiCH, where, whereArg) > 0;
+        deleteSemesterFromFachbereich(Id); //Kann auch nix deleten und false sein, deswegen keine Zuweisung =)
+        return success;
     }
 
     public ArrayList<MasterDTO> sucheBereicheMaster (String wort){
@@ -403,6 +401,7 @@ public class DatenbankManager extends SQLiteOpenHelper
         return fachbereichHilfe;
     }
 
+<<<<<<< HEAD
 
     // Datensatze loeschen
     public boolean delete(int id)
@@ -415,6 +414,8 @@ public class DatenbankManager extends SQLiteOpenHelper
     }
 
     // Update Datensatz
+=======
+>>>>>>> cc42625c4eab36a8d3fd3822663d2a2d6755065d
     public boolean updateBachelor(BachelorDTO bachelor)
     {
         SQLiteDatabase db = this.getWritableDatabase();
