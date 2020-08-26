@@ -12,6 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
+        android:background="#F15B50"
         android:gravity="center"
         android:paddingLeft="20dp"
         android:paddingTop="10dp"
@@ -24,8 +25,8 @@
     <TextView
         android:id="@+id/BESCHREIBUNGMODUL_TEXTVIEW"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:text="Hier könnte ihre Modulbeschreibung stehen!"
-        android:textSize="20sp" />
+        android:textSize="24sp" />
 
 </LinearLayout>
