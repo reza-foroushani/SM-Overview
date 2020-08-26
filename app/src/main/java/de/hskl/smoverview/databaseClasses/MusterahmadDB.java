@@ -350,4 +350,69 @@ public class MusterahmadDB extends SQLiteOpenHelper
         }
 
     }
+
+    //--------------------------------------------------------------------------------------------------------------------------------
+// insert in Table
+public boolean insertBachlor(BachelorDTO bachelor, String mORb) {
+    SQLiteDatabase db = this.getWritableDatabase();
+    //key_Value
+    ContentValues neueZeille = new ContentValues();
+    neueZeille.put(FACHBERECIH_NAMEN, bachelor.getFachbereich());
+    neueZeille.put(MASTER_OR_BACHLER, mORb);
+    boolean success = db.insert(TABELlE_FACHBEREiCH, null, neueZeille) > 0;
+    return success;
+}
+
+    // List Bachelor
+    public ArrayList<BachelorDTO> getALLFachBachelor() {
+        ArrayList<BachelorDTO> fachbereichHilfe = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor= db.query(TABELlE_FACHBEREiCH,new String[]{"id","Fachberecih","MorB"},"MorB=?",new String[]{"B"},null,null,null);
+        if(cursor.moveToFirst()){
+            do {
+                String fachberichName=cursor.getString(cursor.getColumnIndex(FACHBERECIH_NAMEN));
+                String beschreibung =cursor.getString(cursor.getColumnIndex(MASTER_OR_BACHLER));
+                int fachbereich_ID =cursor.getInt(cursor.getColumnIndex(FACHBERECIH_ID));
+                BachelorDTO bachelor = new BachelorDTO(fachbereich_ID,fachberichName,beschreibung);
+                fachbereichHilfe.add(bachelor);
+            }while (cursor.moveToNext());
+        }
+        return fachbereichHilfe;
+    }
+
+    // Datensatze loeschen
+    public boolean delete(int id)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String where = FACHBERECIH_ID + "=?";
+        String[] whereArg = new String[]{String.valueOf(id)};
+        boolean success = db.delete(TABELlE_FACHBEREiCH, where, whereArg) > 0;
+        return success;
+    }
+
+    public boolean updateBachelor(BachelorDTO bachelor)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(FACHBERECIH_NAMEN,bachelor.getFachbereich());
+        boolean success = db.update(TABELlE_FACHBEREiCH,values,FACHBERECIH_ID + " = ?",
+                new String[]{ String.valueOf(bachelor.getId())}) > 0;
+        return success;
+    }
+
+    public ArrayList<BachelorDTO> sucheBereicheBachlor (String wort){
+        ArrayList<BachelorDTO>   fachbereichHilfe = new ArrayList<>();
+        SQLiteDatabase db =this.getReadableDatabase();
+        Cursor cursor=  db.rawQuery("select * from FachbereichTabelle where Fachberecih like '"+wort+"%' and MorB ='B' ",null);
+
+        if(cursor.moveToFirst()){
+            do {
+                String fachberichName=cursor.getString(cursor.getColumnIndex(FACHBERECIH_NAMEN));
+                int fachbereich_ID =cursor.getInt(cursor.getColumnIndex(FACHBERECIH_ID));
+                BachelorDTO Bachlor = new BachelorDTO(fachbereich_ID,fachberichName);
+                fachbereichHilfe.add(Bachlor);
+            }while (cursor.moveToNext());
+        }
+        return  fachbereichHilfe;
+    }
 }

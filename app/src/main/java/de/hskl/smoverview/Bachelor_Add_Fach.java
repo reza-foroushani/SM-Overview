@@ -13,7 +13,8 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import de.hskl.smoverview.databaseClasses.BachelorDTO;
-import de.hskl.smoverview.databaseClasses.DBFachbereich;
+
+import de.hskl.smoverview.databaseClasses.MusterahmadDB;
 
 public class Bachelor_Add_Fach extends AppCompatActivity implements View.OnClickListener{
     // Eingabefeld
@@ -24,7 +25,9 @@ public class Bachelor_Add_Fach extends AppCompatActivity implements View.OnClick
     Button addAbbrechenButton;
 
     // DB
-    DBFachbereich dbFachbereich;
+   // DBFachbereich dbFachbereich;
+    MusterahmadDB dbFachbereich;
+
     ArrayList arrayList;
 
     @Override
@@ -40,7 +43,7 @@ public class Bachelor_Add_Fach extends AppCompatActivity implements View.OnClick
         addSpeichernButton.setOnClickListener(this);
 
         // Datenbank Connect
-        dbFachbereich = new DBFachbereich(Bachelor_Add_Fach.this);
+        dbFachbereich = new MusterahmadDB(Bachelor_Add_Fach.this);
 
         // Add Daten
         arrayList = dbFachbereich.getALLFachBachelor();

@@ -24,7 +24,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
 
 import de.hskl.smoverview.databaseClasses.BachelorDTO;
-import de.hskl.smoverview.databaseClasses.DBFachbereich;
+
+import de.hskl.smoverview.databaseClasses.MusterahmadDB;
 import de.hskl.smoverview.databaseClasses.RequestCodes;
 
 public class BachelorIntent extends AppCompatActivity implements View.OnClickListener {
@@ -32,7 +33,9 @@ public class BachelorIntent extends AppCompatActivity implements View.OnClickLis
     FloatingActionButton addButton;
     ListView addListView;
     ArrayAdapter arrayAdapter;
-    DBFachbereich dbFachbereich;
+    //DBFachbereich dbFachbereich;
+    MusterahmadDB dbFachbereich;
+
 
     EditText suchen ;
 
@@ -46,7 +49,7 @@ public class BachelorIntent extends AppCompatActivity implements View.OnClickLis
         addListView = findViewById(R.id.ADD_LIST_VIEW);
         registerForContextMenu(addListView);
 
-        dbFachbereich = new DBFachbereich(BachelorIntent.this);
+        dbFachbereich = new MusterahmadDB(BachelorIntent.this);
         updateList();
         arrayAdapter.notifyDataSetChanged();
         addListView.invalidateViews();
@@ -133,7 +136,7 @@ public class BachelorIntent extends AppCompatActivity implements View.OnClickLis
                                 (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
                         BachelorDTO bachelor = (BachelorDTO) addListView.getItemAtPosition(adapterContextMenuInfo.position);
                         int id = bachelor.getId();
-                        DBFachbereich dbFachbereich = new DBFachbereich(getApplicationContext());
+                        MusterahmadDB dbFachbereich = new MusterahmadDB(getApplicationContext());
                         if (dbFachbereich.delete(id)) {
                             updateList();
                         } else {
@@ -177,7 +180,7 @@ public class BachelorIntent extends AppCompatActivity implements View.OnClickLis
                             String fachbereichName = fachbereichTextView.getText().toString();
                             BachelorDTO bachelor = (BachelorDTO) addListView.getItemAtPosition(adapterContextMenuInfo.position);
                             bachelor.setFachbereich(fachbereichName);
-                            DBFachbereich dbFachbereich = new DBFachbereich(getApplicationContext());
+                            MusterahmadDB dbFachbereich = new MusterahmadDB(getApplicationContext());
                             if (dbFachbereich.updateBachelor(bachelor)) {
                                 updateList();
                             } else {
