@@ -143,29 +143,34 @@ public class SemesterUebersichtActivity extends AppCompatActivity
         {
             if(resultCode == Activity.RESULT_OK)
             {
-                String oldModulName = data.getStringExtra("OLDMODULNAME");
                 String modulName = data.getStringExtra("MODULNAME");
-                String modulBeschreibung = data.getStringExtra("MODULBESCHREIBUNG");
-                String semesterName = listDataHeader.get(data.getIntExtra("GROUPINDEX", -1));
-                List<String> modulesList = listDataChild.get(semesterName);
-                int childIndex = data.getIntExtra("CHILDINDEX", -1);
+                if(isModulNameUnique(modulName))
+                {
+                    String oldModulName = data.getStringExtra("OLDMODULNAME");
+                    String modulBeschreibung = data.getStringExtra("MODULBESCHREIBUNG");
+                    String semesterName = listDataHeader.get(data.getIntExtra("GROUPINDEX", -1));
+                    List<String> modulesList = listDataChild.get(semesterName);
+                    int childIndex = data.getIntExtra("CHILDINDEX", -1);
 
-                modulesList.set(childIndex, modulName);
+                    modulesList.set(childIndex, modulName);
 
-                listDataChild.put(semesterName, modulesList);
+                    listDataChild.put(semesterName, modulesList);
 
-                listAdapter.updateView(listDataHeader, listDataChild);
+                    listAdapter.updateView(listDataHeader, listDataChild);
 
-                SemesterDTO semester = db.getSemester(semesterName, currentStudiengangId);
-                ModulDTO currentModul = db.getModul(oldModulName, semester.getS_id());
-                ModulDTO newModul = new ModulDTO(currentModul.getM_id(), modulName, modulBeschreibung, currentModul.getS_id(), currentModul.getStudiengang_id());
+                    SemesterDTO semester = db.getSemester(semesterName, currentStudiengangId);
+                    ModulDTO currentModul = db.getModul(oldModulName, semester.getS_id());
+                    ModulDTO newModul = new ModulDTO(currentModul.getM_id(), modulName, modulBeschreibung, currentModul.getS_id(), currentModul.getStudiengang_id());
 
-                boolean success = db.updateModul(newModul, currentModul.getM_id());
+                    boolean success = db.updateModul(newModul, currentModul.getM_id());
 
-                if(success)
-                    Toast.makeText(this, "Modul erfolgreich verändert!", Toast.LENGTH_SHORT).show();
+                    if(success)
+                        Toast.makeText(this, "Modul erfolgreich verändert!", Toast.LENGTH_SHORT).show();
+                    else
+                        Toast.makeText(this, "Fehler mit Datenbank!", Toast.LENGTH_SHORT).show();
+                }
                 else
-                    Toast.makeText(this, "Fehler mit Datenbank!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Modulname existiert bereits!", Toast.LENGTH_SHORT).show();
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
@@ -296,5 +301,13 @@ public class SemesterUebersichtActivity extends AppCompatActivity
             Toast.makeText(this, "Fehler bei Übergabe von MorB!", Toast.LENGTH_SHORT);
             MAXSEMESTER = 0;
         }
+    }
+
+    public boolean isModulNameUnique(String modulName)
+    {
+        for(List<String> list : listDataChild.values())
+            if(list.contains(modulName))
+                return false;
+        return true;
     }
 }

@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Typeface;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -152,17 +153,22 @@ public class CostumExpandableListAdapter extends BaseExpandableListAdapter
 
                                 if(!neuesModul.isEmpty() && !modulBeschreibung.isEmpty())
                                 {
-                                    _listDataChild.get(semesterName).add(neuesModul);
-                                    notifyDataSetChanged();
+                                    if(isModulNameUnique(neuesModul))
+                                    {
+                                        _listDataChild.get(semesterName).add(neuesModul);
+                                        notifyDataSetChanged();
 
-                                    SemesterDTO semester = db.getSemester(semesterName, studiengangId);
-                                    ModulDTO modul = new ModulDTO(neuesModul, modulBeschreibung, semester.getS_id(), studiengangId);
-                                    boolean success = db.addModul(modul);
+                                        SemesterDTO semester = db.getSemester(semesterName, studiengangId);
+                                        ModulDTO modul = new ModulDTO(neuesModul, modulBeschreibung, semester.getS_id(), studiengangId);
+                                        boolean success = db.addModul(modul);
 
-                                    if(success)
-                                        Toast.makeText(_context, "Modul erfolgreich hinzugefügt!", Toast.LENGTH_SHORT).show();
+                                        if(success)
+                                            Toast.makeText(_context, "Modul erfolgreich hinzugefügt!", Toast.LENGTH_SHORT).show();
+                                        else
+                                            Toast.makeText(_context, "Fehler mit Datenbank!", Toast.LENGTH_SHORT).show();
+                                    }
                                     else
-                                        Toast.makeText(_context, "Fehler mit Datenbank!", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(_context, "Modulname existiert bereits!", Toast.LENGTH_SHORT).show();
                                 }
                                 else
                                     Toast.makeText(_context, "Felder dürfen nicht leer sein!", Toast.LENGTH_SHORT).show();
@@ -178,6 +184,14 @@ public class CostumExpandableListAdapter extends BaseExpandableListAdapter
                 dialog.show();
             }
         });
+    }
+
+    public boolean isModulNameUnique(String modulName)
+    {
+        for(List<String> list : _listDataChild.values())
+            if(list.contains(modulName))
+                return false;
+        return true;
     }
 
     private void setupClickListenerSemesterDelete(Button deleteSemesterBtn, final int groupPosition)
