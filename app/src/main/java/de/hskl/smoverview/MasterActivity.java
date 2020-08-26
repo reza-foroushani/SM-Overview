@@ -216,8 +216,8 @@ public class MasterActivity extends AppCompatActivity implements View.OnClickLis
         masterDialog = master;
 
         AlertDialog.Builder dialogBearbeiten= new AlertDialog.Builder(this);
-        dialogBearbeiten.setTitle("Fachbereichname berbeiten ");
-        dialogBearbeiten.setMessage("Neu Name eingeben");
+        dialogBearbeiten.setTitle("Fachbereichname bearbeiten");
+        dialogBearbeiten.setMessage("Neuen Name eingeben");
         //bring die bearbeitlayout  und mit context zusammenlegen
         final  View  bearbeitlayout =this.getLayoutInflater().inflate(R.layout.layout_dialogbearbeitenfachbereichvonmaster,null);
         dialogBearbeiten.setView(bearbeitlayout);
@@ -228,7 +228,7 @@ public class MasterActivity extends AppCompatActivity implements View.OnClickLis
         newText.setText(master.getFachbereichName());
         newBeschreibung.setText(master.getBeschreichbung());
 
-        dialogBearbeiten.setPositiveButton("speichern", new DialogInterface.OnClickListener() {
+        dialogBearbeiten.setPositiveButton("Speichern", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 //ich füge die neu Bearbeitung  in alter position hinzu und aktuallisieren
@@ -280,9 +280,9 @@ public class MasterActivity extends AppCompatActivity implements View.OnClickLis
         masterDialog = master;
         final AlertDialog.Builder dialogloeschen= new AlertDialog.Builder(this);
         final MasterDTO masterFinal = master;
-        dialogloeschen.setTitle("Fachbereich löschen ");
-        dialogloeschen.setMessage("Sind Sie sicher ");
-        dialogloeschen.setPositiveButton("löschen", new DialogInterface.OnClickListener() {
+        dialogloeschen.setTitle("Fachbereich löschen");
+        dialogloeschen.setMessage("Sind Sie sicher?");
+        dialogloeschen.setPositiveButton("Löschen", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 //TODO hier später mit datenbank löschen
