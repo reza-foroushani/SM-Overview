@@ -143,7 +143,7 @@ public class MasterActivity extends AppCompatActivity implements View.OnClickLis
                         db.addFachberecihMaster(master, "M");
                         // es wird  neue item hinzugefügt
 
-                        //  FachbereichMasterItem.add(data.getStringExtra("NAME"));
+                        
 
                         Toast toast = Toast.makeText(this, "Nuer Studiengang hinzufügt", Toast.LENGTH_SHORT);
                         toast.show();
@@ -230,7 +230,7 @@ public class MasterActivity extends AppCompatActivity implements View.OnClickLis
         final MasterDTO masterfinal = master;
         final EditText newText=(EditText) bearbeitlayout.findViewById(R.id.BEARBEITEN_DIALOG);
         final EditText newBeschreibung=(EditText) bearbeitlayout.findViewById(R.id.BESCHREIBUNG_DIALOG);
-       // Name=newText.getText().toString();
+
 
             newText.setText(master.getFachbereichName());
             newBeschreibung.setText(master.getBeschreichbung());
@@ -260,7 +260,6 @@ public class MasterActivity extends AppCompatActivity implements View.OnClickLis
             @Override
             public void afterTextChanged(Editable editable) {}
         });
-
 
 
         dialogBearbeiten.setPositiveButton("Speichern", new DialogInterface.OnClickListener() {
