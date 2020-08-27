@@ -158,7 +158,7 @@ public class BachelorIntent extends AppCompatActivity implements View.OnClickLis
             builder.show();
         }
 
-        // Bearbeiten
+        // Bearbeiten Name des Faches Bachelor
         else if (item.getTitle() == "Bearbeiten") {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             AlertDialog dialog;
@@ -167,40 +167,46 @@ public class BachelorIntent extends AppCompatActivity implements View.OnClickLis
             builder.setView(inflateView);
 
             builder.setTitle("Name des Fachbereich ändern ")
-                .setMessage("Geben Sie neue Namen ein:")
-                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener()
-                {
-                    public void onClick(DialogInterface dialogInterface, int i)
+                    .setMessage("Geben Sie neue Namen ein:")
+                    .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener()
                     {
-                        try {
-                            AdapterView.AdapterContextMenuInfo adapterContextMenuInfo =
-                                    (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+                        public void onClick(DialogInterface dialogInterface, int i)
+                        {
+                            try {
+                                AdapterView.AdapterContextMenuInfo adapterContextMenuInfo =
+                                        (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
 
-                            final EditText fachbereichTextView = (EditText) inflateView.findViewById(R.id.BEARBEITEN_BACHELOR);
-                            String fachbereichName = fachbereichTextView.getText().toString();
-                            BachelorDTO bachelor = (BachelorDTO) addListView.getItemAtPosition(adapterContextMenuInfo.position);
-                            bachelor.setFachbereich(fachbereichName);
-                            DatenbankManager dbFachbereich = new DatenbankManager(getApplicationContext());
-                            if (bachelor.getFachbereich().trim().length() > 0 && !bachelor.getFachbereich().isEmpty()) {
-                                if (dbFachbereich.updateBachelor(bachelor)) {
-                                    updateList();
-                                    Toast.makeText(getApplicationContext(), "Änderung wurde erfolgreich durchgeführt!",
+                                final EditText fachbereichTextView = (EditText) inflateView.findViewById(R.id.BEARBEITEN_BACHELOR);
+                                String fachbereichName = fachbereichTextView.getText().toString();
+                                BachelorDTO bachelor = (BachelorDTO) addListView.getItemAtPosition(adapterContextMenuInfo.position);
+                                bachelor.setFachbereich(fachbereichName);
+                                DatenbankManager dbFachbereich = new DatenbankManager(getApplicationContext());
+
+                                if(dbFachbereich.equelText(fachbereichName) == false){
+                                    Toast.makeText(getApplicationContext(), "Das Fach ist bereits vorhanden!",
                                             Toast.LENGTH_LONG).show();
-                                }
-                            }else {
-                                    Toast.makeText(getApplicationContext(), "Felder dürfen nicht leer sein!",
-                                            Toast.LENGTH_LONG).show();
-                                }
+                                }else {
+                                    if (bachelor.getFachbereich().trim().length() > 0 && !bachelor.getFachbereich().isEmpty()) {
+                                        if (dbFachbereich.updateBachelor(bachelor)) {
+                                            updateList();
+                                            Toast.makeText(getApplicationContext(), "Änderung wurde erfolgreich durchgeführt!",
+                                                    Toast.LENGTH_LONG).show();
+                                        }
+                                    } else {
+                                        Toast.makeText(getApplicationContext(), "Felder dürfen nicht leer sein!",
+                                                Toast.LENGTH_LONG).show();
+                                    }
+                                } // ende If-Abfrage
                             } catch(Exception e){
                                 Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
                             }
 
-                    }
-                });
+                        }
+                    });
 
             dialog = builder.create();
             dialog.show();
         }
         return super.onContextItemSelected(item);
-        }
+    }
 }

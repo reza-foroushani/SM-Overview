@@ -441,4 +441,27 @@ public class DatenbankManager extends SQLiteOpenHelper
         }
         return  fachbereichHilfe;
     }
+
+    // equel()  ob der Name in DB vorhanden ist
+    public boolean equelText(String text){
+        ArrayList<BachelorDTO>   fachbereichHilfe = new ArrayList<>();
+        SQLiteDatabase db =this.getReadableDatabase();
+        Cursor cursor=  db.rawQuery("SELECT * FROM FachbereichTabelle " +
+                "WHERE Fachberecih LIKE '"+text+"%' AND MorB ='B' ",null);
+        if(cursor.moveToFirst()){
+            //cursor.getColumnIndex er sucht index von spalte
+            String fachberichName=cursor.getString(cursor.getColumnIndex(FACHBERECIH_NAMEN));
+            //ich brauche  inhalb jedes item  seine id  speichern
+            int fachbereich_ID =cursor.getInt(cursor.getColumnIndex(FACHBERECIH_ID));
+            if(text.equals(fachberichName)){
+                return false;
+            }else {
+                return true  ;
+            }
+        }else {
+            return true  ;
+        }
+    }
+
+
 }
