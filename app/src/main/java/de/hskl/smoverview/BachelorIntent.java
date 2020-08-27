@@ -35,8 +35,6 @@ public class BachelorIntent extends AppCompatActivity implements View.OnClickLis
     ArrayAdapter arrayAdapter;
     //DBFachbereich dbFachbereich;
     DatenbankManager dbFachbereich;
-
-
     EditText suchen ;
 
     @Override
@@ -44,8 +42,11 @@ public class BachelorIntent extends AppCompatActivity implements View.OnClickLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.bachelor_bachelor);
 
+        // referenz zu Bachelor Studiengan-Seite
         ausgabe = findViewById(R.id.TEXT_VIEW_BACHELOR);
+        //+ Symbol
         addButton = findViewById(R.id.ADD_BUTTEN);
+        // Liste, in der alle Fächer stehen
         addListView = findViewById(R.id.ADD_LIST_VIEW);
         registerForContextMenu(addListView);
 
@@ -68,6 +69,8 @@ public class BachelorIntent extends AppCompatActivity implements View.OnClickLis
             }
         });
 
+
+        // Methode Suchen durch Methode addTextChangedListener von Klasse TextWatcher
         suchen = (EditText) findViewById(R.id.SUCHEN2);
         suchen.addTextChangedListener(new TextWatcher() {
             @Override
@@ -115,6 +118,7 @@ public class BachelorIntent extends AppCompatActivity implements View.OnClickLis
         addListView.setAdapter(arrayAdapter);
     }
 
+    // alle Elemente werden in Liste durchgesucht!
     public void suchList(String wort){
         ArrayList<BachelorDTO> test2 = dbFachbereich.sucheBereicheBachlor(wort);
         arrayAdapter = new BachelorAdapter(this,R.layout.bachelor_item,test2);
@@ -181,16 +185,22 @@ public class BachelorIntent extends AppCompatActivity implements View.OnClickLis
                             BachelorDTO bachelor = (BachelorDTO) addListView.getItemAtPosition(adapterContextMenuInfo.position);
                             bachelor.setFachbereich(fachbereichName);
                             DatenbankManager dbFachbereich = new DatenbankManager(getApplicationContext());
+
+                            if(dbFachbereich.equelText(fachbereichName) == false){
+                                Toast.makeText(getApplicationContext(), "Das Fach ist bereits vorhanden!",
+                                        Toast.LENGTH_LONG).show();
+                            }else {
                             if (bachelor.getFachbereich().trim().length() > 0 && !bachelor.getFachbereich().isEmpty()) {
                                 if (dbFachbereich.updateBachelor(bachelor)) {
                                     updateList();
                                     Toast.makeText(getApplicationContext(), "Änderung wurde erfolgreich durchgeführt!",
                                             Toast.LENGTH_LONG).show();
                                 }
-                            }else {
-                                    Toast.makeText(getApplicationContext(), "Felder dürfen nicht leer sein!",
-                                            Toast.LENGTH_LONG).show();
-                                }
+                            } else {
+                                Toast.makeText(getApplicationContext(), "Felder dürfen nicht leer sein!",
+                                        Toast.LENGTH_LONG).show();
+                            }
+                        } // ende If-Abfrage
                             } catch(Exception e){
                                 Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
                             }

@@ -7,8 +7,11 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-
-
+// ======================================================================================  //
+//   Startseite von App :  wir legen zwei Button mit entsprechende Namen an, und durch findViewById
+//   weisen wir adresse von onActivity-Seite des jeweilige Modul.
+//   in Onvclick lege ich durch if abfrage Intet Objekt mmit Kunstuktor-Name der Klasse
+// ======================================================================================  //
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     Button master;
