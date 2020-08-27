@@ -58,23 +58,29 @@ public class Bachelor_Add_Fach extends AppCompatActivity implements View.OnClick
             String text = addEditText.getText().toString();
             BachelorDTO bachelorDTO = new BachelorDTO(text);
 
-            if (!text.isEmpty() && text.trim().length() > 0) {
-                if (dbFachbereich.insertBachlor(bachelorDTO, "B")) {
-                    addEditText.setText("");
-                    Toast toast = Toast.makeText(this,"Datensatz erfolgreich gespeichert",Toast.LENGTH_SHORT);
-                    toast.show();
-                }
-            }else {
-                Toast toast = Toast.makeText(this, "Felder dürfen nicht leer sein!", Toast.LENGTH_SHORT);
+            if (dbFachbereich.equelText(text) == false) {
+                Toast toast = Toast.makeText(this, "Das Fach ist bereits vorhanden!", Toast.LENGTH_SHORT);
                 toast.show();
-                Intent intentOfBachelorIntent = new Intent(this, BachelorIntent.class);
-                startActivity(intentOfBachelorIntent);
+            } else {
+                if (!text.isEmpty() && text.trim().length() > 0 && dbFachbereich.equelText(text) == true) {
+                    if (dbFachbereich.insertBachlor(bachelorDTO, "B")) {
+                        addEditText.setText("");
+                        Toast toast = Toast.makeText(this, "Datensatz erfolgreich gespeichert", Toast.LENGTH_SHORT);
+                        toast.show();
+                    }
+                } else {
+                    Toast toast = Toast.makeText(this, "Felder dürfen nicht leer sein!", Toast.LENGTH_SHORT);
+                    toast.show();
+                    Intent intentOfBachelorIntent = new Intent(this, BachelorIntent.class);
+                    startActivity(intentOfBachelorIntent);
+                }
             }
-            }
-                Intent i = new Intent();
-                setResult(Activity.RESULT_OK, i);
-                finish();
-            }
+        } // ende If-Abfrage
+
+        Intent i = new Intent();
+        setResult(Activity.RESULT_OK, i);
+        finish();
+    }
 
 
 
