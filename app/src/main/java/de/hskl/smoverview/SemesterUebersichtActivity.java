@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -143,10 +144,10 @@ public class SemesterUebersichtActivity extends AppCompatActivity
         {
             if(resultCode == Activity.RESULT_OK)
             {
+                String oldModulName = data.getStringExtra("OLDMODULNAME");
                 String modulName = data.getStringExtra("MODULNAME");
-                if(isModulNameUnique(modulName))
+                if(modulName.equals(oldModulName) || isModulNameUnique(modulName))
                 {
-                    String oldModulName = data.getStringExtra("OLDMODULNAME");
                     String modulBeschreibung = data.getStringExtra("MODULBESCHREIBUNG");
                     String semesterName = listDataHeader.get(data.getIntExtra("GROUPINDEX", -1));
                     List<String> modulesList = listDataChild.get(semesterName);
