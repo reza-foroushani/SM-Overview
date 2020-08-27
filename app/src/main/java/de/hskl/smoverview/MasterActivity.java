@@ -346,15 +346,15 @@ public class MasterActivity extends AppCompatActivity implements View.OnClickLis
     //
     // ======================================================================================  //
     public  void updateList(){
-        ArrayList<MasterDTO> test1 = db.getAllFachBereicheMaster();
-        masterAdapter = new MasterAdapter(this,R.layout.item_master,test1);
+        ArrayList<MasterDTO> MasterItems = db.getAllFachBereicheMaster();
+        masterAdapter = new MasterAdapter(this,R.layout.item_master,MasterItems);
         fachbereichliste.setAdapter(masterAdapter);
     }
 
 
     public  void suchList(String wort){
-        ArrayList<MasterDTO> test2 = db.sucheBereicheMaster(wort);
-        masterAdapter = new MasterAdapter(this,R.layout.item_master,test2);
+        ArrayList<MasterDTO> MasterSuchItems = db.sucheBereicheMaster(wort);
+        masterAdapter = new MasterAdapter(this,R.layout.item_master,MasterSuchItems);
         fachbereichliste.setAdapter(masterAdapter);
     }
     // ======================================================================================  //
