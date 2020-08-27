@@ -143,7 +143,7 @@ public class MasterActivity extends AppCompatActivity implements View.OnClickLis
                         db.addFachberecihMaster(master, "M");
                         // es wird  neue item hinzugefügt
 
-                        
+
 
                         Toast toast = Toast.makeText(this, "Nuer Studiengang hinzufügt", Toast.LENGTH_SHORT);
                         toast.show();

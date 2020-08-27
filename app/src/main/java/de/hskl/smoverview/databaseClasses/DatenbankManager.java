@@ -306,7 +306,7 @@ public class DatenbankManager extends SQLiteOpenHelper
         String[] whereArg = new String[]{Integer.toString(id)};
         db.update(TABELlE_FACHBEREiCH,values,where,whereArg);
 
-//db.update(TABELlE_FACHBEREiCH,values, "id=?",new String[]{String.valueOf(master.getFachbereich_Id())});
+
     }
 
     public boolean deleteFachbereich(int Id){
@@ -322,11 +322,11 @@ public class DatenbankManager extends SQLiteOpenHelper
         ArrayList<MasterDTO>   fachbereichHilfe = new ArrayList<>();
         String M="M";
         // er nimmt all daten
-        //String SELECT_query ="select * from " +TABELlE_FACHBEREiCH+"WHERE"+MASTER_OR_BACHLER+ "="+ "M";
+        
         // copy von db für lesen
         SQLiteDatabase db =this.getReadableDatabase();
         Cursor cursor=  db.rawQuery("select * from FachbereichTabelle where Fachberecih like '"+wort+"%' and MorB ='M' ",null);
-        //ohne expression deswegen null ,wir haben ergebniss von select-quere genomen
+        //ohne expression deswegen null
 
         //wenn true dann erste zeihle hat daten
         if(cursor.moveToFirst()){
