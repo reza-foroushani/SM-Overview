@@ -322,7 +322,7 @@ public class DatenbankManager extends SQLiteOpenHelper
         ArrayList<MasterDTO>   fachbereichHilfe = new ArrayList<>();
         String M="M";
         // er nimmt all daten
-        
+
         // copy von db für lesen
         SQLiteDatabase db =this.getReadableDatabase();
         Cursor cursor=  db.rawQuery("select * from FachbereichTabelle where Fachberecih like '"+wort+"%' and MorB ='M' ",null);
