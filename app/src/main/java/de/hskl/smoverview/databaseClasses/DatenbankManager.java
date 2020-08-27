@@ -343,7 +343,7 @@ public class DatenbankManager extends SQLiteOpenHelper
         return  fachbereichHilfe;
 
     }
-    public Boolean PruefBereicheMaster (String wort){
+    public Boolean PruefBereicheMaster (String wort,int id){
 
         // er nimmt all daten
         SQLiteDatabase db =this.getReadableDatabase();
@@ -354,11 +354,31 @@ public class DatenbankManager extends SQLiteOpenHelper
                 String beschreibung =cursor.getString(cursor.getColumnIndex(FACHBERECIH_BESCHREICHBUNG));
                 //ich brauche  inhalb jedes item  seine id  speichern
                 int fachbereich_ID =cursor.getInt(cursor.getColumnIndex(FACHBERECIH_ID));
-               if(wort.equals(fachberichName)){
+               if(wort.equals(fachberichName)&&id!=fachbereich_ID){
                    return false;
                }else {
                    return true  ;
                }
+        }else {
+            return true  ;
+        }
+    }
+    public Boolean PruefBereicheMasternachName (String wort){
+
+        // er nimmt all daten
+        SQLiteDatabase db =this.getReadableDatabase();
+        Cursor cursor=  db.rawQuery("select * from FachbereichTabelle where Fachberecih like '%"+wort+"%' and MorB ='M' ",null);
+        if(cursor.moveToFirst()){
+            //cursor.getColumnIndex er sucht index von spalte
+            String fachberichName=cursor.getString(cursor.getColumnIndex(FACHBERECIH_NAMEN));
+            String beschreibung =cursor.getString(cursor.getColumnIndex(FACHBERECIH_BESCHREICHBUNG));
+            //ich brauche  inhalb jedes item  seine id  speichern
+            int fachbereich_ID =cursor.getInt(cursor.getColumnIndex(FACHBERECIH_ID));
+            if(wort.equals(fachberichName)){
+                return false;
+            }else {
+                return true  ;
+            }
         }else {
             return true  ;
         }

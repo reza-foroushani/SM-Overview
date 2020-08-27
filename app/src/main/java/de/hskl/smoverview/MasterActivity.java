@@ -136,7 +136,8 @@ public class MasterActivity extends AppCompatActivity implements View.OnClickLis
                 String FachbereichNme = data.getStringExtra("NAME");
                 String FachbereichBeschreibung = data.getStringExtra("BESCHREIBUNG");
                 // prüfung ob bereit da oder nciht
-                if(db.PruefBereicheMaster(FachbereichNme)){
+                if(db.PruefBereicheMasternachName(FachbereichNme)){
+
                     // prüfung ob leer oder nciht
                     if(FachbereichNme.trim().length() > 0) {
                         MasterDTO master = new MasterDTO(FachbereichNme, FachbereichBeschreibung);
@@ -246,7 +247,9 @@ public class MasterActivity extends AppCompatActivity implements View.OnClickLis
                 }
 
                 @Override
-                public void afterTextChanged(Editable editable) {}
+                public void afterTextChanged(Editable editable) {
+
+                }
             });
         newBeschreibung.addTextChangedListener( new TextWatcher() {
             @Override
@@ -273,10 +276,12 @@ public class MasterActivity extends AppCompatActivity implements View.OnClickLis
                 String neuFachbereichBeschreicung=newBeschreibung.getText().toString();
 
                 // prüfung ob bereit da oder nciht
-                if(db.PruefBereicheMaster(neuFachbereichName)){
+                if(db.PruefBereicheMaster(neuFachbereichName,masterfinal.getFachbereich_Id())){
                     // prüfung ob leer oder nciht
+
                     if(neuFachbereichName.trim().length() > 0) {
                         MasterDTO nueMaster = new MasterDTO(masterfinal.getFachbereich_Id(), neuFachbereichName, neuFachbereichBeschreicung);
+
                         db.updatMaster(nueMaster, masterfinal.getFachbereich_Id());
                         updateList();
                         Toast toast = Toast.makeText(getApplicationContext(), "erfolgreich verändert!", Toast.LENGTH_SHORT);
