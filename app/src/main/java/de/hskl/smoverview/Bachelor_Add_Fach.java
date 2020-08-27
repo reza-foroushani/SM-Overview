@@ -47,12 +47,7 @@ public class Bachelor_Add_Fach extends AppCompatActivity implements View.OnClick
 
     @Override
     public void onClick(View view) {
-        if(view.getId() == addAbbrechenButton.getId()){
-            Intent intentOfViewBachelor = new Intent(this,BachelorIntent.class);
-            startActivity(intentOfViewBachelor);
-            Toast toast = Toast.makeText(this,"Fachbereich",Toast.LENGTH_SHORT);
-            toast.show();
-        }
+
 
         if(view.getId() == addSpeichernButton.getId()) {
             String text = addEditText.getText().toString();
@@ -71,11 +66,9 @@ public class Bachelor_Add_Fach extends AppCompatActivity implements View.OnClick
                 } else {
                     Toast toast = Toast.makeText(this, "Felder dürfen nicht leer sein!", Toast.LENGTH_SHORT);
                     toast.show();
-                    Intent intentOfBachelorIntent = new Intent(this, BachelorIntent.class);
-                    startActivity(intentOfBachelorIntent);
                 }
             }
-        } // ende If-Abfrage
+        }// ende If-Abfrage
 
         Intent i = new Intent();
         setResult(Activity.RESULT_OK, i);
